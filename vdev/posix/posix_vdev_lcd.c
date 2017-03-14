@@ -10,16 +10,16 @@
 #define VLCD_Y_SIZE 320
 
 static pthread_t RefreshThread;
-static uint16_t LcdBuffer[VLCD_Y_SIZE][VLCD_X_SIZE] = {0};
+static uint16_t LcdBuffer[VLCD_Y_SIZE][VLCD_X_SIZE];
 
-static void _vdev_lcd_color16_to_24(uint16_t color, uint8_t *r, uint8_t *g, uint8_t *b)
+static void _posix_lcd_color16_to_24(uint16_t color, uint8_t *r, uint8_t *g, uint8_t *b)
 {
     *r = (color >> 11) * 0xff / 0x1f;
     *g = ((color >> 5) & 0x3f) * 0xff / 0x3f;
     *b = (color & 0x1f) * 0xff / 0x1f;
 }
 
-static void _vdev_lcd_do_refresh(SDL_Renderer* renderer)
+static void _posix_lcd_do_refresh(SDL_Renderer* renderer)
 {
     uint16_t x, y;
     uint8_t r, g, b;
@@ -29,7 +29,7 @@ static void _vdev_lcd_do_refresh(SDL_Renderer* renderer)
         for (x = 0; x < VLCD_X_SIZE; x++) {
 
             color = LcdBuffer[y][x];
-            _vdev_lcd_color16_to_24(color, &r, &g, &b);
+            _posix_lcd_color16_to_24(color, &r, &g, &b);
 
             SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawPoint(renderer, x, y);
@@ -38,7 +38,7 @@ static void _vdev_lcd_do_refresh(SDL_Renderer* renderer)
     SDL_RenderPresent(renderer);
 }
 
-static void *_vdev_lcd_task_refresh(void *args)
+static void *_posix_lcd_task_refresh(void *args)
 {
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
@@ -55,7 +55,7 @@ static void *_vdev_lcd_task_refresh(void *args)
 
     /* refresh */
     while(1) {
-        _vdev_lcd_do_refresh(renderer);
+        _posix_lcd_do_refresh(renderer);
     }
 
 
@@ -75,7 +75,7 @@ static vdev_status_t posix_lcd_init(void)
     int res;
 
     /* create thread */
-    res = pthread_create(&RefreshThread, NULL, _vdev_lcd_task_refresh, (void *)NULL);
+    res = pthread_create(&RefreshThread, NULL, _posix_lcd_task_refresh, (void *)NULL);
     if (0 != res) {
         return VDEV_STATUS_FAILURE;
     }
