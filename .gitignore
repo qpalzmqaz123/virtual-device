@@ -1,5 +1,7 @@
 *.o
 *.out
+*.swp
+
 GPATH
 GRTAGS
 GTAGS

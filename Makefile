@@ -1,10 +1,72 @@
-all: a.o
-	gcc a.o vdev_lcd.o `sdl2-config --cflags` `sdl2-config --libs` -lpthread
+CC = gcc
 
-a.o: a.c vdev_lcd.c vdev_lcd.h vdev_types.h vdev.h
-	gcc vdev_lcd.c `sdl2-config --cflags` `sdl2-config --libs` -o vdev_lcd.o -c
-	gcc a.c `sdl2-config --cflags` `sdl2-config --libs` -o a.o -c
+# 工程名,影响输出的文件名
+PROJ_NAME = simulater
+# 编译输出的目录，防止文件过多看起来混乱，包括.d文件
+OBJS_OUTPUT_DIR = ./obj_output
+# 宏定义
+DEFINES = 
+
+# 所有头文件的目录
+INCLUDE_DIRS = ./vdev/inc
+
+# 所有源文件的目录
+SRC_DIRS =	   ./vdev/posix
+
+# 依赖的目标文件
+OBJS = main.o \
+	   posix_vdev_lcd.o
 
 
+# 链接时的lib参数
+LIBS_OPTION = -L ./lib 
+LIBS_OPTION += -L/usr/local/lib -lSDL2
+
+CFLAGS = -g -Wall -O3
+CFLAGS += -I/usr/local/include/SDL2 -D_THREAD_SAFE
+
+# includes
+CFLAGS += $(foreach dir, $(INCLUDE_DIRS), -I $(dir) )
+# defines
+CFLAGS += $(foreach def, $(DEFINES), -D $(def))
+
+#####################################################################
+vpath %.s $(SRC_DIRS)
+vpath %.c $(SRC_DIRS)
+vpath %.h $(INCLUDE_DIRS)
+
+# 所有源文件，去除了startup
+SRCS = $(subst startup_stm32f4xx_gcc.c, , $(OBJS:.o=.c))
+# 给所有obj加上真实的路径
+OBJS_REAL = $(foreach obj, $(OBJS), $(OBJS_OUTPUT_DIR)/$(obj))
+
+# 输出
+.PHONY: all
+
+all: project
+
+project: $(OBJS_REAL)
+	$(CC) $(CFLAGS) -o $(PROJ_NAME) $(OBJS_REAL) $(LIBS_OPTION)
+	
+# 默认规则
+$(OBJS_OUTPUT_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJS_OUTPUT_DIR)/%.o: %.s
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# 头文件依赖
+include $(foreach d, $(SRCS:.c=.d), $(OBJS_OUTPUT_DIR)/$(d))
+
+$(OBJS_OUTPUT_DIR)/%.d: %.c
+	@set -e; rm -f $@; \
+	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,$(OBJS_OUTPUT_DIR)\/\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+# 自定义依赖
+
+#####################################################################
 clean:
-	rm -rvf *.o a.out
+	rm -vf $(OBJS_OUTPUT_DIR)/*
+	rm -vf $(PROJ_NAME)
