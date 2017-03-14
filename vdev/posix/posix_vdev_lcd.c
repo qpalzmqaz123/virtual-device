@@ -70,7 +70,8 @@ static void *_posix_lcd_task_refresh(void *args)
     SDL_Quit();
 }
 
-static vdev_status_t posix_lcd_init(void)
+static vdev_status_t posix_lcd_init(
+       _IN_ uint32_t id)
 {
     int res;
 
@@ -84,6 +85,7 @@ static vdev_status_t posix_lcd_init(void)
 }
 
 static vdev_status_t posix_lcd_fill_rect(
+       _IN_ uint32_t id,
        _IN_ uint16_t xs,
        _IN_ uint16_t ys,
        _IN_ uint16_t xe,
@@ -102,9 +104,10 @@ static vdev_status_t posix_lcd_fill_rect(
 }
 
 static vdev_status_t posix_lcd_draw_point(
-        _IN_ uint16_t x,
-        _IN_ uint16_t y,
-        _IN_ uint16_t color)
+       _IN_ uint32_t id,
+       _IN_ uint16_t x,
+       _IN_ uint16_t y,
+       _IN_ uint16_t color)
 {
     LcdBuffer[y][x] = color;
 
@@ -112,9 +115,10 @@ static vdev_status_t posix_lcd_draw_point(
 }
 
 static vdev_status_t posix_lcd_get_point(
-        _IN_ uint16_t x,
-        _IN_ uint16_t y,
-        _OUT_ uint16_t *color)
+       _IN_ uint32_t id,
+       _IN_ uint16_t x,
+       _IN_ uint16_t y,
+       _OUT_ uint16_t *color)
 {
     *color = LcdBuffer[y][x];
 

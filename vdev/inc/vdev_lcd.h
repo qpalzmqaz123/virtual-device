@@ -6,16 +6,18 @@
 /**
  * @brief Initialize Lcd
  *
- * @param[in] x_size Lcd x size
- * @param[in] y_size Lcd y size
+ * @param[in] id Device id
  *
  * @return status code, refer to vdev_status_t
  */
-typedef vdev_status_t (*vdev_lcd_init_fn) (void);
+typedef vdev_status_t (*vdev_lcd_init_fn) (
+        _IN_ uint32_t id
+        );
 
 /**
  * @brief Fill rect
  *
+ * @param[in] id Device id
  * @param[in] xs X coordinate of start point
  * @param[in] ys Y coordinate of start point
  * @param[in] xe X coordinate of end point
@@ -25,6 +27,7 @@ typedef vdev_status_t (*vdev_lcd_init_fn) (void);
  * @return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
+        _IN_ uint32_t id,
         _IN_ uint16_t xs,
         _IN_ uint16_t ys,
         _IN_ uint16_t xe,
@@ -34,6 +37,7 @@ typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
 /**
  * @brief Draw point
  *
+ * @param[in] id Device id
  * @param[in] x X coordinate
  * @param[in] y Y coordinate 
  * @param[in] color Color
@@ -41,6 +45,7 @@ typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
  * @return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
+        _IN_ uint32_t id,
         _IN_ uint16_t x,
         _IN_ uint16_t y,
         _IN_ uint16_t color);
@@ -48,6 +53,7 @@ typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
 /**
  * @brief Get point color
  *
+ * @param[in] id Device id
  * @param[in] x X coordinate
  * @param[in] y Y coordinate 
  * @param[in] color Color
@@ -55,6 +61,7 @@ typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
  * @return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_get_point_fn) (
+        _IN_ uint32_t id,
         _IN_ uint16_t x,
         _IN_ uint16_t y,
         _OUT_ uint16_t *color);

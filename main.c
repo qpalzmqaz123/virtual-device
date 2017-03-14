@@ -18,11 +18,11 @@ int main(int argc, char** argv)
 
     lcd_api = &api.lcd;
 
-    lcd_api->lcd_init();
+    lcd_api->lcd_init(0);
     for (i = 0; i < 10; i++) {
-        lcd_api->lcd_fill_rect(0, 0, 480, 320, 0xf800);
+        lcd_api->lcd_fill_rect(0, 0, 0, 480, 320, 0xf800);
         usleep(100000);
-        lcd_api->lcd_fill_rect(0, 0, 480, 320, 0x001f);
+        lcd_api->lcd_fill_rect(0, 0, 0, 480, 320, 0x001f);
         usleep(100000);
     }
 
