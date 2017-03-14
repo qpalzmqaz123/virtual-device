@@ -1,4 +1,4 @@
-#ifndef __VD_LCD_H__
+#if !defined(__VD_LCD_H__) && VDEV_SUPPORT_LCD == 1
 #define __VD_LCD_H__
 
 #include "vdev_types.h"

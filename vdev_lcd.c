@@ -1,5 +1,7 @@
 #include "vdev.h"
 
+#if VDEV_SUPPORT_LCD == 1
+
 #include "SDL.h"
 #include <unistd.h>
 #include <pthread.h>
@@ -126,4 +128,6 @@ void vdev_lcd_api_install(vdev_lcd_api_t *api)
     api->lcd_draw_point = posix_lcd_draw_point;
     api->lcd_get_point = posix_lcd_get_point;
 }
+
+#endif
 
