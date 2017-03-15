@@ -1,3 +1,6 @@
+simulater
+obj_output/
+
 *.o
 *.out
 *.swp

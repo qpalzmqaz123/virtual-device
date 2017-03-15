@@ -1,0 +1,132 @@
+diff --git a/main.c b/main.c
+index 7f42f3b..9f7ab3c 100644
+--- a/main.c
++++ b/main.c
+@@ -15,6 +15,7 @@ int main(int argc, char** argv)
+     vdev_lcd_api_install(&api.lcd);
+ 
+     api.lcd.lcd_init(0);
++    api.lcd.lcd_fill_rect(0, 0, 0, 480, 320, 0);
+ 
+     sleep(5);
+ 
+diff --git a/vdev/posix/src/posix_vdev_lcd.c b/vdev/posix/src/posix_vdev_lcd.c
+index 581e08c..45e7263 100644
+--- a/vdev/posix/src/posix_vdev_lcd.c
++++ b/vdev/posix/src/posix_vdev_lcd.c
+@@ -10,7 +10,10 @@
+ #define VLCD_X_SIZE 480
+ #define VLCD_Y_SIZE 320
+ 
++SDL_Window* window = NULL;
++SDL_Renderer* renderer = NULL;
+ static pthread_t RefreshThread;
++static pthread_mutex_t Mutex = PTHREAD_MUTEX_INITIALIZER;
+ static uint16_t LcdBuffer[VLCD_Y_SIZE][VLCD_X_SIZE];
+ 
+ static void _posix_lcd_color16_to_24(uint16_t color, uint8_t *r, uint8_t *g, uint8_t *b)
+@@ -20,31 +23,24 @@ static void _posix_lcd_color16_to_24(uint16_t color, uint8_t *r, uint8_t *g, uin
+     *b = (color & 0x1f) * 0xff / 0x1f;
+ }
+ 
+-static void _posix_lcd_do_refresh(SDL_Renderer* renderer)
++static void *_posix_lcd_task_refresh(void *args)
+ {
+-    uint16_t x, y;
+-    uint8_t r, g, b;
+-    uint16_t color;
+-
+-    for (y = 0; y < VLCD_Y_SIZE; y++) {
+-        for (x = 0; x < VLCD_X_SIZE; x++) {
+-
+-            color = LcdBuffer[y][x];
+-            _posix_lcd_color16_to_24(color, &r, &g, &b);
+-
+-            SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+-            SDL_RenderDrawPoint(renderer, x, y);
+-        } 
++    while (1) {
++        pthread_mutex_lock(&Mutex);
++        SDL_RenderPresent(renderer);
++        printf("refresh");
++        pthread_mutex_unlock(&Mutex);
++        sleep(1);
+     }
+-    SDL_RenderPresent(renderer);
++
++    return NULL;
+ }
+ 
+-static void *_posix_lcd_task_refresh(void *args)
++static vdev_status_t posix_lcd_init(
++       _IN_ uint32_t id)
+ {
+-    SDL_Window* window = NULL;
+-    SDL_Renderer* renderer = NULL;
++    int res;
+ 
+-    /* init */
+     if (0 != SDL_Init(SDL_INIT_VIDEO)) {
+         printf("Can't init SDL\n");
+         exit(1);
+@@ -54,34 +50,14 @@ static void *_posix_lcd_task_refresh(void *args)
+         exit(1);
+     }
+ 
+-    /* refresh */
+-    while(1) {
+-        _posix_lcd_do_refresh(renderer);
+-    }
+-
+-
+-    /* destroy */
+-    if (renderer) {
+-        SDL_DestroyRenderer(renderer);
+-    }
+-    if (window) {
+-        SDL_DestroyWindow(window);
+-    }
+-
+-    SDL_Quit();
+-}
+-
+-static vdev_status_t posix_lcd_init(
+-       _IN_ uint32_t id)
+-{
+-    int res;
+-
+     /* create thread */
+     res = pthread_create(&RefreshThread, NULL, _posix_lcd_task_refresh, (void *)NULL);
+     if (0 != res) {
+         return VDEV_STATUS_FAILURE;
+     }
+ 
++    pthread_mutex_init(&Mutex, NULL);
++
+     return VDEV_STATUS_SUCCESS;
+ }
+ 
+@@ -94,6 +70,8 @@ static vdev_status_t posix_lcd_fill_rect(
+        _IN_ uint16_t color)
+ {
+     uint16_t x, y;
++    uint8_t r, g, b;
++    SDL_Rect rect;
+ 
+     for (y = ys; y <= ye; y++) {
+         for (x = xs; x < xe; x++) {
+@@ -101,6 +79,14 @@ static vdev_status_t posix_lcd_fill_rect(
+         }
+     }
+ 
++    _posix_lcd_color16_to_24(color, &r, &g, &b);
++    rect.x = xs;
++    rect.y = ys;
++    rect.w = xe - xs;
++    rect.h = ye - ys;
++    pthread_mutex_lock(&Mutex);
++    SDL_RenderDrawRect(renderer, &rect);
++    pthread_mutex_unlock(&Mutex);
+     return VDEV_STATUS_SUCCESS;
+ }
+ 

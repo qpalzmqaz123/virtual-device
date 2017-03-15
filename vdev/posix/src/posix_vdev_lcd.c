@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 #define VLCD_X_SIZE 480
 #define VLCD_Y_SIZE 320
@@ -59,7 +60,7 @@ static void *_posix_lcd_task_refresh(void *args)
     }
 
 
-    /* destory */
+    /* destroy */
     if (renderer) {
         SDL_DestroyRenderer(renderer);
     }
@@ -127,6 +128,12 @@ static vdev_status_t posix_lcd_get_point(
 
 void vdev_lcd_api_install(vdev_lcd_api_t *api)
 {
+#if 0
+    struct timeval t1, t2;
+    gettimeofday(&t1, NULL);
+    gettimeofday(&t2, NULL);
+    printf("time: %d:%d\n", t2.tv_sec - t1.tv_sec, (t2.tv_usec - t1.tv_usec) / 1000);
+#endif
     api->lcd_init = posix_lcd_init;
     api->lcd_fill_rect = posix_lcd_fill_rect;
     api->lcd_draw_point = posix_lcd_draw_point;

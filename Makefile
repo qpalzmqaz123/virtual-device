@@ -8,22 +8,24 @@ OBJS_OUTPUT_DIR = ./obj_output
 DEFINES = 
 
 # 所有头文件的目录
-INCLUDE_DIRS = ./vdev/inc
+INCLUDE_DIRS = ./vdev/inc \
+			   ./vdev/posix/inc
 
 # 所有源文件的目录
-SRC_DIRS =	   ./vdev/posix
+SRC_DIRS =	   ./vdev/posix/src
 
 # 依赖的目标文件
 OBJS = main.o \
-	   posix_vdev_lcd.o
+	   posix_vdev_lcd.o queue.o
 
 
 # 链接时的lib参数
-LIBS_OPTION = -L ./lib 
-LIBS_OPTION += -L/usr/local/lib -lSDL2
+LIBS_OPTION = -L ./lib
+LIBS_OPTION = -lpthread
+LIBS_OPTION += $(shell sdl2-config --libs)
 
 CFLAGS = -g -Wall -O3
-CFLAGS += -I/usr/local/include/SDL2 -D_THREAD_SAFE
+CFLAGS += $(shell sdl2-config --cflags)
 
 # includes
 CFLAGS += $(foreach dir, $(INCLUDE_DIRS), -I $(dir) )

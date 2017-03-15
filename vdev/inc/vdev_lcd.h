@@ -11,8 +11,7 @@
  * @return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_init_fn) (
-        _IN_ uint32_t id
-        );
+        _IN_ uint32_t id);
 
 /**
  * @brief Fill rect
