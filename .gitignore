@@ -4,6 +4,7 @@ obj_output/
 *.o
 *.out
 *.swp
+*.diff
 
 GPATH
 GRTAGS
