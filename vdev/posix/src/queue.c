@@ -68,9 +68,9 @@ vdev_status_t posix_queue_get(queue_t *q, void *item, uint32_t item_size)
     return VDEV_STATUS_SUCCESS;
 }
 
-bool posix_queue_empty(queue_t *q)
+BOOL posix_queue_empty(queue_t *q)
 {
-    bool res;
+    BOOL res;
     pthread_mutex_lock(&q->mutex);
     res = (q->p2 == q->p1);
     pthread_mutex_unlock(&q->mutex);
@@ -78,9 +78,9 @@ bool posix_queue_empty(queue_t *q)
     return res;
 }
 
-bool posix_queue_full(queue_t *q)
+BOOL posix_queue_full(queue_t *q)
 {
-    bool res;
+    BOOL res;
     pthread_mutex_lock(&q->mutex);
     res = (q->p2 - q->head == q->count && q->p1 == q->head);
     pthread_mutex_unlock(&q->mutex);

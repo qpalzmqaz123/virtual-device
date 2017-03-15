@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-typedef uint32_t bool;
+typedef uint32_t BOOL;
 
 #define TRUE 1
-#define FALSE 2
+#define FALSE 0
 
 #define _IN_
 #define _OUT_
