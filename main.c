@@ -15,11 +15,11 @@ int main(int argc, char** argv)
     memset(&api, 0, sizeof(vdev_api_t));
     vdev_lcd_api_install(&api.lcd);
 
-    api.lcd.lcd_init(0);
+    api.lcd.init(0);
 
     for (i = 0; i < 200; i++) {
         for (j = 0; j < 200; j++) {
-            api.lcd.lcd_draw_point(0, i, j, 0xf800);
+            api.lcd.draw_point(0, i, j, 0xf800);
         }
     }
 

@@ -69,10 +69,10 @@ typedef vdev_status_t (*vdev_lcd_get_point_fn) (
  * @brief lcd apis
  */
 typedef struct _vdev_lcd_api_t {
-    vdev_lcd_init_fn       lcd_init;
-    vdev_lcd_fill_rect_fn  lcd_fill_rect;
-    vdev_lcd_draw_point_fn lcd_draw_point;
-    vdev_lcd_get_point_fn  lcd_get_point;
+    vdev_lcd_init_fn       init;
+    vdev_lcd_fill_rect_fn  fill_rect;
+    vdev_lcd_draw_point_fn draw_point;
+    vdev_lcd_get_point_fn  get_point;
 } vdev_lcd_api_t;
 
 

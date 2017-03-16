@@ -135,10 +135,10 @@ static vdev_status_t posix_lcd_get_point(
 
 void vdev_lcd_api_install(vdev_lcd_api_t *api)
 {
-    api->lcd_init = posix_lcd_init;
-    api->lcd_fill_rect = posix_lcd_fill_rect;
-    api->lcd_draw_point = posix_lcd_draw_point;
-    api->lcd_get_point = posix_lcd_get_point;
+    api->init = posix_lcd_init;
+    api->fill_rect = posix_lcd_fill_rect;
+    api->draw_point = posix_lcd_draw_point;
+    api->get_point = posix_lcd_get_point;
 }
 
 #endif
