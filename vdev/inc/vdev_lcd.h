@@ -8,7 +8,7 @@
  *
  * @param[in] id Device id
  *
- * @return status code, refer to vdev_status_t
+ * @return Return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_init_fn) (
         _IN_ uint32_t id);
@@ -23,7 +23,7 @@ typedef vdev_status_t (*vdev_lcd_init_fn) (
  * @param[in] ye Y coordinate of end point
  * @param[in] color Color
  *
- * @return status code, refer to vdev_status_t
+ * @return Return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
         _IN_ uint32_t id,
@@ -41,7 +41,7 @@ typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
  * @param[in] y Y coordinate 
  * @param[in] color Color
  *
- * @return status code, refer to vdev_status_t
+ * @return Return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
         _IN_ uint32_t id,
@@ -55,15 +55,32 @@ typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
  * @param[in] id Device id
  * @param[in] x X coordinate
  * @param[in] y Y coordinate 
- * @param[in] color Color
+ * @param[out] color Color
  *
- * @return status code, refer to vdev_status_t
+ * @return Return status code, refer to vdev_status_t
  */
 typedef vdev_status_t (*vdev_lcd_get_point_fn) (
         _IN_ uint32_t id,
         _IN_ uint16_t x,
         _IN_ uint16_t y,
         _OUT_ uint16_t *color);
+
+#if VDEV_SUPPORT_TOUCH == 1
+
+/**
+ * @brief Get touch AD value
+ *
+ * @param[out] x Touch x AD
+ * @param[out] y Touch y AD
+ *
+ * @return Return VDEV_STATUS_SUCCESS if touch down,
+ * else return VDEV_STATUS_FAILURE
+ */
+typedef vdev_status_t (*vdev_lcd_touch_get_digital) (
+        _OUT_ uint16_t *x,
+        _OUT_ uint16_t *y);
+
+#endif
 
 /**
  * @brief lcd apis
@@ -73,6 +90,9 @@ typedef struct _vdev_lcd_api_t {
     vdev_lcd_fill_rect_fn  fill_rect;
     vdev_lcd_draw_point_fn draw_point;
     vdev_lcd_get_point_fn  get_point;
+#if VDEV_SUPPORT_TOUCH == 1
+    vdev_lcd_touch_get_digital  touch_get_digital;
+#endif
 } vdev_lcd_api_t;
 
 

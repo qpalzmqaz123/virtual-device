@@ -9,7 +9,9 @@ void vdev_lcd_api_install(vdev_lcd_api_t *api);
 
 int main(int argc, char** argv)
 {
-    int i, j;
+    int i = 0;
+    uint16_t x, y;
+    vdev_status_t rs;
     vdev_api_t api;
 
     memset(&api, 0, sizeof(vdev_api_t));
@@ -17,13 +19,15 @@ int main(int argc, char** argv)
 
     api.lcd.init(0);
 
-    for (i = 0; i < 300; i++) {
-        for (j = 0; j < 300; j++) {
-            api.lcd.draw_point(0, i, j, 0xf800);
-        }
-    }
+    api.lcd.fill_rect(0, 0, 0, 479, 319, 0xf800);
 
-    sleep(3);
+    for (i = 0; i < 30; i++) {
+        rs = api.lcd.touch_get_digital(&x, &y);
+        if (VDEV_STATUS_SUCCESS == rs) {
+            printf("touch down: %d - %d\n", x, y);
+        }
+        usleep(200000);
+    }
 
     return 0;
 }
