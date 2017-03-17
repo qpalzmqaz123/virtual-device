@@ -3,6 +3,7 @@
 
 #include "vdev_types.h"
 #include "vdev_conf.h"
+#include "vdev_macro.h"
 
 #include "vdev_lcd.h"
 

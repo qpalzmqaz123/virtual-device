@@ -17,13 +17,13 @@ int main(int argc, char** argv)
 
     api.lcd.init(0);
 
-    for (i = 0; i < 200; i++) {
-        for (j = 0; j < 200; j++) {
+    for (i = 0; i < 300; i++) {
+        for (j = 0; j < 300; j++) {
             api.lcd.draw_point(0, i, j, 0xf800);
         }
     }
 
-    sleep(5);
+    sleep(3);
 
     return 0;
 }

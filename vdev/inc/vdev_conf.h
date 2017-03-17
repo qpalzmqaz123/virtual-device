@@ -3,4 +3,7 @@
 
 #define VDEV_SUPPORT_LCD 1
 
+#include "stdio.h"
+#define vprintf printf
+
 #endif

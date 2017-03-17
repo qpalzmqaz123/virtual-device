@@ -35,7 +35,7 @@ static void *_posix_lcd_task_refresh(void *args)
         }
 
         pthread_mutex_unlock(&Mutex);
-        usleep(30000);
+        usleep(50000);
     }
 
     return NULL;
@@ -46,14 +46,8 @@ static vdev_status_t posix_lcd_init(
 {
     int res;
 
-    if (0 != SDL_Init(SDL_INIT_VIDEO)) {
-        printf("Can't init SDL\n");
-        exit(1);
-    }
-    if (0 != SDL_CreateWindowAndRenderer(VLCD_X_SIZE, VLCD_Y_SIZE, 0, &window, &renderer)) {
-        printf("Can't create window\n");
-        exit(1);
-    }
+    VDEV_ASSERT_SUCCESS(SDL_Init(SDL_INIT_VIDEO));
+    VDEV_ASSERT_SUCCESS(SDL_CreateWindowAndRenderer(VLCD_X_SIZE, VLCD_Y_SIZE, 0, &window, &renderer));
 
     /* create thread */
     res = pthread_create(&RefreshThread, NULL, _posix_lcd_task_refresh, (void *)NULL);
