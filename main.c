@@ -2,32 +2,22 @@
 #include <stdio.h>
 #include <string.h>
 #include "vdev.h"
+#include "GUI.h"
 
-#include "queue.h"
-
-void vdev_lcd_api_install(vdev_lcd_api_t *api);
+void bsp_init(void)
+{
+    vdev_api_init();
+}
 
 int main(int argc, char** argv)
 {
-    int i = 0;
-    uint16_t x, y;
-    vdev_status_t rs;
-    vdev_api_t api;
+    bsp_init();
 
-    memset(&api, 0, sizeof(vdev_api_t));
-    vdev_lcd_api_install(&api.lcd);
+    GUI_Init();
 
-    api.lcd.init(0);
+//    GUI_MessageBox("hello world", "Messagebox", GUI_MESSAGEBOX_CF_MOVEABLE);
 
-    api.lcd.fill_rect(0, 0, 0, 479, 319, 0xf800);
-
-    for (i = 0; i < 30; i++) {
-        rs = api.lcd.touch_get_digital(&x, &y);
-        if (VDEV_STATUS_SUCCESS == rs) {
-            printf("touch down: %d - %d\n", x, y);
-        }
-        usleep(200000);
-    }
+    sleep(5);
 
     return 0;
 }

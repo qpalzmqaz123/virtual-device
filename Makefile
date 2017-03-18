@@ -9,19 +9,22 @@ DEFINES =
 
 # 所有头文件的目录
 INCLUDE_DIRS = ./vdev/inc \
-			   ./vdev/posix/inc
+			   ./vdev/posix/inc \
+			   ./third_party/ucgui/GUI/Core/ ./third_party/ucgui/Config
 
 # 所有源文件的目录
 SRC_DIRS =	   ./vdev/posix/src
 
 # 依赖的目标文件
 OBJS = main.o \
-	   posix_vdev_lcd.o queue.o
+	   posix_vdev_lcd.o posix_vdev.o
 
 
 # 链接时的lib参数
-LIBS_OPTION = -L ./lib
-LIBS_OPTION = -lpthread
+LIBS_OPTION = -L ./lib \
+			  -L ./third_party/ucgui/GUI
+LIBS_OPTION += -lpthread \
+			   -lucgui
 LIBS_OPTION += $(shell sdl2-config --libs)
 
 CFLAGS = -g -Wall -O3

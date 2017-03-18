@@ -16,4 +16,18 @@ typedef struct _vdev_api_t {
 #endif
 } vdev_api_t;
 
+/**
+ * @brief Api intiialization
+ *
+ * @return Return status code, refer to vdev_status_t
+ */
+vdev_status_t vdev_api_init(void);
+
+/**
+ * @brief Get all api
+ *
+ * @return Return status code, refer to vdev_status_t
+ */
+vdev_api_t *vdev_get_api(void);
+
 #endif
