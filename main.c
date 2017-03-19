@@ -15,9 +15,7 @@ int main(int argc, char** argv)
 
     GUI_Init();
 
-//    GUI_MessageBox("hello world", "Messagebox", GUI_MESSAGEBOX_CF_MOVEABLE);
-
-    sleep(5);
+    GUI_MessageBox("hello world", "Messagebox", GUI_MESSAGEBOX_CF_MOVEABLE);
 
     return 0;
 }

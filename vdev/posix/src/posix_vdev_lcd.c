@@ -132,8 +132,8 @@ static vdev_status_t posix_lcd_fill_rect(
     _posix_lcd_color16_to_24(color, &r, &g, &b);
     rect.x = xs;
     rect.y = ys;
-    rect.w = xe - xs;
-    rect.h = ye - ys;
+    rect.w = xe - xs + 1;
+    rect.h = ye - ys + 1;
 
     pthread_mutex_lock(&pLcdInfo->refresh_mutex);
 
