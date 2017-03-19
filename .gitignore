@@ -1,6 +1,7 @@
 simulater
 obj_output/
 
+*.a
 *.o
 *.out
 *.swp
