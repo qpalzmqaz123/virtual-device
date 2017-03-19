@@ -179,7 +179,8 @@ static vdev_status_t posix_lcd_get_point(
 }
 
 #if VDEV_SUPPORT_TOUCH == 1
-static vdev_status_t posix_lcd_touch_get_digital (
+static vdev_status_t posix_lcd_touch_get_xy (
+        _IN_ uint32_t id,
         _OUT_ uint16_t *x,
         _OUT_ uint16_t *y)
 {
@@ -205,7 +206,7 @@ void vdev_lcd_api_install(vdev_lcd_api_t *api)
     api->draw_point = posix_lcd_draw_point;
     api->get_point = posix_lcd_get_point;
 #if VDEV_SUPPORT_TOUCH == 1
-    api->touch_get_digital = posix_lcd_touch_get_digital;
+    api->touch_get_xy = posix_lcd_touch_get_xy;
 #endif
 }
 

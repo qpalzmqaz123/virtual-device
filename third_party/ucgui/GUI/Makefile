@@ -33,6 +33,7 @@ vpath %.h ../Config ./AntiAlias ./ConvertColor ./ConvertMono ./Core ./Font ./LCD
 SRCS = \
 	LCD_VDEV.c \
 	GUI_X.c \
+	GUI_X_Touch.c \
 	\
 	GUIAAArc.c \
 	GUIAAChar.c \

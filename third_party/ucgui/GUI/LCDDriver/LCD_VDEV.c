@@ -40,7 +40,7 @@ Version-Date---Author-Explanation
 #include "GUI_Private.h"
 #include "GUIDebug.h"
 
-#if (LCD_CONTROLLER == -2)
+#if (LCD_CONTROLLER == -1)
 
 #include "vdev.h"
 
@@ -560,4 +560,4 @@ void LCDTemplate_c(void);
 void LCDTemplate_c(void) { } /* avoid empty object files */
 
 #endif /* (LCD_CONTROLLER undefined) */
-	 	 			 		    	 				 	  			   	 	 	 	 	 	  	  	      	   		 	 	 		  		  	 		 	  	  			     			       	   	 			  		    	 	     	 				  	 					 	 			   	  	  			 				 		 	 	 			     			 
+

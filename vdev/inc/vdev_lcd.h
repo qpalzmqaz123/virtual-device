@@ -68,15 +68,17 @@ typedef vdev_status_t (*vdev_lcd_get_point_fn) (
 #if VDEV_SUPPORT_TOUCH == 1
 
 /**
- * @brief Get touch AD value
+ * @brief Get touch coordinate
  *
- * @param[out] x Touch x AD
- * @param[out] y Touch y AD
+ * @param[in] id Device id
+ * @param[out] x Touch x coordinate
+ * @param[out] y Touch y coordinate
  *
  * @return Return VDEV_STATUS_SUCCESS if touch down,
  * else return VDEV_STATUS_FAILURE
  */
-typedef vdev_status_t (*vdev_lcd_touch_get_digital) (
+typedef vdev_status_t (*vdev_lcd_touch_get_xy) (
+        _IN_ uint32_t id,
         _OUT_ uint16_t *x,
         _OUT_ uint16_t *y);
 
@@ -91,7 +93,7 @@ typedef struct _vdev_lcd_api_t {
     vdev_lcd_draw_point_fn draw_point;
     vdev_lcd_get_point_fn  get_point;
 #if VDEV_SUPPORT_TOUCH == 1
-    vdev_lcd_touch_get_digital  touch_get_digital;
+    vdev_lcd_touch_get_xy  touch_get_xy;
 #endif
 } vdev_lcd_api_t;
 
