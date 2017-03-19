@@ -29,6 +29,7 @@
 
 #include "GUI_Private.h"
 #include "stdio.h"
+#include "unistd.h"
 
 /*
 *********************************************************************************************************
@@ -64,6 +65,7 @@ void  GUI_X_Delay (int period)
 */
 void GUI_X_ExecIdle (void) 
 {
+    usleep(1000);
 }
 
 
