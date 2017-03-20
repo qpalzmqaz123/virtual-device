@@ -127,11 +127,56 @@ static vdev_status_t posix_vdev_os_delete_task(
     return VDEV_STATUS_SUCCESS;
 }
 
+static vdev_status_t posix_vdev_os_create_mutex(
+        _OUT_ vdev_os_mutex_t *mutex)
+{
+    int res;
+
+    pthread_mutex_t *p = NULL;
+    p = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_NO_MEMORY, "Can't create mutex");
+
+    res = pthread_mutex_init(p, NULL);
+    if (res) {
+        free(p);
+        return VDEV_STATUS_FAILURE;
+    }
+    *mutex = p;
+
+    return VDEV_STATUS_SUCCESS;
+}
+
+static vdev_status_t posix_vdev_os_delete_mutex(
+        _IN_ vdev_os_mutex_t mutex)
+{
+    pthread_mutex_destroy(mutex);
+    free(mutex);
+    return VDEV_STATUS_SUCCESS;
+}
+
+static vdev_status_t posix_vdev_os_mutex_lock(
+        _IN_ vdev_os_mutex_t mutex)
+{
+    pthread_mutex_lock(mutex);
+    return VDEV_STATUS_SUCCESS;
+}
+
+static vdev_status_t posix_vdev_os_mutex_unlock(
+        _IN_ vdev_os_mutex_t mutex)
+{
+    pthread_mutex_unlock(mutex);
+    return VDEV_STATUS_SUCCESS;
+}
+
 void vdev_os_api_install(vdev_os_api_t *api)
 {
-    api->init = posix_vdev_os_init;
-    api->create_task = posix_vdev_os_create_task;
-    api->delete_task = posix_vdev_os_delete_task;
+    api->init         = posix_vdev_os_init;
+    api->create_task  = posix_vdev_os_create_task;
+    api->delete_task  = posix_vdev_os_delete_task;
+    api->create_mutex = posix_vdev_os_create_mutex;
+    api->delete_mutex = posix_vdev_os_delete_mutex;
+    api->mutex_lock   = posix_vdev_os_mutex_lock;
+    api->mutex_unlock = posix_vdev_os_mutex_unlock;
 }
 
 #endif

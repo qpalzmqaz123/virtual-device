@@ -7,6 +7,8 @@ typedef struct _vdev_os_task_t {
     uint32_t id;
 } vdev_os_task_t;
 
+typedef void * vdev_os_mutex_t;
+
 /**
  * @brief Initialize OS
  *
@@ -41,13 +43,56 @@ typedef vdev_status_t (*vdev_os_delete_task_fn) (
         _IN_ vdev_os_task_t *task);
 
 /**
+ * @brief Create a mutex
+ *
+ * @param[out] mutex Mutex pointer
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_create_mutex_fn) (
+        _OUT_ vdev_os_mutex_t *mutex);
+
+/**
+ * @brief Delete a mutex
+ *
+ * @param[in] mutex Mutex
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_delete_mutex_fn) (
+        _IN_ vdev_os_mutex_t mutex);
+
+/**
+ * @brief Lock the mutex
+ *
+ * @param[in] mutex Mutex
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_mutex_lock_fn) (
+        _IN_ vdev_os_mutex_t mutex);
+
+/**
+ * @brief Unlock the mutex
+ *
+ * @param[in] mutex Mutex
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_mutex_unlock_fn) (
+        _IN_ vdev_os_mutex_t mutex);
+
+/**
  * @brief OS apis
  */
 typedef struct _vdev_os_api_t {
-    vdev_os_init_fn        init;
-    vdev_os_create_task_fn create_task;
-    vdev_os_delete_task_fn delete_task;
+    vdev_os_init_fn         init;
+    vdev_os_create_task_fn  create_task;
+    vdev_os_delete_task_fn  delete_task;
+    vdev_os_create_mutex_fn create_mutex;
+    vdev_os_delete_mutex_fn delete_mutex;
+    vdev_os_mutex_lock_fn   mutex_lock;
+    vdev_os_mutex_unlock_fn mutex_unlock;
 } vdev_os_api_t;
-
 
 #endif
