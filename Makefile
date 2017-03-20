@@ -17,12 +17,11 @@ SRC_DIRS =	   ./vdev/posix/src
 
 # 依赖的目标文件
 OBJS = main.o \
-	   posix_vdev_lcd.o posix_vdev.o
+	   posix_vdev_lcd.o posix_vdev.o posix_vdev_os.o
 
 
 # 链接时的lib参数
-LIBS_OPTION = -L ./lib \
-			  -L ./third_party/ucgui/GUI
+LIBS_OPTION = -L ./third_party/ucgui/GUI
 LIBS_OPTION += -lpthread \
 			   -lucgui
 LIBS_OPTION += $(shell sdl2-config --libs)
@@ -64,6 +63,7 @@ $(OBJS_OUTPUT_DIR)/%.o: %.s
 include $(foreach d, $(SRCS:.c=.d), $(OBJS_OUTPUT_DIR)/$(d))
 
 $(OBJS_OUTPUT_DIR)/%.d: %.c
+	[ -d $(OBJS_OUTPUT_DIR) ] || mkdir $(OBJS_OUTPUT_DIR)
 	@set -e; rm -f $@; \
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,$(OBJS_OUTPUT_DIR)\/\1.o $@ : ,g' < $@.$$$$ > $@; \
@@ -73,5 +73,5 @@ $(OBJS_OUTPUT_DIR)/%.d: %.c
 
 #####################################################################
 clean:
-	rm -vf $(OBJS_OUTPUT_DIR)/*
+	rm -rvf $(OBJS_OUTPUT_DIR)
 	rm -vf $(PROJ_NAME)

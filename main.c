@@ -4,19 +4,12 @@
 #include "vdev.h"
 #include "GUI.h"
 
-#include <pthread.h>
-void *touch_exec(void *arg)
+int test1(void *arg)
 {
     while (1) {
-        usleep(30000);
-        GUI_TOUCH_Exec();
+        printf("task1\n");
+        sleep(1);
     }
-}
-
-void create_outch_thread(void)
-{
-    pthread_t thread;
-    pthread_create(&thread, NULL, touch_exec, (void *)NULL);
 }
 
 void bsp_init(void)
@@ -24,21 +17,26 @@ void bsp_init(void)
     vdev_api_init();
 }
 
+void test(void)
+{
+    vdev_api_t *api;
+    vdev_os_task_t task1;
+
+    api = vdev_get_api();
+
+    api->os.init();
+    api->os.create_task("task1", test1, (void *)NULL, &task1);
+    sleep(5);
+    api->os.delete_task(&task1);
+}
+
 int main(int argc, char** argv)
 {
     bsp_init();
-
-    GUI_Init();
-
-    GUI_CURSOR_Show();
-
-    create_outch_thread();
-
-    GUI_MessageBox("hello world", "Messagebox", GUI_MESSAGEBOX_CF_MOVEABLE);
-
-    sleep(1);
+    test();
+    sleep(3);
+    VDEV_LOG(VDEV_LOG_INFO, "quit");
 
     return 0;
 }
-
 
