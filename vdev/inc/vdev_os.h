@@ -8,6 +8,7 @@ typedef struct _vdev_os_task_t {
 } vdev_os_task_t;
 
 typedef void * vdev_os_mutex_t;
+typedef void * vdev_os_signal_t;
 
 /**
  * @brief Initialize OS
@@ -69,7 +70,7 @@ typedef vdev_status_t (*vdev_os_delete_mutex_fn) (
  *
  * @return Status code, refer to vdev_status_t
  */
-typedef vdev_status_t (*vdev_os_mutex_lock_fn) (
+typedef vdev_status_t (*vdev_os_lock_mutex_fn) (
         _IN_ vdev_os_mutex_t mutex);
 
 /**
@@ -79,20 +80,64 @@ typedef vdev_status_t (*vdev_os_mutex_lock_fn) (
  *
  * @return Status code, refer to vdev_status_t
  */
-typedef vdev_status_t (*vdev_os_mutex_unlock_fn) (
+typedef vdev_status_t (*vdev_os_unlock_mutex_fn) (
         _IN_ vdev_os_mutex_t mutex);
+
+/**
+ * @brief Create a signal
+ *
+ * @param[out] signal Signal pointer
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_create_signal_fn) (
+        _OUT_ vdev_os_signal_t *signal);
+
+/**
+ * @brief Delete a signal
+ *
+ * @param[in] signal Signal pointer
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_delete_signal_fn) (
+        _IN_ vdev_os_signal_t signal);
+
+/**
+ * @brief Set signal
+ *
+ * @param[in] signal Signal
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_set_signal_fn) (
+        _IN_ vdev_os_signal_t signal);
+
+/**
+ * @brief Wait signal
+ *
+ * @param[in] signal Signal
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_wait_signal_fn) (
+        _IN_ vdev_os_signal_t signal);
 
 /**
  * @brief OS apis
  */
 typedef struct _vdev_os_api_t {
-    vdev_os_init_fn         init;
-    vdev_os_create_task_fn  create_task;
-    vdev_os_delete_task_fn  delete_task;
-    vdev_os_create_mutex_fn create_mutex;
-    vdev_os_delete_mutex_fn delete_mutex;
-    vdev_os_mutex_lock_fn   mutex_lock;
-    vdev_os_mutex_unlock_fn mutex_unlock;
+    vdev_os_init_fn          init;
+    vdev_os_create_task_fn   create_task;
+    vdev_os_delete_task_fn   delete_task;
+    vdev_os_create_mutex_fn  create_mutex;
+    vdev_os_delete_mutex_fn  delete_mutex;
+    vdev_os_lock_mutex_fn    lock_mutex;
+    vdev_os_unlock_mutex_fn  unlock_mutex;
+    vdev_os_create_signal_fn create_signal;
+    vdev_os_delete_signal_fn delete_signal;
+    vdev_os_set_signal_fn    set_signal;
+    vdev_os_wait_signal_fn   wait_signal;
 } vdev_os_api_t;
 
 #endif
