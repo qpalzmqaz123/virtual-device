@@ -173,6 +173,7 @@ static vdev_status_t posix_lcd_get_point(
        _IN_ uint16_t y,
        _OUT_ uint16_t *color)
 {
+    /* faster than SDL_RenderReadPixels */
     *color = pLcdInfo->buffer[y][x];
 
     return VDEV_STATUS_SUCCESS;
