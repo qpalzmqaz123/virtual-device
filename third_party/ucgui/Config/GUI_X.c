@@ -28,8 +28,7 @@
 */
 
 #include "GUI_Private.h"
-#include "stdio.h"
-#include "unistd.h"
+#include "vdev.h"
 
 /*
 *********************************************************************************************************
@@ -37,6 +36,9 @@
 *********************************************************************************************************
 */
 
+static vdev_api_t *pApi = NULL;
+static vdev_os_mutex_t Mutex;
+static vdev_os_signal_t Signal;
 
 /*
 *********************************************************************************************************
@@ -49,12 +51,13 @@
 
 int  GUI_X_GetTime (void) 
 {
-    return 0;
+    return (int)pApi->os.get_time();
 }
 
 
 void  GUI_X_Delay (int period) 
 {
+    pApi->os.msleep(period);
 }
 
 
@@ -65,7 +68,7 @@ void  GUI_X_Delay (int period)
 */
 void GUI_X_ExecIdle (void) 
 {
-    usleep(1000);
+    pApi->os.msleep(1);
 }
 
 
@@ -81,22 +84,28 @@ void GUI_X_ExecIdle (void)
 
 void  GUI_X_InitOS (void)
 { 
+    pApi = vdev_get_api();
+
+    pApi->os.create_mutex(&Mutex);
+    pApi->os.create_signal(&Signal);
 }
 
 
 void  GUI_X_Lock (void)
 { 
+    pApi->os.lock_mutex(Mutex);
 }
 
 
 void  GUI_X_Unlock (void)
 { 
+    pApi->os.unlock_mutex(Mutex);
 }
 
 
 U32  GUI_X_GetTaskId (void) 
 { 
-    return 0;
+    return (U32)pApi->os.get_task_id();
 }
 
 /*
@@ -109,11 +118,13 @@ U32  GUI_X_GetTaskId (void)
 
 void GUI_X_WaitEvent (void) 
 {
+    pApi->os.wait_signal(&Signal);
 }
 
 
 void GUI_X_SignalEvent (void) 
 {
+    pApi->os.set_signal(&Signal);
 }
 
 /*

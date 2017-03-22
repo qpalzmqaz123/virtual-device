@@ -85,7 +85,7 @@ static void *_posix_lcd_task_refresh(void *args)
         }
 
         pthread_mutex_unlock(&pLcdInfo->refresh_mutex);
-        usleep(50000);
+        usleep(10000);
     }
 
     return (void *)NULL;
