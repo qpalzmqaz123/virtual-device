@@ -7,6 +7,8 @@
 #define VDEV_SUPPORT_TOUCH 1 /* require SUPPORT_LCD */
 #define VDEV_SUPPORT_OS    1
 
+#define VDEV_SIMULATION_TYPE  1 /* 0: Disable, 1: Posix, 2: Windows */
+
 #include <stdio.h>
 #include <stdlib.h>
 

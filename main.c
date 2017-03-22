@@ -24,6 +24,16 @@ void task_touch(void *args)
     }
 }
 
+void task_test1(void *args)
+{
+    GUI_MessageBox("test1", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
+}
+
+void task_test2(void *args)
+{
+    GUI_MessageBox("test2", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
+}
+
 void task_main(void *args)
 {
     GUI_MessageBox("hello world", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
@@ -31,12 +41,14 @@ void task_main(void *args)
 
 int main(int argc, char** argv)
 {
-    vdev_os_task_t task1, task2;
+    vdev_os_task_t task1, task2, task3, task4;
 
     bsp_init();
 
     pApi->os.create_task("main", task_main, (void *)NULL, &task1);
     pApi->os.create_task("touch", task_touch, (void *)NULL, &task2);
+    pApi->os.create_task("test1", task_test1, (void *)NULL, &task3);
+    pApi->os.create_task("test2", task_test2, (void *)NULL, &task4);
 
     getchar();
 

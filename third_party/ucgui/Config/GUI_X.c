@@ -30,6 +30,10 @@
 #include "GUI_Private.h"
 #include "vdev.h"
 
+#if VDEV_SIMULATION_TYPE == 1
+#include <unistd.h>
+#endif
+
 /*
 *********************************************************************************************************
 *                                         GLOBAL VARIABLES
@@ -94,6 +98,9 @@ void  GUI_X_InitOS (void)
 void  GUI_X_Lock (void)
 { 
     pApi->os.lock_mutex(Mutex);
+#if VDEV_SIMULATION_TYPE == 1
+    usleep(1); /* UCGUI bug ? */
+#endif
 }
 
 
