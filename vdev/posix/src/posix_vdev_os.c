@@ -225,9 +225,19 @@ static vdev_status_t posix_vdev_os_wait_signal(
     return VDEV_STATUS_SUCCESS;
 }
 
-uint32_t posix_vdev_get_task_id(void)
+static uint32_t posix_vdev_get_task_id(void)
 {
     return pthread_self();
+}
+
+static void posix_sleep(uint32_t sec)
+{
+    sleep(sec);
+}
+
+static void posix_msleep(uint32_t ms)
+{
+    usleep(ms * 1000);
 }
 
 void vdev_os_api_install(vdev_os_api_t *api)
@@ -244,6 +254,8 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->set_signal    = posix_vdev_os_set_signal;
     api->wait_signal   = posix_vdev_os_wait_signal;
     api->get_task_id   = posix_vdev_get_task_id;
+    api->sleep         = posix_sleep;
+    api->msleep        = posix_msleep;
 }
 
 #endif
