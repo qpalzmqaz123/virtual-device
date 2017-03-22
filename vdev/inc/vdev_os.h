@@ -29,7 +29,7 @@ typedef vdev_status_t (*vdev_os_init_fn) (void);
  */
 typedef vdev_status_t (*vdev_os_create_task_fn) (
         _IN_ const char *name,
-        _IN_ int (*fn)(void *arg),
+        _IN_ void (*fn)(void *arg),
         _IN_ void *arg,
         _OUT_ vdev_os_task_t *task);
 
@@ -124,6 +124,13 @@ typedef vdev_status_t (*vdev_os_wait_signal_fn) (
         _IN_ vdev_os_signal_t signal);
 
 /**
+ * @brief Get current task id
+ *
+ * @return Task id
+ */
+typedef uint32_t (*vdev_get_task_id_fn) (void);
+
+/**
  * @brief OS apis
  */
 typedef struct _vdev_os_api_t {
@@ -138,6 +145,7 @@ typedef struct _vdev_os_api_t {
     vdev_os_delete_signal_fn delete_signal;
     vdev_os_set_signal_fn    set_signal;
     vdev_os_wait_signal_fn   wait_signal;
+    vdev_get_task_id_fn      get_task_id;
 } vdev_os_api_t;
 
 #endif

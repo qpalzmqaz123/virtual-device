@@ -56,7 +56,7 @@ static vdev_status_t posix_vdev_os_init(void)
 
 static vdev_status_t posix_vdev_os_create_task(
         _IN_ const char *name,
-        _IN_ int (*fn)(void *arg),
+        _IN_ void (*fn)(void *arg),
         _IN_ void *arg,
         _OUT_ vdev_os_task_t *task)
 {
@@ -225,6 +225,11 @@ static vdev_status_t posix_vdev_os_wait_signal(
     return VDEV_STATUS_SUCCESS;
 }
 
+uint32_t posix_vdev_get_task_id(void)
+{
+    return pthread_self();
+}
+
 void vdev_os_api_install(vdev_os_api_t *api)
 {
     api->init          = posix_vdev_os_init;
@@ -238,6 +243,7 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->delete_signal = posix_vdev_os_delete_signal;
     api->set_signal    = posix_vdev_os_set_signal;
     api->wait_signal   = posix_vdev_os_wait_signal;
+    api->get_task_id   = posix_vdev_get_task_id;
 }
 
 #endif
