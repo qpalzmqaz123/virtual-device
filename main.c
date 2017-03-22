@@ -16,7 +16,7 @@ void bsp_init(void)
     GUI_Init();
 }
 
-void task_touch(void *args)
+void task_touch(void *arg)
 {
     while (1) {
         pApi->os.msleep(10);
@@ -24,17 +24,17 @@ void task_touch(void *args)
     }
 }
 
-void task_test1(void *args)
+void task_test1(void *arg)
 {
     GUI_MessageBox("test1", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
 }
 
-void task_test2(void *args)
+void task_test2(void *arg)
 {
     GUI_MessageBox("test2", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
 }
 
-void task_main(void *args)
+void task_main(void *arg)
 {
     GUI_MessageBox("hello world", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
 }

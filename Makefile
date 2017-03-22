@@ -17,6 +17,7 @@ SRC_DIRS =	   ./vdev/posix/src
 
 # 依赖的目标文件
 OBJS = main.o \
+	   posix_queue.o \
 	   posix_vdev_lcd.o posix_vdev.o posix_vdev_os.o
 
 
