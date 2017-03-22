@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <sys/time.h>
 
 
 #define __POSIX_VDEV_OS_DEBUG__ 0
@@ -14,6 +15,7 @@
 typedef struct _os_info_t {
     pthread_t **list;
     uint32_t  thread_cnt;
+    struct timeval ts;
 } os_info_t;
 
 typedef struct _os_signal_t {
@@ -50,6 +52,9 @@ static vdev_status_t posix_vdev_os_init(void)
     pOsInfo = (os_info_t *)malloc(sizeof(os_info_t));
     VDEV_ASSERT_NOT_NULL(pOsInfo);
     memset(pOsInfo, 0, sizeof(os_info_t));
+
+    /* get current time */
+    gettimeofday(&pOsInfo->ts, NULL);
 
     return VDEV_STATUS_SUCCESS;
 }
@@ -240,6 +245,16 @@ static void posix_msleep(uint32_t ms)
     usleep(ms * 1000);
 }
 
+static uint32_t posix_get_time(void)
+{
+    struct timeval tc;
+
+    gettimeofday(&tc, NULL);
+
+    return ((tc.tv_sec - pOsInfo->ts.tv_sec) * 1000 +
+            (tc.tv_usec - pOsInfo->ts.tv_usec) / 1000);
+}
+
 void vdev_os_api_install(vdev_os_api_t *api)
 {
     api->init          = posix_vdev_os_init;
@@ -256,6 +271,7 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->get_task_id   = posix_vdev_get_task_id;
     api->sleep         = posix_sleep;
     api->msleep        = posix_msleep;
+    api->get_time      = posix_get_time;
 }
 
 #endif

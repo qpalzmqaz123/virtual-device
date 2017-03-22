@@ -145,6 +145,13 @@ typedef void (*vdev_sleep_fn) (uint32_t sec);
 typedef void (*vdev_msleep_fn) (uint32_t ms);
 
 /**
+ * @brief Get time (millisecond)
+ *
+ * @return Task id
+ */
+typedef uint32_t (*vdev_get_time_fn) (void);
+
+/**
  * @brief OS apis
  */
 typedef struct _vdev_os_api_t {
@@ -162,6 +169,7 @@ typedef struct _vdev_os_api_t {
     vdev_get_task_id_fn      get_task_id;
     vdev_sleep_fn            sleep;
     vdev_msleep_fn           msleep;
+    vdev_get_time_fn         get_time;
 } vdev_os_api_t;
 
 #endif
