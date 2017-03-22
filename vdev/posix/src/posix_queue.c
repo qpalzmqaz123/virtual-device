@@ -47,6 +47,7 @@ static posix_queue_error_t _posix_queue_put(posix_queue_t *queue, void *item, in
     }
     node->data = (void *)malloc(sizeof(queue->itemsize));
     if (NULL == node->data) {
+        free(node);
         error = POSIX_QUEUE_NO_MEMORY; 
         goto RET;
     }
