@@ -42,7 +42,7 @@
 
 static vdev_api_t *pApi = NULL;
 static vdev_os_mutex_t Mutex;
-static vdev_os_signal_t Signal;
+static vdev_os_event_t Event;
 
 /*
 *********************************************************************************************************
@@ -90,14 +90,14 @@ void  GUI_X_InitOS (void)
 { 
     pApi = vdev_get_api();
 
-    pApi->os.create_mutex(&Mutex);
-    pApi->os.create_signal(&Signal);
+    pApi->os.mutex_create(&Mutex);
+    pApi->os.event_create(&Event);
 }
 
 
 void  GUI_X_Lock (void)
 { 
-    pApi->os.lock_mutex(Mutex);
+    pApi->os.mutex_lock(Mutex);
 #if VDEV_SIMULATION_TYPE == 1
     usleep(1); /* UCGUI bug ? */
 #endif
@@ -106,7 +106,7 @@ void  GUI_X_Lock (void)
 
 void  GUI_X_Unlock (void)
 { 
-    pApi->os.unlock_mutex(Mutex);
+    pApi->os.unmutex_lock(Mutex);
 }
 
 
@@ -125,13 +125,13 @@ U32  GUI_X_GetTaskId (void)
 
 void GUI_X_WaitEvent (void) 
 {
-    pApi->os.wait_signal(&Signal);
+    pApi->os.event_wait(&Event);
 }
 
 
 void GUI_X_SignalEvent (void) 
 {
-    pApi->os.set_signal(&Signal);
+    pApi->os.event_set(&Event);
 }
 
 /*

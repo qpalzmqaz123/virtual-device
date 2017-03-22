@@ -18,10 +18,10 @@ typedef struct _os_info_t {
     struct timeval ts;
 } os_info_t;
 
-typedef struct _os_signal_t {
+typedef struct _os_event_t {
     pthread_mutex_t mutex;
     pthread_cond_t  cond;
-} os_signal_t;
+} os_event_t;
 
 
 static os_info_t *pOsInfo = NULL;
@@ -59,7 +59,7 @@ static vdev_status_t posix_vdev_os_init(void)
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_create_task(
+static vdev_status_t posix_vdev_os_task_create(
         _IN_ const char *name,
         _IN_ void (*fn)(void *arg),
         _IN_ void *arg,
@@ -116,7 +116,7 @@ static vdev_status_t posix_vdev_os_create_task(
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_delete_task(
+static vdev_status_t posix_vdev_os_task_delete(
         _IN_ vdev_os_task_t *task)
 {
     pthread_t **plist = pOsInfo->list + task->id;
@@ -137,7 +137,7 @@ static vdev_status_t posix_vdev_os_delete_task(
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_create_mutex(
+static vdev_status_t posix_vdev_os_mutex_create(
         _OUT_ vdev_os_mutex_t *mutex)
 {
     int res;
@@ -157,7 +157,7 @@ static vdev_status_t posix_vdev_os_create_mutex(
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_delete_mutex(
+static vdev_status_t posix_vdev_os_mutex_delete(
         _IN_ vdev_os_mutex_t mutex)
 {
     pthread_mutex_destroy(mutex);
@@ -165,67 +165,67 @@ static vdev_status_t posix_vdev_os_delete_mutex(
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_lock_mutex(
+static vdev_status_t posix_vdev_os_mutex_lock(
         _IN_ vdev_os_mutex_t mutex)
 {
     pthread_mutex_lock(mutex);
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_unlock_mutex(
+static vdev_status_t posix_vdev_os_unmutex_lock(
         _IN_ vdev_os_mutex_t mutex)
 {
     pthread_mutex_unlock(mutex);
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_create_signal(
-        _OUT_ vdev_os_signal_t *signal)
+static vdev_status_t posix_vdev_os_event_create(
+        _OUT_ vdev_os_event_t *event)
 {
     int res;
-    os_signal_t *p = NULL;
+    os_event_t *p = NULL;
 
-    p = (os_signal_t *)malloc(sizeof(os_signal_t));
-    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_NO_MEMORY, "Can't create signal");
+    p = (os_event_t *)malloc(sizeof(os_event_t));
+    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_NO_MEMORY, "Can't create event");
 
-    memset(p, 0, sizeof(os_signal_t));
+    memset(p, 0, sizeof(os_event_t));
     res = pthread_mutex_init(&p->mutex, NULL);
     res += pthread_cond_init(&p->cond, NULL);
     if (res) {
         free(p);
         return VDEV_STATUS_FAILURE;
     }
-    *signal = p;
+    *event = p;
 
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_delete_signal(
-        _IN_ vdev_os_signal_t signal)
+static vdev_status_t posix_vdev_os_event_delete(
+        _IN_ vdev_os_event_t event)
 {
-    pthread_mutex_destroy(&((os_signal_t *)signal)->mutex);
-    pthread_cond_destroy(&((os_signal_t *)signal)->cond);
-    free(signal);
+    pthread_mutex_destroy(&((os_event_t *)event)->mutex);
+    pthread_cond_destroy(&((os_event_t *)event)->cond);
+    free(event);
 
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_set_signal(
-        _IN_ vdev_os_signal_t signal)
+static vdev_status_t posix_vdev_os_event_set(
+        _IN_ vdev_os_event_t event)
 {
-    pthread_mutex_lock(&((os_signal_t *)signal)->mutex);
-    pthread_cond_signal(&((os_signal_t *)signal)->cond);
-    pthread_mutex_unlock(&((os_signal_t *)signal)->mutex);
+    pthread_mutex_lock(&((os_event_t *)event)->mutex);
+    pthread_cond_signal(&((os_event_t *)event)->cond);
+    pthread_mutex_unlock(&((os_event_t *)event)->mutex);
 
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_wait_signal(
-        _IN_ vdev_os_signal_t signal)
+static vdev_status_t posix_vdev_os_event_wait(
+        _IN_ vdev_os_event_t event)
 {
-    pthread_mutex_lock(&((os_signal_t *)signal)->mutex);
-    pthread_cond_wait(&((os_signal_t *)signal)->cond, &((os_signal_t *)signal)->mutex);
-    pthread_mutex_unlock(&((os_signal_t *)signal)->mutex);
+    pthread_mutex_lock(&((os_event_t *)event)->mutex);
+    pthread_cond_wait(&((os_event_t *)event)->cond, &((os_event_t *)event)->mutex);
+    pthread_mutex_unlock(&((os_event_t *)event)->mutex);
 
     return VDEV_STATUS_SUCCESS;
 }
@@ -258,16 +258,16 @@ static uint32_t posix_get_time(void)
 void vdev_os_api_install(vdev_os_api_t *api)
 {
     api->init          = posix_vdev_os_init;
-    api->create_task   = posix_vdev_os_create_task;
-    api->delete_task   = posix_vdev_os_delete_task;
-    api->create_mutex  = posix_vdev_os_create_mutex;
-    api->delete_mutex  = posix_vdev_os_delete_mutex;
-    api->lock_mutex    = posix_vdev_os_lock_mutex;
-    api->unlock_mutex  = posix_vdev_os_unlock_mutex;
-    api->create_signal = posix_vdev_os_create_signal;
-    api->delete_signal = posix_vdev_os_delete_signal;
-    api->set_signal    = posix_vdev_os_set_signal;
-    api->wait_signal   = posix_vdev_os_wait_signal;
+    api->task_create   = posix_vdev_os_task_create;
+    api->task_delete   = posix_vdev_os_task_delete;
+    api->mutex_create  = posix_vdev_os_mutex_create;
+    api->mutex_delete  = posix_vdev_os_mutex_delete;
+    api->mutex_lock    = posix_vdev_os_mutex_lock;
+    api->unmutex_lock  = posix_vdev_os_unmutex_lock;
+    api->event_create = posix_vdev_os_event_create;
+    api->event_delete = posix_vdev_os_event_delete;
+    api->event_set    = posix_vdev_os_event_set;
+    api->event_wait   = posix_vdev_os_event_wait;
     api->get_task_id   = posix_vdev_get_task_id;
     api->sleep         = posix_sleep;
     api->msleep        = posix_msleep;

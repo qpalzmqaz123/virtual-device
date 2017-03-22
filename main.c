@@ -45,10 +45,10 @@ int main(int argc, char** argv)
 
     bsp_init();
 
-    pApi->os.create_task("main", task_main, (void *)NULL, &task1);
-    pApi->os.create_task("touch", task_touch, (void *)NULL, &task2);
-    pApi->os.create_task("test1", task_test1, (void *)NULL, &task3);
-    pApi->os.create_task("test2", task_test2, (void *)NULL, &task4);
+    pApi->os.task_create("main", task_main, (void *)NULL, &task1);
+    pApi->os.task_create("touch", task_touch, (void *)NULL, &task2);
+    pApi->os.task_create("test1", task_test1, (void *)NULL, &task3);
+    pApi->os.task_create("test2", task_test2, (void *)NULL, &task4);
 
     getchar();
 
