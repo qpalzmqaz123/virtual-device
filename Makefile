@@ -1,7 +1,7 @@
 CC = gcc
 
 # 工程名,影响输出的文件名
-PROJ_NAME = simulater
+PROJ_NAME = simulator
 # 编译输出的目录，防止文件过多看起来混乱，包括.d文件
 OBJS_OUTPUT_DIR = ./obj_output
 # 宏定义

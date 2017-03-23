@@ -101,6 +101,7 @@ static vdev_status_t posix_lcd_init(
 
     VDEV_ASSERT_SUCCESS(SDL_Init(SDL_INIT_VIDEO));
     VDEV_ASSERT_SUCCESS(SDL_CreateWindowAndRenderer(VLCD_X_SIZE, VLCD_Y_SIZE, 0, &pLcdInfo->window, &pLcdInfo->renderer));
+    SDL_SetWindowTitle(pLcdInfo->window, "LCD simulator");
 
     /* create thread */
     VDEV_ASSERT_SUCCESS(pthread_create(&pLcdInfo->refresh_thread, NULL, _posix_lcd_task_refresh, (void *)NULL));
