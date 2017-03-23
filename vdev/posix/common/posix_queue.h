@@ -27,6 +27,7 @@ typedef enum _posix_queue_error_t {
 } posix_queue_error_t;
 
 posix_queue_error_t posix_queue_create(posix_queue_t *queue, int length, int itemsize);
+posix_queue_error_t posix_queue_delete(posix_queue_t *queue);
 posix_queue_error_t posix_queue_put(posix_queue_t *queue, void *item);
 posix_queue_error_t posix_queue_get(posix_queue_t *queue, void *item);
 posix_queue_error_t posix_queue_put_timeout(posix_queue_t *queue, void *item, int ms);

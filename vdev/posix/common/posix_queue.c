@@ -136,6 +136,25 @@ posix_queue_error_t posix_queue_create(posix_queue_t *queue, int length, int ite
     return POSIX_QUEUE_SUCCESS;
 }
 
+posix_queue_error_t posix_queue_delete(posix_queue_t *queue)
+{
+    posix_queue_node_t *node = queue->head;
+
+    pthread_mutex_lock(&queue->mutex);
+
+    while (queue->count--) {
+        free(node->data);
+        free(node);
+        node = node->next;
+    }
+
+    pthread_mutex_unlock(&queue->mutex);
+    pthread_mutex_destroy(&queue->mutex);
+    pthread_cond_destroy(&queue->cond);
+
+    return POSIX_QUEUE_SUCCESS;
+}
+
 posix_queue_error_t posix_queue_put(posix_queue_t *queue, void *item)
 {
     return _posix_queue_put(queue, item, 0, 0);
@@ -180,10 +199,15 @@ static void *producer(void *arg)
 static void *consumer1(void *arg) {
     posix_queue_t *queue = (posix_queue_t *)arg;
     int num;
+    int rc;
 
     while (1) {
         usleep(500000);
-        posix_queue_get(queue, &num);
+        rc = posix_queue_get_timeout(queue, &num, 500000);
+        if (POSIX_QUEUE_TIMEOUT == rc) {
+            printf("c1: timeout!\n");
+            break;
+        }
         printf("c1 get: %d\n", num);
     }
 
@@ -201,7 +225,7 @@ static void *consumer2(void *arg)
         rc = posix_queue_get_timeout(queue, &num, 1000);
         if (POSIX_QUEUE_TIMEOUT == rc) {
             printf("c2: timeout!\n");
-            continue;
+            break;
         }
         printf("c2 get: %d\n", num);
     }
@@ -221,5 +245,7 @@ void test_posix_queue(void)
     pthread_create(&cons2, NULL, consumer2, (void *)&queue);
 
     getchar();
+
+    posix_queue_delete(&queue);
 }
 #endif

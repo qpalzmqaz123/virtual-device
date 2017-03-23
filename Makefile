@@ -9,16 +9,16 @@ DEFINES =
 
 # 所有头文件的目录
 INCLUDE_DIRS = ./vdev/inc \
-			   ./vdev/posix/inc \
+			   ./vdev/posix/common ./vdev/posix/lcd ./vdev/posix/os \
 			   ./third_party/ucgui/GUI/Core/ ./third_party/ucgui/Config
 
 # 所有源文件的目录
-SRC_DIRS =	   ./vdev/posix/src
+SRC_DIRS =	   ./vdev/posix ./vdev/posix/common ./vdev/posix/lcd ./vdev/posix/os \
 
 # 依赖的目标文件
 OBJS = main.o \
 	   posix_queue.o \
-	   posix_vdev_lcd.o posix_vdev.o posix_vdev_os.o
+	   posix_vdev_lcd.o posix_vdev.o posix_vdev_os.o posix_vdev_os_queue.o
 
 
 # 链接时的lib参数

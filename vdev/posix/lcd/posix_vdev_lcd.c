@@ -70,6 +70,7 @@ static void *_posix_lcd_task_touch(void *args)
 		}
         pthread_mutex_unlock(&pLcdInfo->touch_mutex);
     }
+    printf("quit\n");
 
     return (void *)NULL;
 }

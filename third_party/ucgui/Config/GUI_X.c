@@ -106,7 +106,7 @@ void  GUI_X_Lock (void)
 
 void  GUI_X_Unlock (void)
 { 
-    pApi->os.unmutex_lock(Mutex);
+    pApi->os.mutex_unlock(Mutex);
 }
 
 

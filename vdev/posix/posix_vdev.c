@@ -28,6 +28,16 @@ vdev_status_t vdev_api_init(void)
     return VDEV_STATUS_SUCCESS;
 }
 
+vdev_status_t vdev_api_destroy(void)
+{
+#if VDEV_SUPPORT_OS
+    pVdevApi->os.destroy();
+#endif
+    free(pVdevApi);
+
+    return VDEV_STATUS_SUCCESS;
+}
+
 vdev_api_t *vdev_get_api(void)
 {
     return pVdevApi;

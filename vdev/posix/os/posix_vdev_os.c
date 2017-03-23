@@ -7,13 +7,10 @@
 #include <string.h>
 #include <signal.h>
 #include <sys/time.h>
-
-
-#define __POSIX_VDEV_OS_DEBUG__ 0
+#include "posix_vdev_os.h"
 
 
 typedef struct _os_info_t {
-    pthread_t **list;
     uint32_t  thread_cnt;
     struct timeval ts;
 } os_info_t;
@@ -27,26 +24,6 @@ typedef struct _os_event_t {
 static os_info_t *pOsInfo = NULL;
 
 
-#if __POSIX_VDEV_OS_DEBUG__
-static void debug_os_info_inspect(void)
-{
-    uint32_t i = 0;
-    uint32_t cnt = pOsInfo->thread_cnt;
-    pthread_t **p;
-
-    printf("thread_cnt: %d, list: { ", cnt);
-
-    if (cnt) {
-        for (p = pOsInfo->list; i < cnt; p++) {
-            if (*p) i++;
-            printf("%lx ", (long unsigned int)(*p));
-        }
-    }
-
-    printf("}\n");
-}
-#endif
-
 static vdev_status_t posix_vdev_os_init(void)
 {
     pOsInfo = (os_info_t *)malloc(sizeof(os_info_t));
@@ -59,80 +36,45 @@ static vdev_status_t posix_vdev_os_init(void)
     return VDEV_STATUS_SUCCESS;
 }
 
+static vdev_status_t posix_vdev_os_destroy(void)
+{
+    free(pOsInfo);
+
+    return VDEV_STATUS_SUCCESS;
+}
+
 static vdev_status_t posix_vdev_os_task_create(
-        _IN_ const char *name,
+        _OUT_ vdev_os_task_t *task,
         _IN_ void (*fn)(void *arg),
         _IN_ void *arg,
-        _OUT_ vdev_os_task_t *task)
+        _IN_ const char *name)
 {
-    uint32_t i;
-    uint32_t index;
-    pthread_t **plist;
     pthread_t *thread = NULL;
 
-    memset(task, 0, sizeof(vdev_os_task_t));
     /* malloc new thread variable */
     thread = (pthread_t *)malloc(sizeof(pthread_t));
-
-    /* save to thread list */
-    if (pOsInfo->list == NULL) {
-        pOsInfo->list = (pthread_t **)malloc(sizeof(pthread_t *));
-        *pOsInfo->list = thread;
-        index = 0;
-    }
-    else {
-        /* search deleted thread */
-        for (i = 0; i < pOsInfo->thread_cnt; i++) {
-            plist = pOsInfo->list + i;
-            if (NULL == *plist) {
-                *plist = thread;
-                break;
-            }
-        }
-
-        /* list is full */
-        if (i == pOsInfo->thread_cnt) {
-            pOsInfo->list = (pthread_t **)realloc(pOsInfo->list, sizeof(pthread_t *) * (pOsInfo->thread_cnt + 1));
-            *(pOsInfo->list + pOsInfo->thread_cnt) = thread;
-        }
-
-        index = i;
-    }
-    pOsInfo->thread_cnt++;
+    VDEV_RETURN_IF_NULL(thread, VDEV_STATUS_FAILURE, "Can't create thread");
+    memset(thread, 0, sizeof(pthread_t));
 
     /* create thread */
     VDEV_RETURN_IF_ERROR(pthread_create(thread, NULL, (void * (*)(void *))fn, (void *)arg),
-                    VDEV_STATUS_FAILURE,
-                    "Can't create thread");
+                         VDEV_STATUS_FAILURE,
+                         "Can't create thread");
+
+    pOsInfo->thread_cnt++;
 
     /* update task */
-    task->id = index;
-
-#if __POSIX_VDEV_OS_DEBUG__
-    printf("Create task: %d\n", task->id);
-    debug_os_info_inspect();
-#endif
+    *task = thread;
 
     return VDEV_STATUS_SUCCESS;
 }
 
 static vdev_status_t posix_vdev_os_task_delete(
-        _IN_ vdev_os_task_t *task)
+        _IN_ vdev_os_task_t task)
 {
-    pthread_t **plist = pOsInfo->list + task->id;
-
-    if (NULL == *plist) {
-        return VDEV_STATUS_NOT_EXIST;
-    }
-    pthread_cancel(**plist);
-    free(*plist);
-    *plist = NULL;
+    pthread_cancel(*(pthread_t *)task);
+    free(task);
     pOsInfo->thread_cnt--;
-
-#if __POSIX_VDEV_OS_DEBUG__
-    printf("Delete task: %d\n", task->id);
-    debug_os_info_inspect();
-#endif
 
     return VDEV_STATUS_SUCCESS;
 }
@@ -172,7 +114,7 @@ static vdev_status_t posix_vdev_os_mutex_lock(
     return VDEV_STATUS_SUCCESS;
 }
 
-static vdev_status_t posix_vdev_os_unmutex_lock(
+static vdev_status_t posix_vdev_os_mutex_unlock(
         _IN_ vdev_os_mutex_t mutex)
 {
     pthread_mutex_unlock(mutex);
@@ -258,12 +200,13 @@ static uint32_t posix_get_time(void)
 void vdev_os_api_install(vdev_os_api_t *api)
 {
     api->init          = posix_vdev_os_init;
+    api->destroy       = posix_vdev_os_destroy;
     api->task_create   = posix_vdev_os_task_create;
     api->task_delete   = posix_vdev_os_task_delete;
     api->mutex_create  = posix_vdev_os_mutex_create;
     api->mutex_delete  = posix_vdev_os_mutex_delete;
     api->mutex_lock    = posix_vdev_os_mutex_lock;
-    api->unmutex_lock  = posix_vdev_os_unmutex_lock;
+    api->mutex_unlock  = posix_vdev_os_mutex_unlock;
     api->event_create = posix_vdev_os_event_create;
     api->event_delete = posix_vdev_os_event_delete;
     api->event_set    = posix_vdev_os_event_set;
@@ -272,6 +215,8 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->sleep         = posix_sleep;
     api->msleep        = posix_msleep;
     api->get_time      = posix_get_time;
+
+    vdev_os_queue_api_install(api);
 }
 
 #endif

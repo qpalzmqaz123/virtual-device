@@ -31,6 +31,13 @@ typedef struct _vdev_api_t {
 vdev_status_t vdev_api_init(void);
 
 /**
+ * @brief Api destroy
+ *
+ * @return Return status code, refer to vdev_status_t
+ */
+vdev_status_t vdev_api_destroy(void);
+
+/**
  * @brief Get all api
  *
  * @return Return api pointer
