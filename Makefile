@@ -39,6 +39,7 @@ CFLAGS += $(foreach def, $(DEFINES), -D $(def))
 vpath %.s $(SRC_DIRS)
 vpath %.c $(SRC_DIRS)
 vpath %.h $(INCLUDE_DIRS)
+vpath %.d $(OBJS_OUTPUT_DIR)
 
 # 所有源文件，去除了startup
 SRCS = $(subst startup_stm32f4xx_gcc.c, , $(OBJS:.o=.c))
@@ -61,13 +62,13 @@ $(OBJS_OUTPUT_DIR)/%.o: %.s
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # 头文件依赖
-include $(foreach d, $(SRCS:.c=.d), $(OBJS_OUTPUT_DIR)/$(d))
+include $(foreach d, $(SRCS:.c=.d), $(d))
 
-$(OBJS_OUTPUT_DIR)/%.d: %.c
+%.d: %.c
 	[ -d $(OBJS_OUTPUT_DIR) ] || mkdir $(OBJS_OUTPUT_DIR)
 	@set -e; rm -f $@; \
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,$(OBJS_OUTPUT_DIR)\/\1.o $@ : ,g' < $@.$$$$ > $@; \
+	sed 's,\($*\)\.o[ :]*,$(OBJS_OUTPUT_DIR)\/\1.o $@ : ,g' < $@.$$$$ > $(OBJS_OUTPUT_DIR)/$@; \
 	rm -f $@.$$$$
 
 # 自定义依赖
