@@ -4,8 +4,6 @@
 #include <sys/time.h>
 #include "posix_queue.h"
 
-#define __TEST_POSIX_QUEUE__ 0
-
 static posix_queue_error_t _posix_queue_put(posix_queue_t *queue, void *item, int ms, int timeout_en)
 {
     posix_queue_error_t error = POSIX_QUEUE_SUCCESS;
@@ -175,7 +173,7 @@ posix_queue_error_t posix_queue_get_timeout(posix_queue_t *queue, void *item, in
     return _posix_queue_get(queue, item, ms, 1);
 }
 
-#if __TEST_POSIX_QUEUE__
+#if 0 /* test */
 
 static void *producer(void *arg)
 {
