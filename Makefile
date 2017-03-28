@@ -65,8 +65,8 @@ $(OBJS_OUTPUT_DIR)/%.o: %.s
 include $(foreach d, $(SRCS:.c=.d), $(d))
 
 %.d: %.c
-	[ -d $(OBJS_OUTPUT_DIR) ] || mkdir $(OBJS_OUTPUT_DIR)
-	@set -e; rm -f $@; \
+	@test -d $(OBJS_OUTPUT_DIR) || mkdir $(OBJS_OUTPUT_DIR); \
+	set -e; rm -f $@; \
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,$(OBJS_OUTPUT_DIR)\/\1.o $@ : ,g' < $@.$$$$ > $(OBJS_OUTPUT_DIR)/$@; \
 	rm -f $@.$$$$
@@ -75,5 +75,5 @@ include $(foreach d, $(SRCS:.c=.d), $(d))
 
 #####################################################################
 clean:
-	rm -rvf $(OBJS_OUTPUT_DIR)
-	rm -vf $(PROJ_NAME)
+	@rm -rvf $(OBJS_OUTPUT_DIR)
+	@rm -vf $(PROJ_NAME)
