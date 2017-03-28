@@ -38,7 +38,7 @@ LDFLAGS += $(foreach lib, $(LIBRARY_DIRS), -L $(lib))
 vpath %.s $(SOURCE_DIRS)
 vpath %.c $(SOURCE_DIRS)
 vpath %.h $(INCLUDE_DIRS)
-vpath %.d $(OBJS_OUTPUT_DIR)
+vpath %.o $(OBJS_OUTPUT_DIR)
 
 # generate objects
 OBJS = $(SRC_FILES:.c=.o)
@@ -46,10 +46,7 @@ OBJS_REAL = $(foreach obj, $(OBJS), $(OBJS_OUTPUT_DIR)/$(obj))
 
 
 .PHONY: all
-all: setup project
-
-setup:
-	test -d $(OBJS_OUTPUT_DIR) || mkdir $(OBJS_OUTPUT_DIR)
+all: project
 
 project: $(OBJS)
 	$(CC) $(CFLAGS) -o $(PROJ_NAME) $(OBJS_REAL) $(LDFLAGS) $(LIBS)
@@ -59,13 +56,14 @@ project: $(OBJS)
 	$(CC) $(CFLAGS) -c -o $(OBJS_OUTPUT_DIR)/$@ $<
 
 # include files
-include $(foreach d, $(SRCS:.c=.d), $(d))
+include $(foreach d, $(SRC_FILES:.c=.d), $(OBJS_OUTPUT_DIR)/$(d))
 
-%.d: %.c
-	@set -e; rm -f $@; \
+$(OBJS_OUTPUT_DIR)/%.d: %.c
+	@test -d $(OBJS_OUTPUT_DIR) || mkdir $(OBJS_OUTPUT_DIR); \
+	set -e; rm -f $@; \
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,$(OBJS_OUTPUT_DIR)\/\1.o $@ : ,g' < $@.$$$$ > $(OBJS_OUTPUT_DIR)/$@; \
-	rm -f $@.$$$$
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$;
 
 clean:
 	rm -rvf $(OBJS_OUTPUT_DIR)
