@@ -7,7 +7,7 @@
 typedef struct _posix_message_header_t {
     uint32_t model;
     uint32_t id;
-    uint32_t length;
+    uint32_t length; /* data length, exclued header */
 } posix_message_header_t;
 
 typedef struct _posix_manager_queue_table_t {
@@ -51,8 +51,15 @@ posix_manager_register(vdev_model_t model, uint32_t id)
 uint32_t
 posix_manager_send(posix_manager_model_t *model, void *data, uint32_t length)
 {
-    /* TODO: encapsulate */
-    return posix_socket_send(data, length);
+    void *p = malloc(sizeof(posix_message_header_t) + length);
+
+    /* encapsulate data */
+    ((posix_message_header_t *)p)->model  = model->model;
+    ((posix_message_header_t *)p)->id     = model->id;
+    ((posix_message_header_t *)p)->length = length;
+    memcpy(p + sizeof(posix_message_header_t), data, length);
+
+    return posix_socket_send(p, sizeof(posix_message_header_t) + length);
 }
 
 uint32_t
