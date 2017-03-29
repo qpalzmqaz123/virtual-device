@@ -31,12 +31,10 @@ class Sock(object):
         """Send data to client, it will encapsulate header in data
         automatically
         """
-        # check data validate
-        if type(data is not bytes):
-            raise ValueError('data type must be bytes')
+        # encapsulate
+        data = struct.pack('III', model, dev_id, len(data)) + data
 
-        # TODO: encapsulate
-
+        # send data
         self.conn.send(data)
 
     def recv(self):

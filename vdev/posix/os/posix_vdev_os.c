@@ -174,7 +174,7 @@ static vdev_status_t posix_vdev_os_event_wait(
 
 static uint32_t posix_vdev_get_task_id(void)
 {
-    return pthread_self();
+    return (uint32_t)pthread_self();
 }
 
 static void posix_sleep(uint32_t sec)

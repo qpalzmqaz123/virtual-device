@@ -11,13 +11,19 @@ from .sock import Sock
 
 class DeviceProcess(Process):
 
-    def __init__(self, dev_class, queue):
+    def __init__(self, dev_class, queue, model, dev_id, send_queue):
         self.cls = dev_class
         self.ins = self.cls()
         self.q = queue
+        self.model = model
+        self.dev_id = dev_id
+        self.send_q = send_queue
         super(DeviceProcess, self).__init__()
 
     def run(self):
+        # save queue, model, id
+        self.ins.set_send_options(self.send_q, self.model, self.dev_id)
+
         # create a new thread to call instance's run()
         t = Thread(target=self.cls.run, args=(self.ins,))
         t.start()
@@ -28,10 +34,23 @@ class DeviceProcess(Process):
             self.ins.received(data)
 
 
+class SendThread(Thread):
+
+    def __init__(self, queue, sock_session):
+        self.q = queue
+        self.s = sock_session
+        super(SendThread, self).__init__()
+
+    def run(self):
+        while True:
+            obj = self.q.get()
+            self.s.send(obj['model'], obj['id'], obj['data'])
+
+
 class Vdev(Process):
 
     def __init__(self):
-        # key => {'queue': xxx, 'class': xxx}
+        # key => {'queue': Queue, 'class': type, 'model': int, 'id': int}
         self.table = {}
         self.s = None
         self.procs = []
@@ -54,7 +73,9 @@ class Vdev(Process):
 
         self.table[key] = {
             'class': dev_class,
-            'queue': Queue()
+            'queue': Queue(),
+            'model': model,
+            'id': device_id
         }
 
     def run(self):
@@ -64,9 +85,16 @@ class Vdev(Process):
         # create socket
         self.s = Sock()
 
+        # create a queue for send data
+        send_queue = Queue()
+
+        # create thread which loop send_queue and send data to client
+        send_thread = SendThread(send_queue, self.s)
+        send_thread.start()
+
         # start all process
         for info in self.table.values():
-            proc = DeviceProcess(info['class'], info['queue'])
+            proc = DeviceProcess(info['class'], info['queue'], info['model'], info['id'], send_queue)
             self.procs.append(proc)
         [proc.start() for proc in self.procs]
 
