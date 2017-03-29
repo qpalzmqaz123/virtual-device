@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "vdev.h"
+#include "posix_manager.h"
 #include "posix_vdev_lcd.h"
 #include "posix_vdev_os.h"
+#include "posix_vdev_led.h"
 
 static vdev_api_t *pVdevApi = NULL;
 
@@ -14,6 +16,9 @@ static void posix_install_all_api(vdev_api_t *api)
 #if VDEV_SUPPORT_OS
     vdev_os_api_install(&api->os);
 #endif
+#if VDEV_SUPPORT_LED
+    vdev_led_api_install(&api->led);
+#endif
 }
 
 vdev_status_t vdev_api_init(void)
@@ -24,7 +29,12 @@ vdev_status_t vdev_api_init(void)
     }
     memset(pVdevApi, 0, sizeof(vdev_api_t));
 
+    /* initial api */
     posix_install_all_api(pVdevApi);
+
+    /* initial manager */
+    posix_manager_init();
+
     return VDEV_STATUS_SUCCESS;
 }
 

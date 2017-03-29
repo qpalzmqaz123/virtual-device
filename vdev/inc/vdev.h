@@ -7,19 +7,23 @@
 
 #include "vdev_lcd.h"
 #include "vdev_os.h"
+#include "vdev_led.h"
 
 /**
  * @brief all virtual device apis
  */
 typedef struct _vdev_api_t {
+#if VDEV_SUPPORT_LOG
+    vdev_log_t          log;
+#endif
 #if VDEV_SUPPORT_LCD
     vdev_lcd_api_t      lcd;
 #endif
 #if VDEV_SUPPORT_OS
     vdev_os_api_t       os;
 #endif
-#if VDEV_SUPPORT_LOG
-    vdev_log_t          log;
+#if VDEV_SUPPORT_LED
+    vdev_led_api_t      led;
 #endif
 } vdev_api_t;
 

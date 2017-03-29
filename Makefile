@@ -13,18 +13,21 @@ LIBS += $(shell sdl2-config --libs)
 
 DEFINES = 
 
-INCLUDE_DIRS = ./vdev/inc \
-			   ./vdev/posix/common ./vdev/posix/lcd ./vdev/posix/os \
-			   ./third_party/ucgui/GUI/Core/ ./third_party/ucgui/Config
+INCLUDE_DIRS = \
+	vdev/inc \
+	vdev/posix/common vdev/posix/lcd vdev/posix/os vdev/posix/led \
+	third_party/ucgui/GUI/Core/ third_party/ucgui/Config
 
-LIBRARY_DIRS = ./third_party/ucgui/GUI
+LIBRARY_DIRS = \
+	third_party/ucgui/GUI
 
-SOURCE_DIRS = ./vdev/posix ./vdev/posix/common ./vdev/posix/lcd ./vdev/posix/os
+SOURCE_DIRS = \
+	vdev/posix vdev/posix/common vdev/posix/lcd vdev/posix/os vdev/posix/led
 
 SRC_FILES = \
 	main.c \
 	posix_queue.c \
-	posix_vdev_lcd.c posix_vdev.c posix_vdev_os.c posix_vdev_os_queue.c
+	posix_vdev_lcd.c posix_vdev.c posix_vdev_os.c posix_vdev_led.c posix_vdev_os_queue.c posix_manager.c posix_socket.c
 
 ########### End configure #############
 
