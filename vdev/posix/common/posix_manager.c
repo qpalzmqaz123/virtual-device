@@ -51,6 +51,8 @@ posix_manager_register(vdev_model_t model, uint32_t id)
 uint32_t
 posix_manager_send(posix_manager_model_t *model, void *data, uint32_t length)
 {
+    uint32_t len;
+
     void *p = malloc(sizeof(posix_message_header_t) + length);
 
     /* encapsulate data */
@@ -59,7 +61,10 @@ posix_manager_send(posix_manager_model_t *model, void *data, uint32_t length)
     ((posix_message_header_t *)p)->length = length;
     memcpy(p + sizeof(posix_message_header_t), data, length);
 
-    return posix_socket_send(p, sizeof(posix_message_header_t) + length);
+    len = posix_socket_send(p, sizeof(posix_message_header_t) + length);
+    free(p);
+
+    return len;
 }
 
 uint32_t
