@@ -20,6 +20,13 @@
 #define VDEV_LOG(...)
 #endif
 
+#define VDEV_ASSERT(res) do { \
+    if (0 == (res)) { \
+        VDEV_LOG(VDEV_LOG_CRITICAL, "ASSERT failed at %s:%d", __FILE__, __LINE__); \
+        VDEV_ABORT(); \
+    } \
+} while (0)
+
 #define VDEV_ASSERT_NOT_NULL(ptr) do { \
     if (NULL == (ptr)) { \
         VDEV_LOG(VDEV_LOG_CRITICAL, "ASSERT_NOT_NULL failed at %s:%d", __FILE__, __LINE__); \
