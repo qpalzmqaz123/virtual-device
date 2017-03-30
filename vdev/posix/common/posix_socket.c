@@ -8,7 +8,6 @@
 #include <pthread.h>
 
 static int Sock;
-static pthread_mutex_t Mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void posix_socket_init(void)
 {
@@ -32,17 +31,11 @@ void posix_socket_init(void)
 
 uint32_t posix_socket_send(void *data, uint32_t length)
 {
-    uint32_t len;
-
-    pthread_mutex_lock(&Mutex);
-    len = send(Sock, data, length, 0);
-    pthread_mutex_unlock(&Mutex);
-
-    return len;
+    return send(Sock, data, length, 0);
 }
 
-uint32_t posix_socket_recv(void *data, uint32_t length)
+uint32_t posix_socket_recv(void *buffer, uint32_t buf_len)
 {
-    return 0;
+    return recv(Sock, buffer, buf_len, 0);
 }
 

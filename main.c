@@ -6,14 +6,13 @@
 
 static vdev_api_t *pApi = NULL;
 
-#if 0
 void bsp_init(void)
 {
     vdev_api_init();
     pApi = vdev_get_api();
 
     pApi->os.init();
-
+    pApi->led.init(0);
     GUI_Init();
 }
 
@@ -51,32 +50,9 @@ int main(int argc, char** argv)
     pApi->os.task_create(&task3, task_test1, (void *)NULL, "test1");
     pApi->os.task_create(&task4, task_test2, (void *)NULL, "test2");
 
+    printf("Press 'enter' to exit\n");
     getchar();
 
     return 0;
 }
-#endif
 
-void bsp_init(void)
-{
-    vdev_api_init();
-    pApi = vdev_get_api();
-
-    pApi->led.init(0);
-}
-
-int main(int argc, char** argv)
-{
-    int i;
-
-    bsp_init();
-
-    for (i = 0; i < 10; i++) {
-        pApi->led.toggle(0); 
-        usleep(100000);
-    }
-
-    getchar();
-
-    return 0;
-}

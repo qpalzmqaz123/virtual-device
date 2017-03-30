@@ -5,7 +5,7 @@
 
 void posix_socket_init(void);
 uint32_t posix_socket_send(void *data, uint32_t length);
-uint32_t posix_socket_recv(void *data, uint32_t length);
+uint32_t posix_socket_recv(void *buffer, uint32_t buf_len);
 
 #endif
 

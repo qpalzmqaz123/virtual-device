@@ -18,7 +18,6 @@ class Led(vdev.Device):
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
         if cmd == LED_CMD_INIT:
-            time.sleep(1)
             self.send(b'\x01')
 
     def run(self):

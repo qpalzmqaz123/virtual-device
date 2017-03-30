@@ -16,6 +16,7 @@ DEFINES =
 INCLUDE_DIRS = \
 	vdev/inc \
 	vdev/posix/common vdev/posix/lcd vdev/posix/os vdev/posix/led \
+	vdev/posix/third_party/uthash \
 	third_party/ucgui/GUI/Core/ third_party/ucgui/Config
 
 LIBRARY_DIRS = \
