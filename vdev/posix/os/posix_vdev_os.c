@@ -207,10 +207,10 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->mutex_delete  = posix_vdev_os_mutex_delete;
     api->mutex_lock    = posix_vdev_os_mutex_lock;
     api->mutex_unlock  = posix_vdev_os_mutex_unlock;
-    api->event_create = posix_vdev_os_event_create;
-    api->event_delete = posix_vdev_os_event_delete;
-    api->event_set    = posix_vdev_os_event_set;
-    api->event_wait   = posix_vdev_os_event_wait;
+    api->event_create  = posix_vdev_os_event_create;
+    api->event_delete  = posix_vdev_os_event_delete;
+    api->event_set     = posix_vdev_os_event_set;
+    api->event_wait    = posix_vdev_os_event_wait;
     api->get_task_id   = posix_vdev_get_task_id;
     api->sleep         = posix_sleep;
     api->msleep        = posix_msleep;
