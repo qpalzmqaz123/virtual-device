@@ -1,74 +1,45 @@
-########### Configure #############
+ROOT_DIR = $(shell pwd)
+include mk/select_platform.mk
 
-PROJ_NAME = simulator
-OBJS_OUTPUT_DIR = ./obj_output
+###########   Configure   #############
 
-CC = gcc
+PROJECT_NAME=simulator
 
-CFLAGS = -g -Wall -O3
-CFLAGS += $(shell sdl2-config --cflags)
+CFLAGS += -I ./demo/main
 
-LIBS = -lpthread -lucgui
-LIBS += $(shell sdl2-config --libs)
+LIBS += -ldemo -lucgui -lvdev
 
-DEFINES = 
-
-INCLUDE_DIRS = \
-	vdev/inc \
-	vdev/posix/common vdev/posix/lcd vdev/posix/os vdev/posix/led \
-	vdev/posix/third_party/uthash \
-	third_party/ucgui/GUI/Core/ third_party/ucgui/Config
-
-LIBRARY_DIRS = \
-	third_party/ucgui/GUI
-
-SOURCE_DIRS = \
-	vdev/posix vdev/posix/common vdev/posix/lcd vdev/posix/os vdev/posix/led
-
-SRC_FILES = \
-	main.c \
-	posix_queue.c \
-	posix_vdev_lcd.c posix_vdev.c posix_vdev_os.c posix_vdev_led.c posix_vdev_os_queue.c posix_manager.c posix_socket.c
+ALL_LIBRARYS = demo
+ALL_LIBRARYS += ucgui
+ALL_LIBRARYS += vdev
 
 ########### End configure #############
 
-# includes
-CFLAGS += $(foreach dir, $(INCLUDE_DIRS), -I $(dir))
-# defines
-CFLAGS += $(foreach def, $(DEFINES), -D $(def))
-# librarys
-LDFLAGS += $(foreach lib, $(LIBRARY_DIRS), -L $(lib))
 
-vpath %.s $(SOURCE_DIRS)
-vpath %.c $(SOURCE_DIRS)
-vpath %.h $(INCLUDE_DIRS)
-vpath %.o $(OBJS_OUTPUT_DIR)
+# generate object output dir
+OUT_DIR = $(ROOT_DIR)/out.$(PLATFORM)
 
-# generate objects
-OBJS = $(SRC_FILES:.c=.o)
-OBJS_REAL = $(foreach obj, $(OBJS), $(OBJS_OUTPUT_DIR)/$(obj))
+# export values
+export PLATFORM ROOT_DIR OUT_DIR
+
+# generate LD_FLAGS
+LD_FLAGS += $(foreach lib, $(ALL_LIBRARYS), -L $(OUT_DIR)/$(lib))
 
 
-.PHONY: all
-all: project
+.PHONY: all $(ALL_LIBRARYS)
+all: $(ALL_LIBRARYS)
+	$(CC) $(CFLAGS) main.c -o $(OUT_DIR)/$(PROJECT_NAME) $(LD_FLAGS) $(LIBS)
+	@echo 'Compile successful!'
 
-project: $(OBJS)
-	$(CC) $(CFLAGS) -o $(PROJ_NAME) $(OBJS_REAL) $(LDFLAGS) $(LIBS)
-	
-# compile
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $(OBJS_OUTPUT_DIR)/$@ $<
+vdev:
+	$(MAKE) -C vdev/
 
-# include files
-include $(foreach d, $(SRC_FILES:.c=.d), $(OBJS_OUTPUT_DIR)/$(d))
+ucgui:
+	$(MAKE) -C third_party/ucgui/
 
-$(OBJS_OUTPUT_DIR)/%.d: %.c
-	@test -d $(OBJS_OUTPUT_DIR) || mkdir $(OBJS_OUTPUT_DIR); \
-	set -e; rm -f $@; \
-	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$;
+demo:
+	$(MAKE) -C demo/
 
+.PHONY: clean
 clean:
-	rm -rvf $(OBJS_OUTPUT_DIR)
-	rm -vf $(PROJ_NAME)
+	rm -rvf $(OUT_DIR)

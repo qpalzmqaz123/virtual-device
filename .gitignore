@@ -1,5 +1,5 @@
 simulator
-obj_output/
+out.*/
 
 *.a
 *.o
