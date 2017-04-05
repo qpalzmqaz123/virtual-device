@@ -11,8 +11,8 @@ CFLAGS += $(foreach dir, $(INCLUDE_DIRS), -I $(dir))
 $(LIB_OUT_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-.PHONY: all setup
-all: setup $(LIB_FILE)
+.PHONY: all
+all: $(LIB_FILE)
 
 # include dependents
 include $(foreach d, $(SOURCE_FILES:.c=.d), $(LIB_OUT_DIR)/$(d))
@@ -23,9 +23,6 @@ $(LIB_OUT_DIR)/%.d: %.c
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
 	sed 's,\(.*\)\.o[ :]*,$(@:.d=.o) $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$;
-
-setup:
-	@echo $(OBJ_FILES) | xargs dirname | while read dir; do [ -d $$dir ] || mkdir -p $$dir ; done
 
 $(LIB_FILE): $(OBJ_FILES)
 	$(AR) -r $@ $^
