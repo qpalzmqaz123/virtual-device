@@ -3,6 +3,7 @@
 #include "vdev.h"
 #include "stm32_vdev_led.h"
 #include "stm32_vdev_os.h"
+#include "stm32_vdev_lcd.h"
 
 static vdev_api_t VdevApi;
 
