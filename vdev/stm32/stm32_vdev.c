@@ -2,6 +2,7 @@
 #include <string.h>
 #include "vdev.h"
 #include "stm32_vdev_led.h"
+#include "stm32_vdev_os.h"
 
 static vdev_api_t VdevApi;
 
