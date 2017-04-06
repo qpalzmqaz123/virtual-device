@@ -8,7 +8,12 @@
 #define VDEV_SUPPORT_OS    1
 #define VDEV_SUPPORT_LED   1
 
+#ifdef VDEV_SIMULATION_TYPE_POSIX
 #define VDEV_SIMULATION_TYPE  1 /* 0: Disable, 1: Posix, 2: Windows */
+#else
+#define VDEV_SIMULATION_TYPE  0
+#endif
+
 #define VDEV_SIMULATION_SOCKET_PATH "/tmp/vdev_socket"
 
 #include <stdio.h>

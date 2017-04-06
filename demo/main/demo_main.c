@@ -23,6 +23,14 @@ void task_touch(void *arg)
     }
 }
 
+void task_led(void *arg)
+{
+    while (1) {
+        pApi->led.toggle(0); 
+        pApi->os.msleep(500);
+    }
+}
+
 void task_test1(void *arg)
 {
     GUI_MessageBox("test1", "message box", GUI_MESSAGEBOX_CF_MOVEABLE);
@@ -40,17 +48,22 @@ void task_main(void *arg)
 
 int demo_main(int argc, char** argv)
 {
-    vdev_os_task_t task1, task2, task3, task4;
+    vdev_os_task_t led, task1, task2, task3, task4;
 
     bsp_init();
 
+    pApi->os.task_create(&led,   task_led, (void *)NULL, "led");
     pApi->os.task_create(&task1, task_main, (void *)NULL, "main");
     pApi->os.task_create(&task2, task_touch, (void *)NULL, "touch");
     pApi->os.task_create(&task3, task_test1, (void *)NULL, "test1");
     pApi->os.task_create(&task4, task_test2, (void *)NULL, "test2");
 
+#if VDEV_SIMULATION_TYPE == 0
+    while (1);
+#else
     printf("Press 'enter' to exit\n");
     getchar();
+#endif
 
     return 0;
 }
