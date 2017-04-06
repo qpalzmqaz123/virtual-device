@@ -11,6 +11,8 @@ typedef uint32_t BOOL;
 #define _IN_
 #define _OUT_
 
+#define VDEV_ID_ALL (-1) /* you can use VDEV_ID_ALL to initialize all device */
+
 typedef enum _vdev_status_t {
     VDEV_STATUS_SUCCESS = 0,
     VDEV_STATUS_FAILURE,
