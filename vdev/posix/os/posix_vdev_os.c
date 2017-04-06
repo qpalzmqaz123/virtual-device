@@ -79,6 +79,12 @@ static vdev_status_t posix_vdev_os_task_delete(
     return VDEV_STATUS_SUCCESS;
 }
 
+static vdev_status_t posix_vdev_os_task_start(void)
+{
+    return VDEV_STATUS_SUCCESS;
+}
+
+
 static vdev_status_t posix_vdev_os_mutex_create(
         _OUT_ vdev_os_mutex_t *mutex)
 {
@@ -203,6 +209,7 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->destroy       = posix_vdev_os_destroy;
     api->task_create   = posix_vdev_os_task_create;
     api->task_delete   = posix_vdev_os_task_delete;
+    api->task_start    = posix_vdev_os_task_start;
     api->mutex_create  = posix_vdev_os_mutex_create;
     api->mutex_delete  = posix_vdev_os_mutex_delete;
     api->mutex_lock    = posix_vdev_os_mutex_lock;

@@ -49,6 +49,13 @@ typedef vdev_status_t (*vdev_os_task_delete_fn) (
         _IN_ vdev_os_task_t task);
 
 /**
+ * @brief Start task schedular
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_task_start_fn) (void);
+
+/**
  * @brief Create a mutex
  *
  * @param[out] mutex Mutex pointer
@@ -248,6 +255,7 @@ typedef struct _vdev_os_api_t {
     /* task */
     vdev_os_task_create_fn   task_create;
     vdev_os_task_delete_fn   task_delete;
+    vdev_os_task_start_fn    task_start;
     /* mutex */
     vdev_os_mutex_create_fn  mutex_create;
     vdev_os_mutex_delete_fn  mutex_delete;
