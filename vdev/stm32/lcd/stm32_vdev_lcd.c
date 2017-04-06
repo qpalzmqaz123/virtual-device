@@ -7,6 +7,7 @@ static vdev_status_t posix_lcd_init(
        _IN_ uint32_t id)
 {
     Lcd_Init();
+    Touch_Init();
     return VDEV_STATUS_SUCCESS;
 }
 
@@ -54,6 +55,11 @@ static vdev_status_t posix_lcd_touch_get_xy (
         _OUT_ uint16_t *x,
         _OUT_ uint16_t *y)
 {
+    if (!TOUCH_DOWN) {
+        return VDEV_STATUS_FAILURE;
+    }
+
+    Touch_GetXY(x, y);
     return VDEV_STATUS_SUCCESS;
 }
 #endif

@@ -55,11 +55,9 @@ uint16_t Lcd_ReadPoint(uint16_t x, uint16_t y);
 void Lcd_SetBackLight(uint8_t); /* set lcd backlight [0 - 100]*/
 
 /* Touch */
-#if 0
 #define TOUCH_DOWN (!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5))
 
 void Touch_Init(void);
 uint8_t Touch_GetData(uint16_t *x, uint16_t *y);
 uint8_t Touch_GetXY(uint16_t *x, uint16_t *y);
-#endif
 #endif

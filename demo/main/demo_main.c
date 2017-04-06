@@ -13,6 +13,7 @@ void bsp_init(void)
     pApi->os.init();
     pApi->led.init(0);
     GUI_Init();
+    GUI_CURSOR_Show();
 }
 
 void task_touch(void *arg)
