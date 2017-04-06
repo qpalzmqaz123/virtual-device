@@ -58,6 +58,8 @@ int demo_main(int argc, char** argv)
     pApi->os.task_create(&task3, task_test1, (void *)NULL, "test1");
     pApi->os.task_create(&task4, task_test2, (void *)NULL, "test2");
 
+    pApi->os.task_start();
+
 #if VDEV_SIMULATION_TYPE == 0
     while (1);
 #else
