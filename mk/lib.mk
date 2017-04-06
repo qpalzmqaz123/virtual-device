@@ -3,12 +3,16 @@ LIB_OUT_DIR = $(OUT_DIR)/$(LIB_NAME)
 LIB_FILE = $(LIB_OUT_DIR)/lib$(LIB_NAME).a
 
 OBJ_FILES = $(foreach obj, $(SOURCE_FILES), $(LIB_OUT_DIR)/$(obj:.c=.o))
+OBJ_FILES += $(foreach obj, $(STARTUP_FILES), $(LIB_OUT_DIR)/$(obj:.s=.o))
 
 # includes
 CFLAGS += $(foreach dir, $(INCLUDE_DIRS), -I $(dir))
 
 # compile
 $(LIB_OUT_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(LIB_OUT_DIR)/%.o: %.s
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .PHONY: all
