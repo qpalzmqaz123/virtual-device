@@ -12,8 +12,8 @@
 #define AD_LEFT     1950
 #define AD_BOTTOM   1920
 #define AD_RIGHT    120
-#define LCD_WIDTH   320
-#define LCD_HEIGHT  240
+#define LCD_WIDTH   480
+#define LCD_HEIGHT  320
 
 #define TOUCH_ABS(x) ( ((x) < 0) ? (-(x)) : (x) )
 
@@ -175,20 +175,20 @@ uint8_t Touch_GetData(uint16_t *x, uint16_t *y)
 uint8_t Touch_GetXY(uint16_t *x, uint16_t *y) 
 {
     uint8_t res;
-    int tx, ty;
+    int32_t tx, ty;
     
     res = Touch_GetData((uint16_t *)&tx, (uint16_t *)&ty);
+    tx = (tx - AD_LEFT) * LCD_WIDTH / (AD_RIGHT - AD_LEFT);
+    ty = (ty - AD_TOP) * LCD_HEIGHT / (AD_BOTTOM - AD_TOP);
+
     /* ÏÞÖÆ±ßÔµ */
-    tx = (double)((double)(tx - AD_LEFT) / (double)(AD_RIGHT - AD_LEFT)) * LCD_WIDTH;
-    ty = (double)((double)(ty - AD_TOP) / (double)(AD_BOTTOM - AD_TOP)) * LCD_HEIGHT;
-
     tx = (tx < 0) ? 0 : tx;
-    tx = (tx > LCD_WIDTH) ? (LCD_WIDTH - 1) : tx;
+    tx = (tx >= LCD_WIDTH) ? (LCD_WIDTH - 1) : tx;
     ty = (ty < 0) ? 0 : ty;
-    ty = (ty > LCD_HEIGHT) ? (LCD_HEIGHT - 1) : ty;
+    ty = (ty >= LCD_HEIGHT) ? (LCD_HEIGHT - 1) : ty;
 
-    *x = tx;
-    *y = ty;
+    *x = (uint16_t)tx;
+    *y = (uint16_t)ty;
     
     return res;
 }
