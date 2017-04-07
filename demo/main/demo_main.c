@@ -20,7 +20,9 @@ void task_touch(void *arg)
 {
     while (1) {
         pApi->os.msleep(10);
+        GUI_LOCK();
         GUI_TOUCH_Exec();
+        GUI_UNLOCK();
     }
 }
 
