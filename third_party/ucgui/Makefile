@@ -10,6 +10,6 @@ INCLUDE_DIRS = \
 
 INCLUDE_DIRS += $(ROOT_DIR)/vdev/inc
 
-SOURCE_FILES = $(shell find -name '*.c')
+SOURCE_FILES = $(shell find . -name '*.c')
 
 include $(ROOT_DIR)/mk/lib.mk
