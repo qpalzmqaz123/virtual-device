@@ -39,6 +39,7 @@ typedef struct _posix_manager_item_t {
 
 static posix_manager_item_t *pHead = NULL;
 static pthread_rwlock_t Lock = PTHREAD_RWLOCK_INITIALIZER;
+static int Sock;
 
 
 uint32_t
@@ -74,7 +75,7 @@ posix_manager_send(const posix_manager_key_t *key, void *data, uint32_t length)
     ((posix_message_header_t *)p)->length = length;
     memcpy(p + sizeof(posix_message_header_t), data, length);
 
-    len = posix_socket_send(p, sizeof(posix_message_header_t) + length);
+    len = posix_socket_write(Sock, p, sizeof(posix_message_header_t) + length);
     free(p);
 
     return len;
@@ -169,12 +170,12 @@ posix_recv_loop(void *arg)
         item = NULL;
 
         /* receive header */
-        len = posix_socket_recv(&header, sizeof(posix_message_header_t));
+        len = posix_socket_read(Sock, &header, sizeof(posix_message_header_t));
         VDEV_ASSERT(len == sizeof(posix_message_header_t));
 
         /* receive data */
         data = malloc(header.length);
-        len = posix_socket_recv(data, header.length);
+        len = posix_socket_read(Sock, data, header.length);
         VDEV_ASSERT(len == header.length);
 
         /* lookup item */
@@ -200,7 +201,9 @@ posix_manager_init(void)
     pthread_t thread;
 
     /* connect to server */
-    posix_socket_init();
+    printf("Try to connect python...\n");
+    Sock = posix_socket_client_init(VDEV_SIMULATION_SOCKET_PATH);
+    printf("Connection established\n");
 
     /* create a new thread to distribute the received data */
     pthread_create(&thread, NULL, posix_recv_loop, NULL);
