@@ -99,7 +99,7 @@ static void _lcd_msg_process(lcd_msg_t *msg, int conn)
             rect.y = msg->y;
             rect.w = 1;
             rect.h = 1;
-            SDL_RenderReadPixels(pLcdInfo->renderer, &rect, SDL_PIXELFORMAT_RGB565, &color, sizeof(uint32_t));
+            SDL_RenderReadPixels(pLcdInfo->renderer, &rect, SDL_PIXELFORMAT_RGB888, &color, sizeof(uint32_t));
             resp.color = color;
             posix_socket_write(conn, &resp, sizeof(lcd_msg_t));
             break;
