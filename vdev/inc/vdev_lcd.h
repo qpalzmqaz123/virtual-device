@@ -21,7 +21,7 @@ typedef vdev_status_t (*vdev_lcd_init_fn) (
  * @param[in] ys Y coordinate of start point
  * @param[in] xe X coordinate of end point
  * @param[in] ye Y coordinate of end point
- * @param[in] color Color
+ * @param[in] color RGB(888) Color
  *
  * @return Return status code, refer to vdev_status_t
  */
@@ -31,7 +31,7 @@ typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
         _IN_ uint16_t ys,
         _IN_ uint16_t xe,
         _IN_ uint16_t ye,
-        _IN_ uint16_t color);
+        _IN_ uint32_t color);
 
 /**
  * @brief Draw point
@@ -39,7 +39,7 @@ typedef vdev_status_t (*vdev_lcd_fill_rect_fn) (
  * @param[in] id Device id
  * @param[in] x X coordinate
  * @param[in] y Y coordinate 
- * @param[in] color Color
+ * @param[in] color RGB(888) Color
  *
  * @return Return status code, refer to vdev_status_t
  */
@@ -47,7 +47,7 @@ typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
         _IN_ uint32_t id,
         _IN_ uint16_t x,
         _IN_ uint16_t y,
-        _IN_ uint16_t color);
+        _IN_ uint32_t color);
 
 /**
  * @brief Get point color
@@ -55,7 +55,7 @@ typedef vdev_status_t (*vdev_lcd_draw_point_fn) (
  * @param[in] id Device id
  * @param[in] x X coordinate
  * @param[in] y Y coordinate 
- * @param[out] color Color
+ * @param[out] color RGB(888) Color
  *
  * @return Return status code, refer to vdev_status_t
  */
@@ -63,7 +63,7 @@ typedef vdev_status_t (*vdev_lcd_get_point_fn) (
         _IN_ uint32_t id,
         _IN_ uint16_t x,
         _IN_ uint16_t y,
-        _OUT_ uint16_t *color);
+        _OUT_ uint32_t *color);
 
 #if VDEV_SUPPORT_TOUCH == 1
 

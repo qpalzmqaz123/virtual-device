@@ -54,11 +54,11 @@ static int LcdConn;
 static pthread_mutex_t ReadMutex = PTHREAD_MUTEX_INITIALIZER;
 
 
-static void _posix_lcd_color16_to_24(uint16_t color, uint8_t *r, uint8_t *g, uint8_t *b)
+static void _posix_lcd_color_to_rgb(uint32_t color, uint8_t *r, uint8_t *g, uint8_t *b)
 {
-    *r = (color >> 8) & 0xf8;
-    *g = (color >> 3) & 0xfc;
-    *b = (color << 3) & 0xf8;
+    *r = color >> 16;
+    *g = color >> 8;
+    *b = color >> 0;
 }
 
 
@@ -89,7 +89,7 @@ static void _lcd_msg_process(lcd_msg_t *msg, int conn)
 
     switch (msg->type) {
         case LCD_MSG_DRAW_POINT:
-            _posix_lcd_color16_to_24(msg->color, &r, &g, &b);
+            _posix_lcd_color_to_rgb(msg->color, &r, &g, &b);
             SDL_SetRenderDrawColor(pLcdInfo->renderer, r, g, b, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawPoint(pLcdInfo->renderer, msg->x, msg->y);
             pthread_cond_signal(&pLcdInfo->refresh_cond);
@@ -104,7 +104,7 @@ static void _lcd_msg_process(lcd_msg_t *msg, int conn)
             posix_socket_write(conn, &resp, sizeof(lcd_msg_t));
             break;
         case LCD_MSG_FILL_RECT:
-            _posix_lcd_color16_to_24(msg->color, &r, &g, &b);
+            _posix_lcd_color_to_rgb(msg->color, &r, &g, &b);
             rect.x = msg->x;
             rect.y = msg->y;
             rect.w = msg->xe - msg->x + 1;
@@ -223,7 +223,7 @@ static vdev_status_t posix_lcd_fill_rect(
        _IN_ uint16_t ys,
        _IN_ uint16_t xe,
        _IN_ uint16_t ye,
-       _IN_ uint16_t color)
+       _IN_ uint32_t color)
 {
     lcd_msg_t msg = {
         .type = LCD_MSG_FILL_RECT,
@@ -244,7 +244,7 @@ static vdev_status_t posix_lcd_draw_point(
        _IN_ uint32_t id,
        _IN_ uint16_t x,
        _IN_ uint16_t y,
-       _IN_ uint16_t color)
+       _IN_ uint32_t color)
 {
     lcd_msg_t msg = {
         .type = LCD_MSG_DRAW_POINT,
@@ -263,7 +263,7 @@ static vdev_status_t posix_lcd_get_point(
        _IN_ uint32_t id,
        _IN_ uint16_t x,
        _IN_ uint16_t y,
-       _OUT_ uint16_t *color)
+       _OUT_ uint32_t *color)
 {
     lcd_msg_t msg = {
         .type = LCD_MSG_READ_POINT,
