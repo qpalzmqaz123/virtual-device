@@ -398,7 +398,7 @@ void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex) {
 *   that no check on the parameters needs to be performed.
 */
 unsigned int LCD_L0_GetPixelIndex(int x, int y) {
-    uint16_t color = 0;
+    uint32_t color = 0;
     pLcdApi->get_point(0, x, y, &color);
     return color;
 }
