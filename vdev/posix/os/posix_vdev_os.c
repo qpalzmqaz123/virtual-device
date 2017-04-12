@@ -81,6 +81,9 @@ static vdev_status_t posix_vdev_os_task_delete(
 
 static vdev_status_t posix_vdev_os_task_start(void)
 {
+    while (1) {
+        sleep(1);
+    }
     return VDEV_STATUS_SUCCESS;
 }
 

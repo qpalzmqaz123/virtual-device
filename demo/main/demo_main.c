@@ -14,7 +14,6 @@ void bsp_init(void)
     pApi->os.init();
     pApi->led.init(0);
     GUI_Init();
-    GUI_CURSOR_Show();
 }
 
 void task_touch(void *arg)
@@ -56,13 +55,6 @@ int demo_main(int argc, char** argv)
     pApi->os.task_create(&task2, task_touch, (void *)NULL, "touch");
 
     pApi->os.task_start();
-
-#if VDEV_SIMULATION_TYPE == 0
-    while (1);
-#else
-    printf("Press 'enter' to exit\n");
-    getchar();
-#endif
 
     return 0;
 }
