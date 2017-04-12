@@ -18,7 +18,7 @@ class DeviceProcess(Process):
         self.model = model
         self.dev_id = dev_id
         self.send_q = send_queue
-        super(DeviceProcess, self).__init__()
+        super().__init__()
 
     def run(self):
         # save queue, model, id
@@ -39,7 +39,7 @@ class SendThread(Thread):
     def __init__(self, queue, sock_session):
         self.q = queue
         self.s = sock_session
-        super(SendThread, self).__init__()
+        super().__init__()
 
     def run(self):
         while True:
@@ -54,7 +54,7 @@ class Vdev(Process):
         self.table = {}
         self.s = None
         self.procs = []
-        super(Vdev, self).__init__()
+        super().__init__()
 
     def _gen_key(self, model, dev_id):
         """Generate hash key
