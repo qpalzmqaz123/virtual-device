@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-typedef uint32_t BOOL;
 typedef uint32_t bool;
 
 #define TRUE 1

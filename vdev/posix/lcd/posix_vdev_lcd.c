@@ -13,7 +13,7 @@
 #define VLCD_SOCK_FILE "/tmp/vdev_lcd_socket"
 
 typedef struct _touch_info_t {
-    BOOL     down;
+    bool     down;
     uint16_t x;
     uint16_t y;
 } touch_info_t;
