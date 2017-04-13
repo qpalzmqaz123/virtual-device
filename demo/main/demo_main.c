@@ -4,8 +4,7 @@
 #include "GUI.h"
 #include "DIALOG.h"
 
-#if 0
-static const vdev_api_t Apis[] = {
+static vdev_api_t Apis[] = {
     {VDEV_API_LED, VDEV_MODEL_LED},
     {VDEV_API_OS,  VDEV_MODEL_OS},
     {VDEV_API_LCD, VDEV_MODEL_LCD}
@@ -17,7 +16,7 @@ void bsp_init(void)
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
 
-    vdev_api_init(&Apis, sizeof(Apis) / sizeof(vdev_api_t));
+    vdev_api_init(Apis, sizeof(Apis) / sizeof(vdev_api_t));
     p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
     p_led = (vdev_led_api_t *)vdev_api_get(VDEV_API_LED);
 
@@ -73,9 +72,9 @@ int demo_main(int argc, char** argv)
     vdev_os_api_t *p_os  = NULL;
     vdev_os_task_t led, task1, task2;
 
-    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
-
     bsp_init();
+
+    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
 
     p_os->task_create(&led,   task_led, (void *)NULL, "led");
     p_os->task_create(&task1, task_main, (void *)NULL, "main");
@@ -85,39 +84,4 @@ int demo_main(int argc, char** argv)
 
     return 0;
 }
-#else
-
-static const vdev_api_t Apis[] = {
-    {VDEV_API_LED, VDEV_MODEL_LED},
-    {VDEV_API_OS,  VDEV_MODEL_OS},
-    {VDEV_API_LCD, VDEV_MODEL_LCD}
-};
-
-void bsp_init(void)
-{
-    vdev_os_api_t *p_os  = NULL;
-    vdev_led_api_t *p_led = NULL;
-    vdev_lcd_api_t *p_lcd = NULL;
-
-    vdev_api_init(&Apis, sizeof(Apis) / sizeof(vdev_api_t));
-//    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
-    p_lcd = (vdev_lcd_api_t *)vdev_api_get(VDEV_API_LCD);
-
-//    p_os->init();
-//    GUI_Init();
-    
-    p_lcd->init(0);
-    
-}
-
-void demo_main(void)
-{
-    bsp_init();
-
-    printf("jfkldsajflsdjaf\n");
-
-    getchar();
-}
-
-#endif
 
