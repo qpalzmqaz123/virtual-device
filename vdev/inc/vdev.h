@@ -4,27 +4,30 @@
 #include "vdev_types.h"
 #include "vdev_conf.h"
 #include "vdev_macro.h"
+#include "vdev_model.h"
 
 #include "vdev_lcd.h"
 #include "vdev_os.h"
 #include "vdev_led.h"
 
+
 /**
- * @brief all virtual device apis
+ * @brief Api id
+ */
+typedef enum _vdev_api_id_t {
+    VDEV_API_LED = 0,
+    VDEV_API_LCD,
+    VDEV_API_OS,
+
+    VDEV_API_MAX
+} vdev_api_id_t;
+
+/**
+ * @brief All virtual device apis
  */
 typedef struct _vdev_api_t {
-#if VDEV_SUPPORT_LOG
-    vdev_log_t          log;
-#endif
-#if VDEV_SUPPORT_LCD
-    vdev_lcd_api_t      lcd;
-#endif
-#if VDEV_SUPPORT_OS
-    vdev_os_api_t       os;
-#endif
-#if VDEV_SUPPORT_LED
-    vdev_led_api_t      led;
-#endif
+    vdev_api_id_t  id;
+    vdev_model_t   model;
 } vdev_api_t;
 
 /**
@@ -32,21 +35,17 @@ typedef struct _vdev_api_t {
  *
  * @return Return status code, refer to vdev_status_t
  */
-vdev_status_t vdev_api_init(void);
-
-/**
- * @brief Api destroy
- *
- * @return Return status code, refer to vdev_status_t
- */
-vdev_status_t vdev_api_destroy(void);
+vdev_status_t vdev_api_init(
+        _IN_ vdev_api_t *p_api,
+        _IN_ uint32_t count);
 
 /**
  * @brief Get all api
  *
  * @return Return api pointer
  */
-vdev_api_t *vdev_get_api(void);
+void *vdev_api_get(
+        _IN_ vdev_api_id_t id);
 
 /**
  * @brief Set log level

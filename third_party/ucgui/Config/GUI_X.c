@@ -40,7 +40,7 @@
 *********************************************************************************************************
 */
 
-static vdev_api_t *pApi = NULL;
+static vdev_os_api_t *pOsApi = NULL;
 static vdev_os_mutex_t Mutex;
 static vdev_os_event_t Event;
 
@@ -55,13 +55,13 @@ static vdev_os_event_t Event;
 
 int  GUI_X_GetTime (void) 
 {
-    return (int)pApi->os.get_time();
+    return (int)pOsApi->get_time();
 }
 
 
 void  GUI_X_Delay (int period) 
 {
-    pApi->os.msleep(period);
+    pOsApi->msleep(period);
 }
 
 
@@ -72,7 +72,7 @@ void  GUI_X_Delay (int period)
 */
 void GUI_X_ExecIdle (void) 
 {
-    pApi->os.msleep(1);
+    pOsApi->msleep(1);
 }
 
 
@@ -88,16 +88,16 @@ void GUI_X_ExecIdle (void)
 
 void  GUI_X_InitOS (void)
 { 
-    pApi = vdev_get_api();
+    pOsApi = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
 
-    pApi->os.mutex_create(&Mutex);
-    pApi->os.event_create(&Event);
+    pOsApi->mutex_create(&Mutex);
+    pOsApi->event_create(&Event);
 }
 
 
 void  GUI_X_Lock (void)
 { 
-    pApi->os.mutex_lock(Mutex);
+    pOsApi->mutex_lock(Mutex);
 #if VDEV_SIMULATION_TYPE == 1
     usleep(1); /* UCGUI bug ? */
 #endif
@@ -106,13 +106,13 @@ void  GUI_X_Lock (void)
 
 void  GUI_X_Unlock (void)
 { 
-    pApi->os.mutex_unlock(Mutex);
+    pOsApi->mutex_unlock(Mutex);
 }
 
 
 U32  GUI_X_GetTaskId (void) 
 { 
-    return (U32)pApi->os.get_task_id();
+    return (U32)pOsApi->get_task_id();
 }
 
 /*
@@ -125,13 +125,13 @@ U32  GUI_X_GetTaskId (void)
 
 void GUI_X_WaitEvent (void) 
 {
-    pApi->os.event_wait(&Event);
+    pOsApi->event_wait(&Event);
 }
 
 
 void GUI_X_SignalEvent (void) 
 {
-    pApi->os.event_set(&Event);
+    pOsApi->event_set(&Event);
 }
 
 /*

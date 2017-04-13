@@ -21,20 +21,22 @@ Purpose     : Config / System dependent externals for GUI
 #include "GUI_X.h"
 #include "vdev.h"
 
+
+vdev_lcd_api_t *pLcdApi = NULL;
+
+
 void GUI_TOUCH_X_ActivateX(void) {
+    pLcdApi = (vdev_lcd_api_t *)vdev_api_get(VDEV_API_LCD);
 }
 
 void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
-    vdev_api_t *api = NULL;
     vdev_status_t ret;
     uint16_t x, y;
 
-    api = vdev_get_api();
-
-    ret = api->lcd.touch_get_xy(0, &x, &y);
+    ret = pLcdApi->touch_get_xy(0, &x, &y);
     if (ret) {
         return 0xFFFF; 
     }
@@ -44,13 +46,10 @@ int  GUI_TOUCH_X_MeasureX(void) {
 }
 
 int  GUI_TOUCH_X_MeasureY(void) {
-    vdev_api_t *api = NULL;
     vdev_status_t ret;
     uint16_t x, y;
 
-    api = vdev_get_api();
-
-    ret = api->lcd.touch_get_xy(0, &x, &y);
+    ret = pLcdApi->touch_get_xy(0, &x, &y);
     if (ret) {
         return 0xFFFF; 
     }
