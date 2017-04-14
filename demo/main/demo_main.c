@@ -67,7 +67,7 @@ void task_main(void *arg)
     }
 }
 
-int demo_main(int argc, char** argv)
+int main(void)
 {
     vdev_os_api_t *p_os  = NULL;
     vdev_os_task_t led, task1, task2;
@@ -81,7 +81,5 @@ int demo_main(int argc, char** argv)
     p_os->task_create(&task2, task_touch, (void *)NULL, "touch");
 
     p_os->task_start();
-
-    return 0;
 }
 

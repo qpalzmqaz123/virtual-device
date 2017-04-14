@@ -5,13 +5,13 @@ include mk/select_platform.mk
 
 PROJECT_NAME=simulator
 
-CFLAGS += -I ./demo/main
+MAIN_LIBRARY = demo
 
-LIBS += -ldemo -lucgui -lvdev
-
-ALL_LIBRARYS = demo
+ALL_LIBRARYS += demo
 ALL_LIBRARYS += ucgui
 ALL_LIBRARYS += vdev
+
+LIBS += -lucgui -lvdev
 
 ########### End configure #############
 
@@ -29,11 +29,11 @@ LD_FLAGS += $(foreach lib, $(ALL_LIBRARYS), -L $(OUT_DIR)/$(lib))
 .PHONY: all $(ALL_LIBRARYS)
 ifeq ($(PLATFORM), posix)
 all: $(ALL_LIBRARYS)
-	$(CC) $(CFLAGS) main.c -o $(OUT_DIR)/$(PROJECT_NAME) $(LD_FLAGS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(OUT_DIR)/$(PROJECT_NAME) $(OUT_DIR)/$(MAIN_LIBRARY)/lib$(MAIN_LIBRARY).a $(LD_FLAGS) $(LIBS)
 	@echo 'Compile successful!'
 else
 all: $(ALL_LIBRARYS)
-	$(CC) $(CFLAGS) main.c -o $(OUT_DIR)/$(PROJECT_NAME).elf $(LD_FLAGS) $(LIBS)
+	$(CC) $(CFLAGS) -o $(OUT_DIR)/$(PROJECT_NAME).elf $(OUT_DIR)/$(MAIN_LIBRARY)/lib$(MAIN_LIBRARY).a $(LD_FLAGS) $(LIBS)
 	$(OBJCOPY) -O ihex $(OUT_DIR)/$(PROJECT_NAME).elf $(OUT_DIR)/$(PROJECT_NAME).hex
 	$(OBJCOPY) -O binary $(OUT_DIR)/$(PROJECT_NAME).elf $(OUT_DIR)/$(PROJECT_NAME).bin
 	@echo 'Compile successful!'
