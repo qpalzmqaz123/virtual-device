@@ -1,20 +1,19 @@
 #ifndef __VDEV_CONF_H__
 #define __VDEV_CONF_H__
 
+
 #define VDEV_SUPPORT_LOG   0
 
-#define VDEV_SUPPORT_LCD   1
-#define VDEV_SUPPORT_TOUCH 1 /* require SUPPORT_LCD */
-#define VDEV_SUPPORT_OS    1
-#define VDEV_SUPPORT_LED   1
 
 #ifdef VDEV_SIMULATION_TYPE_POSIX
-#define VDEV_SIMULATION_TYPE  1 /* 0: Disable, 1: Posix, 2: Windows */
+#define VDEV_SIMULATION_TYPE  1 /* 0: Disable, 1: Posix */
 #else
 #define VDEV_SIMULATION_TYPE  0
 #endif
 
+
 #define VDEV_SIMULATION_SOCKET_PATH "/tmp/vdev_socket"
+
 
 #include <stdio.h>
 #include <stdlib.h>

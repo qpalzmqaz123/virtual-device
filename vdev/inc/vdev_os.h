@@ -1,4 +1,4 @@
-#if !defined(__VDEV_OS_H__) && VDEV_SUPPORT_OS == 1
+#ifndef __VDEV_OS_H__
 #define __VDEV_OS_H__
 
 #include "vdev_types.h"

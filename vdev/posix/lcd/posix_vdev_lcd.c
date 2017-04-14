@@ -1,7 +1,4 @@
 #include "vdev.h"
-
-#if VDEV_SUPPORT_LCD == 1
-
 #include <unistd.h>
 #include <pthread.h>
 #include "SDL.h"
@@ -61,7 +58,6 @@ static void _posix_lcd_color_to_rgb(uint32_t color, uint8_t *r, uint8_t *g, uint
     *b = color >> 0;
 }
 
-
 static void *_refresh_task(void *arg)
 {
     while (1) {
@@ -76,7 +72,6 @@ static void *_refresh_task(void *arg)
 
     return NULL;
 }
-
 
 static void _lcd_msg_process(lcd_msg_t *msg, int conn)
 {
@@ -126,7 +121,6 @@ static void _lcd_msg_process(lcd_msg_t *msg, int conn)
     pthread_mutex_unlock(&pLcdInfo->refresh_mutex);
 }
 
-
 static void *_recv_task(void *arg)
 {
     int srv;
@@ -143,7 +137,6 @@ static void *_recv_task(void *arg)
 
     return NULL;
 }
-
 
 static void _sdl_lcd_run(void)
 {
@@ -195,7 +188,6 @@ static void _sdl_lcd_run(void)
     exit(0);
 }
 
-
 static vdev_status_t posix_lcd_init(
        _IN_ uint32_t id)
 {
@@ -215,7 +207,6 @@ static vdev_status_t posix_lcd_init(
 
     return VDEV_STATUS_SUCCESS;
 }
-
 
 static vdev_status_t posix_lcd_fill_rect(
        _IN_ uint32_t id,
@@ -239,7 +230,6 @@ static vdev_status_t posix_lcd_fill_rect(
     return VDEV_STATUS_SUCCESS;
 }
 
-
 static vdev_status_t posix_lcd_draw_point(
        _IN_ uint32_t id,
        _IN_ uint16_t x,
@@ -257,7 +247,6 @@ static vdev_status_t posix_lcd_draw_point(
 
     return VDEV_STATUS_SUCCESS;
 }
-
 
 static vdev_status_t posix_lcd_get_point(
        _IN_ uint32_t id,
@@ -283,8 +272,6 @@ static vdev_status_t posix_lcd_get_point(
     return VDEV_STATUS_SUCCESS;
 }
 
-
-#if VDEV_SUPPORT_TOUCH == 1
 static vdev_status_t posix_lcd_touch_get_xy (
         _IN_ uint32_t id,
         _OUT_ uint16_t *x,
@@ -309,7 +296,6 @@ static vdev_status_t posix_lcd_touch_get_xy (
 
     return VDEV_STATUS_SUCCESS;
 }
-#endif
 
 void vdev_lcd_api_install(vdev_lcd_api_t *api)
 {
@@ -317,10 +303,6 @@ void vdev_lcd_api_install(vdev_lcd_api_t *api)
     api->fill_rect = posix_lcd_fill_rect;
     api->draw_point = posix_lcd_draw_point;
     api->get_point = posix_lcd_get_point;
-#if VDEV_SUPPORT_TOUCH == 1
     api->touch_get_xy = posix_lcd_touch_get_xy;
-#endif
 }
-
-#endif
 

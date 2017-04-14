@@ -1,6 +1,4 @@
 #include "vdev.h"
-#if VDEV_SUPPORT_OS == 1
-
 #include "posix_queue.h"
 
 static vdev_status_t posix_vdev_os_queue_create(
@@ -77,4 +75,3 @@ void vdev_os_queue_api_install(vdev_os_api_t *api)
     api->queue_put_timeout = posix_vdev_os_queue_put_timeout;
 }
 
-#endif

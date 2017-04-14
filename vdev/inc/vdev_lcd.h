@@ -1,4 +1,4 @@
-#if !defined(__VDEV_LCD_H__) && VDEV_SUPPORT_LCD == 1
+#ifndef __VDEV_LCD_H__
 #define __VDEV_LCD_H__
 
 #include "vdev_types.h"
@@ -65,8 +65,6 @@ typedef vdev_status_t (*vdev_lcd_get_point_fn) (
         _IN_ uint16_t y,
         _OUT_ uint32_t *color);
 
-#if VDEV_SUPPORT_TOUCH == 1
-
 /**
  * @brief Get touch coordinate
  *
@@ -82,8 +80,6 @@ typedef vdev_status_t (*vdev_lcd_touch_get_xy) (
         _OUT_ uint16_t *x,
         _OUT_ uint16_t *y);
 
-#endif
-
 /**
  * @brief lcd apis
  */
@@ -92,9 +88,7 @@ typedef struct _vdev_lcd_api_t {
     vdev_lcd_fill_rect_fn  fill_rect;
     vdev_lcd_draw_point_fn draw_point;
     vdev_lcd_get_point_fn  get_point;
-#if VDEV_SUPPORT_TOUCH == 1
     vdev_lcd_touch_get_xy  touch_get_xy;
-#endif
 } vdev_lcd_api_t;
 
 

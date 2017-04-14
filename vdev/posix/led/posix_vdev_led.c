@@ -1,5 +1,4 @@
 #include "vdev.h"
-#if VDEV_SUPPORT_LED == 1
 #include "vdev_model.h"
 #include "posix_manager.h"
 
@@ -69,5 +68,4 @@ void vdev_led_api_install(vdev_led_api_t *api)
     api->toggle = posix_vdev_led_toggle;
 
 }
-#endif
 

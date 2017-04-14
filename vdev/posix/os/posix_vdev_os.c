@@ -1,6 +1,4 @@
 #include "vdev.h"
-#if VDEV_SUPPORT_OS == 1
-
 #include <pthread.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -229,4 +227,3 @@ void vdev_os_api_install(vdev_os_api_t *api)
     vdev_os_queue_api_install(api);
 }
 
-#endif

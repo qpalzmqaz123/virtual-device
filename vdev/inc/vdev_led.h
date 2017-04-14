@@ -1,4 +1,4 @@
-#if !defined(__VDEV_LED_H__) && VDEV_SUPPORT_LED == 1
+#ifndef __VDEV_LED_H__
 #define __VDEV_LED_H__
 
 #include "vdev_types.h"
