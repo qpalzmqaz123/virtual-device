@@ -5,39 +5,64 @@
 #include "stm32_vdev_os.h"
 #include "stm32_vdev_lcd.h"
 
-static vdev_api_t VdevApi;
 
-static void stm32_install_all_api(vdev_api_t *api)
+static void *pApis[VDEV_API_MAX] = {NULL}; 
+
+
+static vdev_status_t
+stm32_install_all_api(vdev_api_t *p_api, uint32_t count)
 {
-#if VDEV_SUPPORT_LCD
-    vdev_lcd_api_install(&api->lcd);
-#endif
-#if VDEV_SUPPORT_OS
-    vdev_os_api_install(&api->os);
-#endif
-#if VDEV_SUPPORT_LED
-    vdev_led_api_install(&api->led);
-#endif
+    uint32_t i;
+    uint32_t id;
+    vdev_api_t *p;
+
+    for (i = 0, p = p_api; i < count; i++, p++) {
+
+        id = p->id;
+
+        switch (p->model) {
+            case VDEV_MODEL_GPIO:
+                break;
+            case VDEV_MODEL_LCD:
+                pApis[id] = malloc(sizeof(vdev_lcd_api_t));
+                vdev_lcd_api_install(pApis[id]);
+                break;
+            case VDEV_MODEL_OS:
+                pApis[id] = malloc(sizeof(vdev_os_api_t));
+                vdev_os_api_install(pApis[id]);
+                break;
+            case VDEV_MODEL_LED:
+                pApis[id] = malloc(sizeof(vdev_led_api_t));
+                vdev_led_api_install(pApis[id]);
+                break;
+            case VDEV_MODEL_SDCARD:
+                break;
+            default:
+                return VDEV_STATUS_NOT_EXIST;
+        }
+    }
+
+    return VDEV_STATUS_SUCCESS;
 }
 
-vdev_status_t vdev_api_init(void)
+vdev_status_t vdev_api_init(
+        _IN_ vdev_api_t *p_api,
+        _IN_ uint32_t count)
 {
-    memset(&VdevApi, 0, sizeof(vdev_api_t));
 
     /* initial api */
-    stm32_install_all_api(&VdevApi);
-
-    return VDEV_STATUS_SUCCESS;
+    return stm32_install_all_api(p_api, count);
 }
 
-vdev_status_t vdev_api_destroy(void)
+void *vdev_api_get(
+        _IN_ vdev_api_id_t id)
 {
-    return VDEV_STATUS_SUCCESS;
-}
-
-vdev_api_t *vdev_get_api(void)
-{
-    return &VdevApi;
+    if (id < VDEV_API_MAX) {
+        return pApis[id];
+    }
+    else {
+        return NULL;
+    }
 }
 
 #if VDEV_SUPPORT_LOG

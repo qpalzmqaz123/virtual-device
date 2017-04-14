@@ -1,6 +1,4 @@
 #include "vdev.h"
-
-#if VDEV_SUPPORT_LCD == 1
 #include "tft.h"
 
 
@@ -15,7 +13,6 @@ static uint16_t _color_32_to_16(uint32_t color)
     return tmp;
 }
 
-
 static uint32_t _color_16_to_32(uint16_t color)
 {
     uint32_t tmp = 0;
@@ -27,7 +24,6 @@ static uint32_t _color_16_to_32(uint16_t color)
     return tmp;
 }
 
-
 static vdev_status_t posix_lcd_init(
        _IN_ uint32_t id)
 {
@@ -35,7 +31,6 @@ static vdev_status_t posix_lcd_init(
     Touch_Init();
     return VDEV_STATUS_SUCCESS;
 }
-
 
 static vdev_status_t posix_lcd_fill_rect(
        _IN_ uint32_t id,
@@ -56,7 +51,6 @@ static vdev_status_t posix_lcd_fill_rect(
     return VDEV_STATUS_SUCCESS;
 }
 
-
 static vdev_status_t posix_lcd_draw_point(
        _IN_ uint32_t id,
        _IN_ uint16_t x,
@@ -69,7 +63,6 @@ static vdev_status_t posix_lcd_draw_point(
     return VDEV_STATUS_SUCCESS;
 }
 
-
 static vdev_status_t posix_lcd_get_point(
        _IN_ uint32_t id,
        _IN_ uint16_t x,
@@ -80,8 +73,6 @@ static vdev_status_t posix_lcd_get_point(
     return VDEV_STATUS_SUCCESS;
 }
 
-
-#if VDEV_SUPPORT_TOUCH == 1
 static vdev_status_t posix_lcd_touch_get_xy (
         _IN_ uint32_t id,
         _OUT_ uint16_t *x,
@@ -94,7 +85,6 @@ static vdev_status_t posix_lcd_touch_get_xy (
     Touch_GetXY(x, y);
     return VDEV_STATUS_SUCCESS;
 }
-#endif
 
 void vdev_lcd_api_install(vdev_lcd_api_t *api)
 {
@@ -102,10 +92,6 @@ void vdev_lcd_api_install(vdev_lcd_api_t *api)
     api->fill_rect = posix_lcd_fill_rect;
     api->draw_point = posix_lcd_draw_point;
     api->get_point = posix_lcd_get_point;
-#if VDEV_SUPPORT_TOUCH == 1
     api->touch_get_xy = posix_lcd_touch_get_xy;
-#endif
 }
-
-#endif
 

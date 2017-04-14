@@ -1,5 +1,4 @@
 #include "vdev.h"
-#if VDEV_SUPPORT_OS == 1
 #include <stdlib.h>
 #include <string.h>
 #include "stm32_vdev_os.h"
@@ -141,4 +140,3 @@ void vdev_os_api_install(vdev_os_api_t *api)
     api->get_time      = stm32_get_time;
 }
 
-#endif

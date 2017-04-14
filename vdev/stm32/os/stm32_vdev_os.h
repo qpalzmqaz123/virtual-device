@@ -1,4 +1,4 @@
-#if !defined(__VDEV_STM32_OS_H__) && VDEV_SUPPORT_OS == 1
+#ifndef __VDEV_STM32_OS_H__
 #define __VDEV_STM32_OS_H__
 
 void vdev_os_api_install(vdev_os_api_t *api);

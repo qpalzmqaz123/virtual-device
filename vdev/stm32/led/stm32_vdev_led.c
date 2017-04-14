@@ -1,5 +1,4 @@
 #include "vdev.h"
-#if VDEV_SUPPORT_LED == 1
 #include "stm32f4xx.h"
 
 vdev_status_t posix_vdev_led_init(
@@ -65,5 +64,4 @@ void vdev_led_api_install(vdev_led_api_t *api)
     api->toggle = posix_vdev_led_toggle;
 
 }
-#endif
 
