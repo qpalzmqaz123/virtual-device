@@ -5,6 +5,9 @@
 class Device(object):
     """Vritual device class.
     """
+    def __init__(self, model, dev_id):
+        self.model = model
+        self.dev_id = dev_id
 
     def received(self, data):
         """You can rewrite this method
