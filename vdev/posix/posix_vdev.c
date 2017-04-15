@@ -5,6 +5,7 @@
 #include "posix_vdev_lcd.h"
 #include "posix_vdev_os.h"
 #include "posix_vdev_led.h"
+#include "posix_vdev_sdcard.h"
 
 
 static void *pApis[VDEV_API_MAX] = {NULL}; 
@@ -37,6 +38,8 @@ posix_install_all_api(vdev_api_t *p_api, uint32_t count)
                 vdev_led_api_install(pApis[id]);
                 break;
             case VDEV_MODEL_SDCARD:
+                pApis[id] = malloc(sizeof(vdev_sdcard_api_t));
+                vdev_sdcard_api_install(pApis[id]);
                 break;
             default:
                 return VDEV_STATUS_NOT_EXIST;

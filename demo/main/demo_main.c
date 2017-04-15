@@ -104,11 +104,10 @@ void bsp_init(void)
 
 int main(void)
 {
+    char buffer[512] = "hello world";
     vdev_sdcard_api_t *p_sd  = NULL;
 
     bsp_init();
-
-    p_sd = (vdev_sdcard_api_t *)vdev_api_get(VDEV_API_SDCARD);
 }
 #endif
 

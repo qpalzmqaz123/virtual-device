@@ -2,7 +2,7 @@
 CC = gcc
 AR = ar
 
-CFLAGS = -g -Wall -O3
+CFLAGS = -g -Wall -O0
 
 DEFINES =
 

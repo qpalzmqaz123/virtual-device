@@ -56,13 +56,11 @@ typedef vdev_status_t (*vdev_sdcard_write_fn) (
  * @brief Get sdcard infomation
  *
  * @param[in] id Device id
- * @param[out] count Selector count
  *
- * @return Return status code, refer to vdev_status_t
+ * @return Return sdcard info pointer
  */
-typedef vdev_status_t (*vdev_sdcard_get_info_fn) (
-        _IN_ uint32_t id,
-        _OUT_ vdev_sdcard_info_t *info);
+typedef vdev_sdcard_info_t *(*vdev_sdcard_get_info_fn) (
+        _IN_ uint32_t id);
 
 /**
  * @brief sdcard apis
@@ -70,7 +68,7 @@ typedef vdev_status_t (*vdev_sdcard_get_info_fn) (
 typedef struct _vdev_sdcard_api_t {
     vdev_sdcard_init_fn      init;
     vdev_sdcard_read_fn      read;
-    vdev_sdcard_write_fn      write;
+    vdev_sdcard_write_fn     write;
     vdev_sdcard_get_info_fn  get_info;
 } vdev_sdcard_api_t;
 

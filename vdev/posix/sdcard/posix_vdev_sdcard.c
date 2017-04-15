@@ -10,6 +10,7 @@
     sprintf(buf, "sdcard_%d.bin", (id)); \
 } while(0)
 
+
 typedef struct _sdcard_t {
     int                id;
     FILE              *fp;
@@ -50,6 +51,15 @@ vdev_status_t posix_vdev_sdcard_read(
         _IN_ uint32_t selector,
         _IN_ uint32_t count)
 {
+    uint64_t offset;
+    sdcard_t *p_sd;
+
+    HASH_FIND_INT(pHead, &id, p_sd);
+
+    offset = p_sd->info.block_size * selector;
+    fseek(p_sd->fp, offset, SEEK_SET);
+    fread(buffer, 1, p_sd->info.block_size, p_sd->fp);
+
     return VDEV_STATUS_SUCCESS;
 }
 
@@ -59,14 +69,27 @@ vdev_status_t posix_vdev_sdcard_write(
         _IN_ uint32_t selector,
         _IN_ uint32_t count)
 {
+    uint64_t offset;
+    sdcard_t *p_sd;
+
+    HASH_FIND_INT(pHead, &id, p_sd);
+
+    offset = p_sd->info.block_size * selector;
+    fseek(p_sd->fp, offset, SEEK_SET);
+    fwrite(buffer, 1, p_sd->info.block_size, p_sd->fp);
+    fflush(p_sd->fp);
+
     return VDEV_STATUS_SUCCESS;
 }
 
-vdev_status_t posix_vdev_sdcard_get_info(
-        _IN_ uint32_t id,
-        _OUT_ vdev_sdcard_info_t *info)
+vdev_sdcard_info_t *posix_vdev_sdcard_get_info(
+        _IN_ uint32_t id)
 {
-    return VDEV_STATUS_SUCCESS;
+    sdcard_t *p_sd;
+
+    HASH_FIND_INT(pHead, &id, p_sd);
+
+    return &p_sd->info;
 }
 
 void vdev_sdcard_api_install(vdev_sdcard_api_t *p_api)
