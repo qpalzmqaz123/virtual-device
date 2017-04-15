@@ -50,9 +50,8 @@ vdev_status_t vdev_api_init(
         _IN_ vdev_api_t *p_api,
         _IN_ uint32_t count)
 {
-
     /* initial manager */
-    posix_manager_init();
+//    posix_manager_init();
 
     /* initial api */
     return posix_install_all_api(p_api, count);

@@ -5,8 +5,12 @@
 
 typedef uint32_t bool;
 
+#ifndef __cpluscplus
 #define TRUE 1
 #define FALSE 0
+#define true 1
+#define false 0
+#endif
 
 #define _IN_
 #define _OUT_

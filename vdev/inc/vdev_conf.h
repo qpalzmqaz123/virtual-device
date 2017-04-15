@@ -11,9 +11,10 @@
 #define VDEV_SIMULATION_TYPE  0
 #endif
 
-
 #define VDEV_SIMULATION_SOCKET_PATH "/tmp/vdev_socket"
 
+#define VDEV_SIMULATION_SDCARD_CAPACITY  (1000 * 1000 * 1000)  /* 1G */
+#define VDEV_SIMULATION_SDCARD_BLOCKSIZE 512
 
 #include <stdio.h>
 #include <stdlib.h>

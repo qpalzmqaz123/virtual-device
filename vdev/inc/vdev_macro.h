@@ -49,7 +49,7 @@
 } while (0) \
 
 #define VDEV_RETURN_IF_NULL(ptr, error, fmt, ...) do { \
-    if (NULL == ptr) { \
+    if (NULL == (ptr)) { \
         VDEV_LOG(VDEV_LOG_ERROR, fmt, ##__VA_ARGS__); \
         return (error); \
     } \

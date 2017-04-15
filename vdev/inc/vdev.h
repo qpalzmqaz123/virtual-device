@@ -9,6 +9,7 @@
 #include "vdev_lcd.h"
 #include "vdev_os.h"
 #include "vdev_led.h"
+#include "vdev_sdcard.h"
 
 
 /**
@@ -18,6 +19,7 @@ typedef enum _vdev_api_id_t {
     VDEV_API_LED = 0,
     VDEV_API_LCD,
     VDEV_API_OS,
+    VDEV_API_SDCARD,
 
     VDEV_API_MAX
 } vdev_api_id_t;

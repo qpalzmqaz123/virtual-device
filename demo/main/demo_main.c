@@ -4,6 +4,7 @@
 #include "GUI.h"
 #include "DIALOG.h"
 
+#if 0
 static vdev_api_t Apis[] = {
     {VDEV_API_LED, VDEV_MODEL_LED},
     {VDEV_API_OS,  VDEV_MODEL_OS},
@@ -82,4 +83,32 @@ int main(void)
 
     p_os->task_start();
 }
+#else
+static vdev_api_t Apis[] = {
+    {VDEV_API_LED,    VDEV_MODEL_LED},
+    {VDEV_API_OS,     VDEV_MODEL_OS},
+    {VDEV_API_LCD,    VDEV_MODEL_LCD},
+    {VDEV_API_SDCARD, VDEV_MODEL_SDCARD}
+};
+
+
+void bsp_init(void)
+{
+    vdev_sdcard_api_t *p_sd  = NULL;
+
+    vdev_api_init(Apis, sizeof(Apis) / sizeof(vdev_api_t));
+    p_sd = (vdev_sdcard_api_t *)vdev_api_get(VDEV_API_SDCARD);
+
+    p_sd->init(0);
+}
+
+int main(void)
+{
+    vdev_sdcard_api_t *p_sd  = NULL;
+
+    bsp_init();
+
+    p_sd = (vdev_sdcard_api_t *)vdev_api_get(VDEV_API_SDCARD);
+}
+#endif
 
