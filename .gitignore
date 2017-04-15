@@ -6,6 +6,7 @@ out.*/
 *.out
 *.swp
 *.diff
+*.bin
 
 GPATH
 GRTAGS
