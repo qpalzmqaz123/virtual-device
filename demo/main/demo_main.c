@@ -85,10 +85,11 @@ int main(void)
 }
 #else
 static vdev_api_t Apis[] = {
-    {VDEV_API_LED,    VDEV_MODEL_LED},
-    {VDEV_API_OS,     VDEV_MODEL_OS},
-    {VDEV_API_LCD,    VDEV_MODEL_LCD},
-    {VDEV_API_SDCARD, VDEV_MODEL_SDCARD}
+    {VDEV_API_LED,       VDEV_MODEL_LED},
+    {VDEV_API_OS,        VDEV_MODEL_OS},
+    {VDEV_API_LCD,       VDEV_MODEL_LCD},
+    {VDEV_API_SDCARD,    VDEV_MODEL_SDCARD},
+    {VDEV_API_STEPMOTOR, VDEV_MODEL_STEPMOTOR}
 };
 
 

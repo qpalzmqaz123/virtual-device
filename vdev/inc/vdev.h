@@ -21,6 +21,7 @@ typedef enum _vdev_api_id_t {
     VDEV_API_LCD,
     VDEV_API_OS,
     VDEV_API_SDCARD,
+    VDEV_API_STEPMOTOR,
 
     VDEV_API_MAX
 } vdev_api_id_t;

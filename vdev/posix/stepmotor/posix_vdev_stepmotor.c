@@ -3,6 +3,7 @@
 #include "posix_manager.h"
 #include "uthash.h"
 
+
 typedef enum _stepmotor_cmd {
     STEPMOTOR_CMD_INIT   = 0,
     STEPMOTOR_CMD_RUN    = 1

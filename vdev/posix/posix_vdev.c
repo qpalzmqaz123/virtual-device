@@ -6,6 +6,7 @@
 #include "posix_vdev_os.h"
 #include "posix_vdev_led.h"
 #include "posix_vdev_sdcard.h"
+#include "posix_vdev_stepmotor.h"
 
 
 static void *pApis[VDEV_API_MAX] = {NULL}; 
@@ -41,6 +42,10 @@ posix_install_all_api(vdev_api_t *p_api, uint32_t count)
                 pApis[id] = malloc(sizeof(vdev_sdcard_api_t));
                 vdev_sdcard_api_install(pApis[id]);
                 break;
+            case VDEV_MODEL_STEPMOTOR:
+                pApis[id] = malloc(sizeof(vdev_stepmotor_api_t));
+                vdev_stepmotor_api_install(pApis[id]);
+                break;
             default:
                 return VDEV_STATUS_NOT_EXIST;
         }
@@ -54,7 +59,7 @@ vdev_status_t vdev_api_init(
         _IN_ uint32_t count)
 {
     /* initial manager */
-//    posix_manager_init();
+    posix_manager_init();
 
     /* initial api */
     return posix_install_all_api(p_api, count);
