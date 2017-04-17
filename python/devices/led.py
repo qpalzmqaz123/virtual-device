@@ -21,19 +21,30 @@ class LedUI(QWidget):
         pass
 
 class Led(vdev.Device):
-    led_cmd_init = 0
-    led_cmd_on = 1
-    led_cmd_off = 2
-    led_cmd_toggle = 3
+    LED_CMD_INIT   = 0
+    LED_CMD_ON     = 1
+    LED_CMD_OFF    = 2
+    LED_CMD_TOGGLE = 3
 
     def __init__(self, model, dev_id):
+        self.state = False
         super().__init__(model, dev_id)
 
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
-        if cmd == self.__class__.led_cmd_init:
-            # initial UI
+        print(cmd == self.__class__.LED_CMD_INIT)
+
+        if cmd == self.__class__.LED_CMD_INIT:
+            self.state = False
             self.send(b'\x01')
+        elif cmd == self.__class__.LED_CMD_ON:
+            self.state = True
+        elif cmd == self.__class__.LED_CMD_OFF:
+            self.state = False
+        elif cmd == self.__class__.LED_CMD_TOGGLE:
+            self.state = not self.state
+
+        print('led%d: %s' % (self.dev_id, 'ON' if self.state else 'OFF'))
 
     def run(self):
-        print('run')
+        pass

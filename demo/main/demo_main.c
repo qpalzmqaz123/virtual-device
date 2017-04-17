@@ -4,11 +4,12 @@
 #include "GUI.h"
 #include "DIALOG.h"
 
-#if 0
 static vdev_api_t Apis[] = {
-    {VDEV_API_LED, VDEV_MODEL_LED},
-    {VDEV_API_OS,  VDEV_MODEL_OS},
-    {VDEV_API_LCD, VDEV_MODEL_LCD}
+    {VDEV_API_LED,       VDEV_MODEL_LED},
+    {VDEV_API_OS,        VDEV_MODEL_OS},
+    {VDEV_API_LCD,       VDEV_MODEL_LCD},
+    {VDEV_API_SDCARD,    VDEV_MODEL_SDCARD},
+    {VDEV_API_STEPMOTOR, VDEV_MODEL_STEPMOTOR}
 };
 
 
@@ -16,13 +17,16 @@ void bsp_init(void)
 {
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
+    vdev_stepmotor_api_t *p_stepmotor = NULL;
 
     vdev_api_init(Apis, sizeof(Apis) / sizeof(vdev_api_t));
     p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
     p_led = (vdev_led_api_t *)vdev_api_get(VDEV_API_LED);
+    p_stepmotor = (vdev_stepmotor_api_t *)vdev_api_get(VDEV_API_STEPMOTOR);
 
     p_os->init();
     p_led->init(0);
+    p_stepmotor->init(0);
     GUI_Init();
 }
 
@@ -49,8 +53,8 @@ void task_led(void *arg)
     p_led = (vdev_led_api_t *)vdev_api_get(VDEV_API_LED);
 
     while (1) {
-        p_led->toggle(0); 
         p_os->msleep(500);
+        p_led->toggle(0); 
     }
 }
 
@@ -83,29 +87,4 @@ int main(void)
 
     p_os->task_start();
 }
-#else
-static vdev_api_t Apis[] = {
-    {VDEV_API_LED,       VDEV_MODEL_LED},
-    {VDEV_API_OS,        VDEV_MODEL_OS},
-    {VDEV_API_LCD,       VDEV_MODEL_LCD},
-    {VDEV_API_SDCARD,    VDEV_MODEL_SDCARD},
-    {VDEV_API_STEPMOTOR, VDEV_MODEL_STEPMOTOR}
-};
-
-
-void bsp_init(void)
-{
-    vdev_sdcard_api_t *p_sd  = NULL;
-
-    vdev_api_init(Apis, sizeof(Apis) / sizeof(vdev_api_t));
-    p_sd = (vdev_sdcard_api_t *)vdev_api_get(VDEV_API_SDCARD);
-
-    p_sd->init(0);
-}
-
-int main(void)
-{
-    bsp_init();
-}
-#endif
 

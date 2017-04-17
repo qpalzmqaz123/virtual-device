@@ -31,10 +31,11 @@ vdev_status_t posix_vdev_stepmotor_init(
     memset(p_motor, 0, sizeof(stepmotor_t));
 
     p_motor->id = id;
+    p_motor->key.id = id;
+    p_motor->key.model = VDEV_MODEL_STEPMOTOR;
     HASH_ADD_INT(pHead, id, p_motor);
 
     posix_manager_register(&p_motor->key);
-    VDEV_RETURN_IF_NULL(&p_motor->key, VDEV_STATUS_FAILURE, "");
 
     /* wait init done */
     posix_manager_send(&p_motor->key, &cmd, 1);

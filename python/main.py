@@ -8,5 +8,6 @@ if __name__ == '__main__':
     v = Vdev()
 
     v.register_device(devices.Led, 3, 0)
+    v.register_device(devices.Stepmotor, 5, 0)
 
     v.start()
