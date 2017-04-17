@@ -10,6 +10,7 @@
 #include "vdev_os.h"
 #include "vdev_led.h"
 #include "vdev_sdcard.h"
+#include "vdev_stepmotor.h"
 
 
 /**
