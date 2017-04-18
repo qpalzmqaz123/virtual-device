@@ -13,6 +13,10 @@
 #include "vdev_stepmotor.h"
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Api id
  */
@@ -41,7 +45,7 @@ typedef struct _vdev_api_t {
  */
 vdev_status_t vdev_api_init(
         _IN_ vdev_api_t *p_api,
-        _IN_ int count);
+        _IN_ size_t count);
 
 /**
  * @brief Get all api
@@ -58,5 +62,9 @@ void *vdev_api_get(
  */
 vdev_status_t vdev_set_log(
         _IN_ vdev_log_t log);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

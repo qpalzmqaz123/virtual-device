@@ -27,7 +27,7 @@ static const install_tbl_t InstTbl[] = {
 
 
 static vdev_status_t
-posix_install_all_api(vdev_api_t *p_api, int count)
+posix_install_all_api(vdev_api_t *p_api, size_t count)
 {
     int i, j;
     int id;
@@ -48,7 +48,7 @@ posix_install_all_api(vdev_api_t *p_api, int count)
 
 vdev_status_t vdev_api_init(
         _IN_ vdev_api_t *p_api,
-        _IN_ int count)
+        _IN_ size_t count)
 {
     /* initial manager */
     posix_manager_init();

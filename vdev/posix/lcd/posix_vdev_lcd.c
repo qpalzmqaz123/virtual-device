@@ -140,7 +140,7 @@ static void *_recv_task(void *arg)
 
 static void _sdl_lcd_run(void)
 {
-    bool quit = FALSE;
+    bool quit = false;
     SDL_Event event;
 
 #if 0
@@ -163,15 +163,15 @@ static void _sdl_lcd_run(void)
         SDL_WaitEvent(&event);
 		switch (event.type) {
             case SDL_QUIT:
-                quit = TRUE;
+                quit = true;
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                pLcdInfo->touch_info.down = TRUE;
+                pLcdInfo->touch_info.down = true;
                 pLcdInfo->touch_info.x = event.button.x;
                 pLcdInfo->touch_info.y = event.button.y;
                 break;
             case SDL_MOUSEBUTTONUP:
-                pLcdInfo->touch_info.down = FALSE;
+                pLcdInfo->touch_info.down = false;
                 break;
             case SDL_MOUSEMOTION:
                 if (pLcdInfo->touch_info.down) {

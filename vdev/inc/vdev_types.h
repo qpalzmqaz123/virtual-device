@@ -3,11 +3,8 @@
 
 #include <stdint.h>
 
-typedef uint32_t bool;
-
 #ifndef __cpluscplus
-#define TRUE 1
-#define FALSE 0
+typedef uint32_t bool;
 #define true 1
 #define false 0
 #endif
