@@ -5,10 +5,8 @@
 #define VDEV_SUPPORT_LOG   0
 
 
-#ifdef VDEV_SIMULATION_TYPE_POSIX
-#define VDEV_SIMULATION_TYPE  1 /* 0: Disable, 1: Posix */
-#else
-#define VDEV_SIMULATION_TYPE  0
+#ifndef VDEV_SIMULATION_TYPE
+#define VDEV_SIMULATION_TYPE  0 /* 0: Disable, 1: Posix */
 #endif
 
 #define VDEV_SIMULATION_SOCKET_PATH "/tmp/vdev_socket"

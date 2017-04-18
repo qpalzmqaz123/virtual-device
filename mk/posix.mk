@@ -10,5 +10,5 @@ CFLAGS += $(shell sdl2-config --cflags)
 LIBS += $(shell sdl2-config --libs)
 LIBS += -lpthread
 
-CFLAGS += -D VDEV_SIMULATION_TYPE_POSIX
+CFLAGS += -D VDEV_SIMULATION_TYPE=1
 
