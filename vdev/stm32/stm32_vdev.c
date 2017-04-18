@@ -10,7 +10,7 @@ static void *pApis[VDEV_API_MAX] = {NULL};
 
 
 static vdev_status_t
-stm32_install_all_api(vdev_api_t *p_api, uint32_t count)
+stm32_install_all_api(vdev_api_t *p_api, size_t count)
 {
     uint32_t i;
     uint32_t id;
@@ -47,7 +47,7 @@ stm32_install_all_api(vdev_api_t *p_api, uint32_t count)
 
 vdev_status_t vdev_api_init(
         _IN_ vdev_api_t *p_api,
-        _IN_ uint32_t count)
+        _IN_ size_t count)
 {
 
     /* initial api */
