@@ -9,7 +9,6 @@ typedef enum _stepmotor_cmd {
     STEPMOTOR_CMD_RUN    = 1
 } stepmotor_cmd;
 
-
 typedef struct _stepmotor_t {
     int                 id;
     posix_manager_key_t key;
