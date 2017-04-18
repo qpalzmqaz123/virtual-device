@@ -9,45 +9,37 @@
 #include "posix_vdev_stepmotor.h"
 
 
+typedef struct _install_tbl_t {
+    vdev_api_id_t  id;
+    size_t         size;
+    void (*fn)(void *);
+} install_tbl_t;
+
+
 static void *pApis[VDEV_API_MAX] = {NULL}; 
+static const install_tbl_t InstTbl[] = {
+    {VDEV_API_LED,       sizeof(vdev_led_api_t),       (void (*)(void *))vdev_led_api_install},
+    {VDEV_API_LCD,       sizeof(vdev_lcd_api_t),       (void (*)(void *))vdev_lcd_api_install},
+    {VDEV_API_OS,        sizeof(vdev_os_api_t),        (void (*)(void *))vdev_os_api_install},
+    {VDEV_API_SDCARD,    sizeof(vdev_sdcard_api_t),    (void (*)(void *))vdev_sdcard_api_install},
+    {VDEV_API_STEPMOTOR, sizeof(vdev_stepmotor_api_t), (void (*)(void *))vdev_stepmotor_api_install}
+};
 
 
 static vdev_status_t
-posix_install_all_api(vdev_api_t *p_api, uint32_t count)
+posix_install_all_api(vdev_api_t *p_api, int count)
 {
-    uint32_t i;
-    uint32_t id;
-    vdev_api_t *p;
+    int i, j;
+    int id;
 
-    for (i = 0, p = p_api; i < count; i++, p++) {
+    for (i = 0; i < count; i++) {
+        id = p_api[i].id;
 
-        id = p->id;
-
-        switch (p->model) {
-            case VDEV_MODEL_GPIO:
-                break;
-            case VDEV_MODEL_LCD:
-                pApis[id] = malloc(sizeof(vdev_lcd_api_t));
-                vdev_lcd_api_install(pApis[id]);
-                break;
-            case VDEV_MODEL_OS:
-                pApis[id] = malloc(sizeof(vdev_os_api_t));
-                vdev_os_api_install(pApis[id]);
-                break;
-            case VDEV_MODEL_LED:
-                pApis[id] = malloc(sizeof(vdev_led_api_t));
-                vdev_led_api_install(pApis[id]);
-                break;
-            case VDEV_MODEL_SDCARD:
-                pApis[id] = malloc(sizeof(vdev_sdcard_api_t));
-                vdev_sdcard_api_install(pApis[id]);
-                break;
-            case VDEV_MODEL_STEPMOTOR:
-                pApis[id] = malloc(sizeof(vdev_stepmotor_api_t));
-                vdev_stepmotor_api_install(pApis[id]);
-                break;
-            default:
-                return VDEV_STATUS_NOT_EXIST;
+        for (j = 0; j < sizeof(InstTbl) / sizeof(InstTbl[0]); j++) {
+            if (id == InstTbl[j].id) {
+                pApis[id] = malloc(InstTbl[j].size);
+                InstTbl[j].fn(pApis[id]);
+            }
         }
     }
 
@@ -56,7 +48,7 @@ posix_install_all_api(vdev_api_t *p_api, uint32_t count)
 
 vdev_status_t vdev_api_init(
         _IN_ vdev_api_t *p_api,
-        _IN_ uint32_t count)
+        _IN_ int count)
 {
     /* initial manager */
     posix_manager_init();

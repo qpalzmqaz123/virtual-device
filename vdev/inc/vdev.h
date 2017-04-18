@@ -41,7 +41,7 @@ typedef struct _vdev_api_t {
  */
 vdev_status_t vdev_api_init(
         _IN_ vdev_api_t *p_api,
-        _IN_ uint32_t count);
+        _IN_ int count);
 
 /**
  * @brief Get all api
