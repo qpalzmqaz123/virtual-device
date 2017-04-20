@@ -18,10 +18,13 @@ class Stepmotor(vdev.Device):
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
         if cmd == self.__class__.STEPMOTOR_CMD_INIT:
-            self.send(b'\x01')
+            self.count = 0
         elif cmd == self.__class__.STEPMOTOR_CMD_RUN:
             self.count += 1
-            print('stepmotor %d: %.2f°' % (self.dev_id, self.count % 400 / 400 * 360))
+
+        print('stepmotor %d: %.2f°' % (self.dev_id, self.count % 400 / 400 * 360))
+
+        self.send_status(vdev.config.status.VDEV_STATUS_SUCCESS)
 
     def run(self):
         pass

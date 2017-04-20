@@ -24,7 +24,7 @@ vdev_status_t posix_vdev_stepmotor_init(
 {
     stepmotor_t *p_motor = NULL;
     uint8_t cmd = STEPMOTOR_CMD_INIT;
-    uint8_t state;
+    uint32_t res;
 
     VDEV_RETURN_IF_NULL(p_motor = (stepmotor_t *)malloc(sizeof(stepmotor_t)), VDEV_STATUS_NO_MEMORY, "");
     memset(p_motor, 0, sizeof(stepmotor_t));
@@ -36,11 +36,10 @@ vdev_status_t posix_vdev_stepmotor_init(
 
     posix_manager_register(&p_motor->key);
 
-    /* wait init done */
-    posix_manager_send(&p_motor->key, &cmd, 1);
-    posix_manager_recv(&p_motor->key, &state, 1);
+    posix_manager_send(&p_motor->key, &cmd, sizeof(uint8_t));
+    posix_manager_recv(&p_motor->key, &res , sizeof(uint32_t));
 
-    return VDEV_STATUS_SUCCESS;
+    return res;
 }
 
 vdev_status_t posix_vdev_stepmotor_run(
@@ -48,13 +47,15 @@ vdev_status_t posix_vdev_stepmotor_run(
 {
     stepmotor_t *p_motor = NULL;
     uint8_t cmd = STEPMOTOR_CMD_RUN;
+    uint32_t res;
 
     HASH_FIND_INT(pHead, &id, p_motor);
     VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
 
-    posix_manager_send(&p_motor->key, &cmd, 1);
+    posix_manager_send(&p_motor->key, &cmd, sizeof(uint8_t));
+    posix_manager_recv(&p_motor->key, &res , sizeof(uint32_t));
 
-    return VDEV_STATUS_SUCCESS;
+    return res;
 }
 
 void vdev_stepmotor_api_install(vdev_stepmotor_api_t *api)
