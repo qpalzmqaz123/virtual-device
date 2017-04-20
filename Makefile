@@ -28,7 +28,8 @@ LD_FLAGS += $(foreach lib, $(ALL_LIBRARYS), -L $(OUT_DIR)/$(lib))
 
 .PHONY: all $(ALL_LIBRARYS)
 ifeq ($(PLATFORM), posix)
-all: $(ALL_LIBRARYS)
+.PHONY: special
+all: $(ALL_LIBRARYS) special
 	$(CC) $(CFLAGS) -o $(OUT_DIR)/$(PROJECT_NAME) $(OUT_DIR)/$(MAIN_LIBRARY)/lib$(MAIN_LIBRARY).a $(LD_FLAGS) $(LIBS)
 	@echo 'Compile successful!'
 else
@@ -47,6 +48,9 @@ ucgui:
 
 demo:
 	$(MAKE) -C demo/
+
+special:
+	$(MAKE) -C special/
 
 .PHONY: clean
 clean:
