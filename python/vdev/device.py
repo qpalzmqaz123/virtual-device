@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+import struct
+
 
 class Device(object):
     """Vritual device class.
@@ -40,4 +42,10 @@ class Device(object):
             })
         except NameError:
             raise RuntimeError("Please register device and run the app at first")
+
+    def send_status(self, status):
+        """Send status code to client, refer to vdev_status_t
+        """
+        data = struct.pack('I', status)
+        self.send(data)
 

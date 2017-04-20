@@ -25,8 +25,8 @@ vdev_status_t posix_vdev_led_init(
         _IN_ uint32_t id)
 {
     led_t *p_led = NULL;
-    led_cmd cmd = LED_CMD_INIT;
-    uint8_t state;
+    uint8_t cmd = LED_CMD_INIT;
+    uint32_t res;
 
     VDEV_RETURN_IF_NULL(p_led = (led_t *)malloc(sizeof(led_t)), VDEV_STATUS_NO_MEMORY, "");
     memset(p_led, 0, sizeof(led_t));
@@ -38,54 +38,58 @@ vdev_status_t posix_vdev_led_init(
 
     posix_manager_register(&p_led->key);
 
-    /* wait init done */
-    posix_manager_send(&p_led->key, &cmd, 1);
-    posix_manager_recv(&p_led->key, &state, 1);
+    posix_manager_send(&p_led->key, &cmd, sizeof(uint8_t));
+    posix_manager_recv(&p_led->key, &res, sizeof(uint32_t));
 
-    return VDEV_STATUS_SUCCESS;
+    return res;
 }
 
 vdev_status_t posix_vdev_led_on(
         _IN_ uint32_t id)
 {
     led_t *p_led = NULL;
-    led_cmd cmd = LED_CMD_ON;
+    uint8_t cmd = LED_CMD_ON;
+    uint32_t res;
 
     HASH_FIND_INT(pHead, &id, p_led);
     VDEV_RETURN_IF_NULL(p_led, VDEV_STATUS_FAILURE, "");
 
-    posix_manager_send(&p_led->key, &cmd, 1);
+    posix_manager_send(&p_led->key, &cmd, sizeof(uint8_t));
+    posix_manager_recv(&p_led->key, &res, sizeof(uint32_t));
 
-
-    return VDEV_STATUS_SUCCESS;
+    return res;
 }
 
 vdev_status_t posix_vdev_led_off(
         _IN_ uint32_t id)
 {
     led_t *p_led = NULL;
-    led_cmd cmd = LED_CMD_OFF;
+    uint8_t cmd = LED_CMD_OFF;
+    uint32_t res;
 
     HASH_FIND_INT(pHead, &id, p_led);
     VDEV_RETURN_IF_NULL(p_led, VDEV_STATUS_FAILURE, "");
 
-    posix_manager_send(&p_led->key, &cmd, 1);
+    posix_manager_send(&p_led->key, &cmd, sizeof(uint8_t));
+    posix_manager_recv(&p_led->key, &res, sizeof(uint32_t));
 
-    return VDEV_STATUS_SUCCESS;
+    return res;
 }
 
 vdev_status_t posix_vdev_led_toggle(
         _IN_ uint32_t id)
 {
     led_t *p_led = NULL;
-    led_cmd cmd = LED_CMD_TOGGLE;
+    uint8_t cmd = LED_CMD_TOGGLE;
+    uint32_t res;
 
     HASH_FIND_INT(pHead, &id, p_led);
     VDEV_RETURN_IF_NULL(p_led, VDEV_STATUS_FAILURE, "");
 
     posix_manager_send(&p_led->key, &cmd, sizeof(uint8_t));
+    posix_manager_recv(&p_led->key, &res, sizeof(uint32_t));
 
-    return VDEV_STATUS_SUCCESS;
+    return res;
 }
 
 void vdev_led_api_install(vdev_led_api_t *api)

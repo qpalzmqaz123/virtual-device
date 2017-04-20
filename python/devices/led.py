@@ -32,11 +32,9 @@ class Led(vdev.Device):
 
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
-        print(cmd == self.__class__.LED_CMD_INIT)
 
         if cmd == self.__class__.LED_CMD_INIT:
             self.state = False
-            self.send(b'\x01')
         elif cmd == self.__class__.LED_CMD_ON:
             self.state = True
         elif cmd == self.__class__.LED_CMD_OFF:
@@ -45,6 +43,8 @@ class Led(vdev.Device):
             self.state = not self.state
 
         print('led%d: %s' % (self.dev_id, 'ON' if self.state else 'OFF'))
+
+        self.send_status(vdev.config.status.VDEV_STATUS_SUCCESS)
 
     def run(self):
         pass
