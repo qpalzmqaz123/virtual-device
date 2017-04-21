@@ -41,7 +41,6 @@ def _parse_content(content):
     
     return attrs
     
-
 def Enum2Py(fname, enum_type):
     content = _get_enum_content(fname, enum_type)
     if not content:

@@ -21,25 +21,24 @@ class LedUI(QWidget):
         pass
 
 class Led(vdev.Device):
-    LED_CMD_INIT   = 0
-    LED_CMD_ON     = 1
-    LED_CMD_OFF    = 2
-    LED_CMD_TOGGLE = 3
 
     def __init__(self, model, dev_id):
         self.state = False
+        self.cmd = vdev.Enum2Py(
+                vdev.config.vdev_root_dir + '/posix/led/posix_vdev_led.c',
+                'led_cmd_t')
         super().__init__(model, dev_id)
 
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
 
-        if cmd == self.__class__.LED_CMD_INIT:
+        if cmd == self.cmd.LED_CMD_INIT:
             self.state = False
-        elif cmd == self.__class__.LED_CMD_ON:
+        elif cmd == self.cmd.LED_CMD_ON:
             self.state = True
-        elif cmd == self.__class__.LED_CMD_OFF:
+        elif cmd == self.cmd.LED_CMD_OFF:
             self.state = False
-        elif cmd == self.__class__.LED_CMD_TOGGLE:
+        elif cmd == self.cmd.LED_CMD_TOGGLE:
             self.state = not self.state
 
         print('led%d: %s' % (self.dev_id, 'ON' if self.state else 'OFF'))

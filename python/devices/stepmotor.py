@@ -8,18 +8,20 @@ import time
 
 
 class Stepmotor(vdev.Device):
-    STEPMOTOR_CMD_INIT   = 0
-    STEPMOTOR_CMD_RUN    = 1
 
     def __init__(self, model, dev_id):
         self.count = 0
+        self.cmd = vdev.Enum2Py(
+                vdev.config.vdev_root_dir + '/posix/stepmotor/posix_vdev_stepmotor.c',
+                'stepmotor_cmd_t')
         super().__init__(model, dev_id)
 
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
-        if cmd == self.__class__.STEPMOTOR_CMD_INIT:
+
+        if cmd == self.cmd.STEPMOTOR_CMD_INIT:
             self.count = 0
-        elif cmd == self.__class__.STEPMOTOR_CMD_RUN:
+        elif cmd == self.cmd.STEPMOTOR_CMD_RUN:
             self.count += 1
 
         print('stepmotor %d: %.2f°' % (self.dev_id, self.count % 400 / 400 * 360))

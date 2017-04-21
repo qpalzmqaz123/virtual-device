@@ -4,12 +4,12 @@
 #include "uthash.h"
 
 
-typedef enum _led_cmd {
+typedef enum _led_cmd_t {
     LED_CMD_INIT   = 0,
     LED_CMD_ON     = 1,
     LED_CMD_OFF    = 2,
     LED_CMD_TOGGLE = 3
-} led_cmd;
+} led_cmd_t;
 
 typedef struct _led_t {
     int                 id;

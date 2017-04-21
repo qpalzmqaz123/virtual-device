@@ -4,10 +4,10 @@
 #include "uthash.h"
 
 
-typedef enum _stepmotor_cmd {
+typedef enum _stepmotor_cmd_t {
     STEPMOTOR_CMD_INIT   = 0,
     STEPMOTOR_CMD_RUN    = 1
-} stepmotor_cmd;
+} stepmotor_cmd_t;
 
 typedef struct _stepmotor_t {
     int                 id;
