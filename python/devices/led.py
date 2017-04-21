@@ -22,12 +22,11 @@ class LedUI(QWidget):
 
 class Led(vdev.Device):
 
-    def __init__(self, model, dev_id):
+    def __init__(self):
         self.state = False
         self.cmd = vdev.Enum2Py(
                 vdev.config.vdev_root_dir + '/posix/led/posix_vdev_led.c',
                 'led_cmd_t')
-        super().__init__(model, dev_id)
 
     def received(self, data):
         cmd = struct.unpack('B', data)[0]

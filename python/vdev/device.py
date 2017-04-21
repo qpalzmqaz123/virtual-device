@@ -5,11 +5,8 @@ import struct
 
 
 class Device(object):
-    """Vritual device class.
-    """
-    def __init__(self, model, dev_id):
-        self.model = model
-        self.dev_id = dev_id
+
+    __slots__ = ('model', 'dev_id')
 
     def received(self, data):
         """You can rewrite this method
@@ -23,8 +20,8 @@ class Device(object):
 
     def set_send_options(self, queue, model, dev_id):
         self.__q = queue
-        self.__model = model
-        self.__dev_id = dev_id
+        self.model = model
+        self.dev_id = dev_id
 
     def send(self, data):
         """Send data to client
@@ -36,8 +33,8 @@ class Device(object):
         # send data
         try:
             self.__q.put({
-                'model': self.__model,
-                'id': self.__dev_id,
+                'model': self.model,
+                'id': self.dev_id,
                 'data': data
             })
         except NameError:

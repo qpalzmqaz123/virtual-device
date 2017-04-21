@@ -13,7 +13,7 @@ class DeviceProcess(Process):
 
     def __init__(self, dev_class, queue, model, dev_id, send_queue):
         self.cls = dev_class
-        self.ins = self.cls(model, dev_id)
+        self.ins = self.cls()
         self.q = queue
         self.model = model
         self.dev_id = dev_id

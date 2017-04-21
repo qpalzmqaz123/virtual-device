@@ -9,12 +9,11 @@ import time
 
 class Stepmotor(vdev.Device):
 
-    def __init__(self, model, dev_id):
+    def __init__(self):
         self.count = 0
         self.cmd = vdev.Enum2Py(
                 vdev.config.vdev_root_dir + '/posix/stepmotor/posix_vdev_stepmotor.c',
                 'stepmotor_cmd_t')
-        super().__init__(model, dev_id)
 
     def received(self, data):
         cmd = struct.unpack('B', data)[0]
