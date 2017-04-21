@@ -92,7 +92,8 @@ vdev_sdcard_info_t *posix_vdev_sdcard_get_info(
     return &p_sd->info;
 }
 
-void vdev_sdcard_api_install(vdev_sdcard_api_t *p_api)
+void
+vdev_sdcard_api_install(vdev_sdcard_api_t *p_api)
 {
     p_api->init     = posix_vdev_sdcard_init;
     p_api->read     = posix_vdev_sdcard_read;

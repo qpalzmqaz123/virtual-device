@@ -4,6 +4,7 @@
 #include "GUI.h"
 #include "DIALOG.h"
 
+
 static vdev_api_t Apis[] = {
     {VDEV_API_LED,       VDEV_MODEL_LED},
     {VDEV_API_OS,        VDEV_MODEL_OS},
@@ -13,7 +14,8 @@ static vdev_api_t Apis[] = {
 };
 
 
-void bsp_init(void)
+static void
+bsp_init(void)
 {
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
@@ -30,7 +32,8 @@ void bsp_init(void)
     GUI_Init();
 }
 
-void task_touch(void *arg)
+static void
+task_touch(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
 
@@ -44,7 +47,8 @@ void task_touch(void *arg)
     }
 }
 
-void task_led(void *arg)
+static void
+task_led(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
@@ -62,7 +66,8 @@ void task_led(void *arg)
 }
 
 WM_HWIN CreateFramewin(void);
-void task_main(void *arg)
+static void
+task_main(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
 
@@ -75,7 +80,8 @@ void task_main(void *arg)
     }
 }
 
-int main(void)
+int
+main(void)
 {
     vdev_os_api_t *p_os  = NULL;
     vdev_os_task_t led, task1, task2;

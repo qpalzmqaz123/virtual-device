@@ -92,7 +92,8 @@ vdev_status_t posix_vdev_led_toggle(
     return res;
 }
 
-void vdev_led_api_install(vdev_led_api_t *api)
+void
+vdev_led_api_install(vdev_led_api_t *api)
 {
     api->init   = posix_vdev_led_init;
     api->on     = posix_vdev_led_on;

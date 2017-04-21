@@ -133,7 +133,8 @@ static vdev_status_t posix_lcd_touch_get_xy (
     return VDEV_STATUS_SUCCESS;
 }
 
-void vdev_lcd_api_install(vdev_lcd_api_t *api)
+void
+vdev_lcd_api_install(vdev_lcd_api_t *api)
 {
     api->init = posix_lcd_init;
     api->fill_rect = posix_lcd_fill_rect;

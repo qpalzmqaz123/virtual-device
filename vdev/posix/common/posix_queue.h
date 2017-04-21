@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
+
 typedef struct _posix_queue_node_t {
     void *data;
     struct _posix_queue_node_t *next;
@@ -26,11 +27,23 @@ typedef enum _posix_queue_error_t {
     POSIX_QUEUE_TIMEOUT,
 } posix_queue_error_t;
 
-posix_queue_error_t posix_queue_create(posix_queue_t *queue, int length, int itemsize);
-posix_queue_error_t posix_queue_delete(posix_queue_t *queue);
-posix_queue_error_t posix_queue_put(posix_queue_t *queue, void *item);
-posix_queue_error_t posix_queue_get(posix_queue_t *queue, void *item);
-posix_queue_error_t posix_queue_put_timeout(posix_queue_t *queue, void *item, int ms);
-posix_queue_error_t posix_queue_get_timeout(posix_queue_t *queue, void *item, int ms);
+
+posix_queue_error_t
+posix_queue_create(posix_queue_t *queue, int length, int itemsize);
+
+posix_queue_error_t
+posix_queue_delete(posix_queue_t *queue);
+
+posix_queue_error_t
+posix_queue_put(posix_queue_t *queue, void *item);
+
+posix_queue_error_t
+posix_queue_get(posix_queue_t *queue, void *item);
+
+posix_queue_error_t
+posix_queue_put_timeout(posix_queue_t *queue, void *item, int ms);
+
+posix_queue_error_t
+posix_queue_get_timeout(posix_queue_t *queue, void *item, int ms);
 
 #endif

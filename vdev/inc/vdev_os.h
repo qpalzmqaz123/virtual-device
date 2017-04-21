@@ -3,6 +3,7 @@
 
 #include "vdev_types.h"
 
+
 typedef void * vdev_os_task_t;
 typedef void * vdev_os_mutex_t;
 typedef void * vdev_os_event_t;
@@ -149,7 +150,8 @@ typedef uint32_t (*vdev_get_task_id_fn) (void);
  *
  * @return Task id
  */
-typedef void (*vdev_sleep_fn) (uint32_t sec);
+typedef void (*vdev_sleep_fn) (
+        _IN_ uint32_t sec);
 
 /**
  * @brief Sleep (millisecond)
@@ -158,7 +160,8 @@ typedef void (*vdev_sleep_fn) (uint32_t sec);
  *
  * @return Task id
  */
-typedef void (*vdev_msleep_fn) (uint32_t ms);
+typedef void (*vdev_msleep_fn) (
+        _IN_ uint32_t ms);
 
 /**
  * @brief Get time (millisecond)

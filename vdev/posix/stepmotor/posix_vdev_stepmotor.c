@@ -58,7 +58,8 @@ vdev_status_t posix_vdev_stepmotor_run(
     return res;
 }
 
-void vdev_stepmotor_api_install(vdev_stepmotor_api_t *api)
+void
+vdev_stepmotor_api_install(vdev_stepmotor_api_t *api)
 {
     api->init   = posix_vdev_stepmotor_init;
     api->run    = posix_vdev_stepmotor_run;

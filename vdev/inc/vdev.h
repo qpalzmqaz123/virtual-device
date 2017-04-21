@@ -17,6 +17,7 @@
 extern "C" {
 #endif
 
+
 /**
  * @brief Api id
  */
@@ -41,6 +42,9 @@ typedef struct _vdev_api_t {
 /**
  * @brief Api intiialization
  *
+ * @param[in] p_api Api table
+ * @param[in] count Item count in api table
+ *
  * @return Return status code, refer to vdev_status_t
  */
 vdev_status_t vdev_api_init(
@@ -50,6 +54,8 @@ vdev_status_t vdev_api_init(
 /**
  * @brief Get all api
  *
+ * @param[in] id Api id
+ *
  * @return Return api pointer
  */
 void *vdev_api_get(
@@ -57,6 +63,8 @@ void *vdev_api_get(
 
 /**
  * @brief Set log level
+ *
+ * @param[in] log Log level
  *
  * @return Return status code, refer to vdev_status_t
  */

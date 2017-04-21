@@ -2,7 +2,8 @@
 #include "tft.h"
 
 
-static uint16_t _color_32_to_16(uint32_t color)
+static uint16_t
+_color_32_to_16(uint32_t color)
 {
     uint16_t tmp = 0;
 
@@ -13,7 +14,8 @@ static uint16_t _color_32_to_16(uint32_t color)
     return tmp;
 }
 
-static uint32_t _color_16_to_32(uint16_t color)
+static uint32_t
+_color_16_to_32(uint16_t color)
 {
     uint32_t tmp = 0;
 
@@ -86,7 +88,8 @@ static vdev_status_t posix_lcd_touch_get_xy (
     return VDEV_STATUS_SUCCESS;
 }
 
-void vdev_lcd_api_install(vdev_lcd_api_t *api)
+void
+vdev_lcd_api_install(vdev_lcd_api_t *api)
 {
     api->init = posix_lcd_init;
     api->fill_rect = posix_lcd_fill_rect;

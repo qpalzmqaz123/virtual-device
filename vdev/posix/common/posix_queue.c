@@ -4,7 +4,9 @@
 #include <sys/time.h>
 #include "posix_queue.h"
 
-static posix_queue_error_t _posix_queue_put(posix_queue_t *queue, void *item, int ms, int timeout_en)
+
+static posix_queue_error_t
+_posix_queue_put(posix_queue_t *queue, void *item, int ms, int timeout_en)
 {
     posix_queue_error_t error = POSIX_QUEUE_SUCCESS;
     posix_queue_node_t *node;
@@ -70,7 +72,8 @@ RET:
     return error;
 }
 
-static posix_queue_error_t _posix_queue_get(posix_queue_t *queue, void *item, int ms, int timeout_en)
+static posix_queue_error_t
+_posix_queue_get(posix_queue_t *queue, void *item, int ms, int timeout_en)
 {
     posix_queue_error_t error = POSIX_QUEUE_SUCCESS;
     posix_queue_node_t *node;
@@ -118,7 +121,8 @@ RET:
     return error;
 }
 
-posix_queue_error_t posix_queue_create(posix_queue_t *queue, int length, int itemsize)
+posix_queue_error_t
+posix_queue_create(posix_queue_t *queue, int length, int itemsize)
 {
     int res;
 
@@ -134,7 +138,8 @@ posix_queue_error_t posix_queue_create(posix_queue_t *queue, int length, int ite
     return POSIX_QUEUE_SUCCESS;
 }
 
-posix_queue_error_t posix_queue_delete(posix_queue_t *queue)
+posix_queue_error_t
+posix_queue_delete(posix_queue_t *queue)
 {
     posix_queue_node_t *node = queue->head;
 
@@ -153,29 +158,34 @@ posix_queue_error_t posix_queue_delete(posix_queue_t *queue)
     return POSIX_QUEUE_SUCCESS;
 }
 
-posix_queue_error_t posix_queue_put(posix_queue_t *queue, void *item)
+posix_queue_error_t
+posix_queue_put(posix_queue_t *queue, void *item)
 {
     return _posix_queue_put(queue, item, 0, 0);
 }
 
-posix_queue_error_t posix_queue_get(posix_queue_t *queue, void *item)
+posix_queue_error_t
+posix_queue_get(posix_queue_t *queue, void *item)
 {
     return _posix_queue_get(queue, item, 0, 0);
 }
 
-posix_queue_error_t posix_queue_put_timeout(posix_queue_t *queue, void *item, int ms)
+posix_queue_error_t
+posix_queue_put_timeout(posix_queue_t *queue, void *item, int ms)
 {
     return _posix_queue_put(queue, item, ms, 1);
 }
 
-posix_queue_error_t posix_queue_get_timeout(posix_queue_t *queue, void *item, int ms)
+posix_queue_error_t
+posix_queue_get_timeout(posix_queue_t *queue, void *item, int ms)
 {
     return _posix_queue_get(queue, item, ms, 1);
 }
 
 #if 0 /* test */
 
-static void *producer(void *arg)
+static void *
+producer(void *arg)
 {
     int i;
     int rc;
@@ -194,7 +204,8 @@ static void *producer(void *arg)
     return NULL;
 }
 
-static void *consumer1(void *arg) {
+static void *
+consumer1(void *arg) {
     posix_queue_t *queue = (posix_queue_t *)arg;
     int num;
     int rc;
@@ -212,7 +223,8 @@ static void *consumer1(void *arg) {
     return NULL;
 }
 
-static void *consumer2(void *arg)
+static void *
+consumer2(void *arg)
 {
     posix_queue_t *queue = (posix_queue_t *)arg;
     int num;
@@ -231,7 +243,8 @@ static void *consumer2(void *arg)
     return NULL;
 }
 
-void test_posix_queue(void)
+void
+test_posix_queue(void)
 {
     pthread_t prod, cons1, cons2;
     posix_queue_t queue;

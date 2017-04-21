@@ -184,12 +184,14 @@ static uint32_t posix_vdev_get_task_id(void)
     return (uint32_t)pthread_self();
 }
 
-static void posix_sleep(uint32_t sec)
+static void posix_sleep(
+        _IN_ uint32_t sec)
 {
     sleep(sec);
 }
 
-static void posix_msleep(uint32_t ms)
+static void posix_msleep(
+        _IN_ uint32_t ms)
 {
     usleep(ms * 1000);
 }
@@ -204,7 +206,8 @@ static uint32_t posix_get_time(void)
             (tc.tv_usec - pOsInfo->ts.tv_usec) / 1000);
 }
 
-void vdev_os_api_install(vdev_os_api_t *api)
+void
+vdev_os_api_install(vdev_os_api_t *api)
 {
     api->init          = posix_vdev_os_init;
     api->destroy       = posix_vdev_os_destroy;

@@ -3,6 +3,7 @@
 
 #include "vdev_types.h"
 
+
 /**
  * @brief Initialize stepmotor
  *

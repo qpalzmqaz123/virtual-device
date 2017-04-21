@@ -8,6 +8,7 @@
 #include "timers.h"
 #include "semphr.h"
 
+
 static vdev_status_t stm32_vdev_os_init(void)
 {
     return VDEV_STATUS_SUCCESS;
@@ -104,12 +105,14 @@ static uint32_t stm32_vdev_get_task_id(void)
     return 0;
 }
 
-static void stm32_sleep(uint32_t sec)
+static void stm32_sleep(
+        _IN_ uint32_t sec)
 {
     vTaskDelay(sec * 1000);
 }
 
-static void stm32_msleep(uint32_t ms)
+static void stm32_msleep(
+        _IN_ uint32_t ms)
 {
     vTaskDelay(ms);
 }
@@ -119,7 +122,8 @@ static uint32_t stm32_get_time(void)
     return ((uint32_t) xTaskGetTickCount());
 }
 
-void vdev_os_api_install(vdev_os_api_t *api)
+void
+vdev_os_api_install(vdev_os_api_t *api)
 {
     api->init          = stm32_vdev_os_init;
     api->destroy       = stm32_vdev_os_destroy;

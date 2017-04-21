@@ -1,6 +1,7 @@
 #include "vdev.h"
 #include "posix_queue.h"
 
+
 static vdev_status_t posix_vdev_os_queue_create(
         _OUT_ vdev_os_queue_t *queue,
         _IN_ uint32_t length,
@@ -65,7 +66,8 @@ static vdev_status_t posix_vdev_os_queue_put_timeout(
     return VDEV_STATUS_SUCCESS;
 }
 
-void vdev_os_queue_api_install(vdev_os_api_t *api)
+void
+vdev_os_queue_api_install(vdev_os_api_t *api)
 {
     api->queue_create      = posix_vdev_os_queue_create;
     api->queue_delete      = posix_vdev_os_queue_delete;

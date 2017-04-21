@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+
 #ifndef __cpluscplus
 typedef uint32_t bool;
 #define true 1

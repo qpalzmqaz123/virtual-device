@@ -14,8 +14,8 @@ uint16_t  FPS=8;
 uint8_t   VPW=16;
 #endif
 
-static
-void Lcd_PinInit(void)
+static void
+Lcd_PinInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -87,7 +87,8 @@ void Lcd_PinInit(void)
 }
 
 #if __USE_IO_SIMULATE == 0
-static void Lcd_FSMCInit(void)
+static void
+Lcd_FSMCInit(void)
 {
     FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
     FSMC_NORSRAMTimingInitTypeDef FSMC_NORSRAMTimingInitStructure;
@@ -122,7 +123,8 @@ static void Lcd_FSMCInit(void)
 }
 #endif
 
-void Lcd_SetBackLight(uint8_t val)
+void
+Lcd_SetBackLight(uint8_t val)
 {
     if (0 == val) {
         LCD_LED_L();
@@ -132,7 +134,8 @@ void Lcd_SetBackLight(uint8_t val)
     }
 }
 
-void Lcd_DelayMs(volatile int ms)
+void
+Lcd_DelayMs(volatile int ms)
 {
     volatile int i;
 
@@ -142,7 +145,8 @@ void Lcd_DelayMs(volatile int ms)
     }
 }
 
-void Lcd_WriteReg(uint16_t data)
+void
+Lcd_WriteReg(uint16_t data)
 {
 #if __USE_IO_SIMULATE == 0
     LCD_REG = data;
@@ -156,7 +160,8 @@ void Lcd_WriteReg(uint16_t data)
 #endif
 }
 
-void Lcd_WriteData(uint16_t data)
+void
+Lcd_WriteData(uint16_t data)
 {
 #if __LCD_DEVICE == __LCD_DEV_ILI9486
     /* 8 bit mode */
@@ -191,7 +196,8 @@ void Lcd_WriteData(uint16_t data)
 }
 
 #if __LCD_DEVICE == __LCD_DEV_ILI9486
-void Lcd_WriteData8Bit(uint8_t data)
+void
+Lcd_WriteData8Bit(uint8_t data)
 {
 #if __USE_IO_SIMULATE == 0
     LCD_RAM = data;
@@ -205,7 +211,8 @@ void Lcd_WriteData8Bit(uint8_t data)
 }
 #endif
 
-uint16_t Lcd_ReadPoint(uint16_t x, uint16_t y)
+uint16_t
+Lcd_ReadPoint(uint16_t x, uint16_t y)
 {
     volatile uint16_t tmp = 0;
 
@@ -264,15 +271,16 @@ uint16_t Lcd_ReadPoint(uint16_t x, uint16_t y)
 
 
 
-void Lcd_WriteRegData(uint16_t reg, uint16_t data)
+void
+Lcd_WriteRegData(uint16_t reg, uint16_t data)
 {
     Lcd_WriteReg(reg);
     Lcd_WriteData(data);
 }
 
 
-static
-void Lcd_Reset(void)
+static void
+Lcd_Reset(void)
 {
 #if __USE_IO_SIMULATE == 0
     GPIOA->ODR &= ~0x0002;
@@ -287,7 +295,8 @@ void Lcd_Reset(void)
 #endif
 }
 
-void Lcd_Init(void)
+void
+Lcd_Init(void)
 {
     Lcd_PinInit();
 #if __USE_IO_SIMULATE == 0
@@ -519,13 +528,15 @@ void Lcd_SetWindow(uint16_t xs, uint16_t ys,uint16_t xe,uint16_t ye)
 #endif
 }
 
-void Lcd_DrawPoint(uint16_t x, uint16_t y, uint16_t color)
+void
+Lcd_DrawPoint(uint16_t x, uint16_t y, uint16_t color)
 {
     Lcd_SetWindow(x, y, x, y);
     Lcd_WriteData(color);
 }
 
-void Lcd_Clear(uint16_t color)
+void
+Lcd_Clear(uint16_t color)
 {
     int x = __LCD_X_MAX, y = __LCD_Y_MAX;
     int i, j;

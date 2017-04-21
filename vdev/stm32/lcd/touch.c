@@ -17,8 +17,8 @@
 
 #define TOUCH_ABS(x) ( ((x) < 0) ? (-(x)) : (x) )
 
-static
-void Touch_DelayUs(volatile int x)
+static void
+Touch_DelayUs(volatile int x)
 {
     volatile int i;
 
@@ -31,7 +31,8 @@ void Touch_DelayUs(volatile int x)
 /**
  * @brief 采用SPI2，PB13-SCK, PB14-MISO, PB15-MOSI, APB1默认为84MHZ
  */
-void SpiTouchPin_Init(void)
+void
+SpiTouchPin_Init(void)
 {
     GPIO_InitTypeDef gpio;
     
@@ -53,7 +54,8 @@ void SpiTouchPin_Init(void)
  * @brief 初始化spi
  * @param baduratePres: SPI时钟分频系数,如SPI_BaudRatePrescaler_16,参照st库头文件
  */
-void SpiTouch_Init(uint16_t baduratePres)
+void
+SpiTouch_Init(uint16_t baduratePres)
 {
     SPI_InitTypeDef spi;
     
@@ -80,7 +82,8 @@ void SpiTouch_Init(uint16_t baduratePres)
  * @param data: 需要发送的数据
  * @return 接收到的数据
  */
-uint8_t SpiTouch_WriteAndRead(uint8_t data)
+uint8_t
+SpiTouch_WriteAndRead(uint8_t data)
 {
     while(!(SPI2->SR & SPI_I2S_FLAG_TXE));
     SPI2->DR = data;
@@ -92,7 +95,8 @@ uint8_t SpiTouch_WriteAndRead(uint8_t data)
 /**
  * @brief 触摸屏初始化
  */
-void Touch_Init(void)
+void
+Touch_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -114,7 +118,8 @@ void Touch_Init(void)
 /**
  * @brief 获取AD值
  */
-static void Touch_Get(uint16_t *x, uint16_t *y)
+static void
+Touch_Get(uint16_t *x, uint16_t *y)
 {
     Touch_CS_L;
     
@@ -141,7 +146,8 @@ static void Touch_Get(uint16_t *x, uint16_t *y)
  * @param *y: 存储yAD的指针
  * @return 1: 滤波成功 0: 滤波失败
  */
-uint8_t Touch_GetData(uint16_t *x, uint16_t *y)
+uint8_t
+Touch_GetData(uint16_t *x, uint16_t *y)
 {
     uint16_t retry = 2;
     uint16_t cnt = 20;
@@ -172,7 +178,8 @@ uint8_t Touch_GetData(uint16_t *x, uint16_t *y)
  * @param *y: 存储y坐标的指针
  * @return 1: 滤波成功 0: 滤波失败
  */
-uint8_t Touch_GetXY(uint16_t *x, uint16_t *y) 
+uint8_t
+Touch_GetXY(uint16_t *x, uint16_t *y) 
 {
     uint8_t res;
     int32_t tx, ty;

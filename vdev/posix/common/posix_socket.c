@@ -9,7 +9,8 @@
 #include <pthread.h>
 
 
-int posix_socket_server_init(int client_num, const char *socket_file)
+int
+posix_socket_server_init(int client_num, const char *socket_file)
 {
     int fd;
     struct sockaddr_un saun;
@@ -28,7 +29,8 @@ int posix_socket_server_init(int client_num, const char *socket_file)
 }
 
 
-int posix_socket_client_init(const char *socket_file)
+int
+posix_socket_client_init(const char *socket_file)
 {
     int fd;
     struct sockaddr_un saun;
@@ -48,7 +50,8 @@ int posix_socket_client_init(const char *socket_file)
     return fd;
 }
 
-int posix_socket_accept(int srv)
+int
+posix_socket_accept(int srv)
 {
     int conn;
 
@@ -58,13 +61,16 @@ int posix_socket_accept(int srv)
 }
 
 
-int posix_socket_write(int sock, void *buff, int size)
+int
+posix_socket_write(int sock, void *buff, int size)
 {
     return write(sock, buff, size);
 }
 
 
-int posix_socket_read(int sock, void *buff, int size)
+int
+posix_socket_read(int sock, void *buff, int size)
 {
     return read(sock, buff, size);
 }
+

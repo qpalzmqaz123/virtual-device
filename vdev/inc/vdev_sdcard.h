@@ -3,6 +3,7 @@
 
 #include "vdev_types.h"
 
+
 typedef struct _vdev_sdcard_info_t {
     uint32_t block_size;
     uint64_t capacity;

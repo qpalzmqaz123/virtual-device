@@ -6,6 +6,7 @@
 #include "uthash.h"
 #include "vdev.h"
 
+
 #define HASH_SAVE_ITEM(item_ptr) do { \
     pthread_rwlock_wrlock(&Lock); \
     HASH_ADD(hh, pHead, key, sizeof(posix_manager_key_t), (item_ptr)); \
