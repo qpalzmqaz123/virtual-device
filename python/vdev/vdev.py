@@ -11,27 +11,21 @@ from .sock import Sock
 
 class DeviceProcess(Process):
 
-    def __init__(self, dev_class, queue, model, dev_id, send_queue):
+    def __init__(self, dev_class, queue, model, send_queue):
         self.cls = dev_class
         self.ins = self.cls()
-        self.q = queue
+        self.recv_q = queue
         self.model = model
-        self.dev_id = dev_id
         self.send_q = send_queue
+
         super().__init__()
 
     def run(self):
-        # save queue, model, id
-        self.ins.set_send_options(self.send_q, self.model, self.dev_id)
-
-        # create a new thread to call instance's run()
-        t = Thread(target=self.cls.run, args=(self.ins,))
-        t.start()
+        # save queue, model
+        self.ins.set_send_options(self.recv_q, self.send_q, self.model)
 
         # loop queue
-        while True:
-            data = self.q.get()
-            self.ins.received(data)
+        self.ins.recv_loop()
 
 
 class SendThread(Thread):
@@ -39,6 +33,7 @@ class SendThread(Thread):
     def __init__(self, queue, sock_session):
         self.q = queue
         self.s = sock_session
+
         super().__init__()
 
     def run(self):
@@ -50,37 +45,31 @@ class SendThread(Thread):
 class Vdev(Process):
 
     def __init__(self):
-        # key => {'queue': Queue, 'class': type, 'model': int, 'id': int}
+        # key => {'queue': Queue, 'class': type, 'model': int}
         self.table = {}
+        # socket
         self.s = None
+        # device process array
         self.procs = []
+
         super().__init__()
 
-    def _gen_key(self, model, dev_id):
-        """Generate hash key
-        """
-        return '%d-%d' % (model, dev_id)
-
-    def register_device(self, dev_class, model, device_id=0):
+    def register_device(self, dev_class, model):
         """Register virtual device.
 
         Parameters:
             dev_class:    device class
             model:        device model number, refer to vdev/inc/vdev_model.h
-            device_id:    available when multi-device exist
         """
-        key = self._gen_key(model, device_id)
-
-        self.table[key] = {
+        self.table[model] = {
             'class': dev_class,
             'queue': Queue(),
             'model': model,
-            'id': device_id
         }
 
     def run(self):
         """Loop the socket forever, then distribute the data to each 
-        callback via model and device id 
+        callback via model number.
         """
         # create socket
         self.s = Sock()
@@ -94,7 +83,7 @@ class Vdev(Process):
 
         # start all process
         for info in self.table.values():
-            proc = DeviceProcess(info['class'], info['queue'], info['model'], info['id'], send_queue)
+            proc = DeviceProcess(info['class'], info['queue'], info['model'], send_queue)
             self.procs.append(proc)
         [proc.start() for proc in self.procs]
 
@@ -104,12 +93,12 @@ class Vdev(Process):
             except ValueError as e:
                 continue
 
-            # look up queue by model and dev_id
-            key = self._gen_key(model, dev_id)
-            info = self.table.get(key)
+            # look up queue by model number
+            info = self.table.get(model)
             if info == None:
                 logging.error('device %d-%d not fond!' % (model, dev_id))
                 continue
 
             # distribute data
-            info['queue'].put(data)
+            info['queue'].put(dict(data=data, dev_id=dev_id))
+

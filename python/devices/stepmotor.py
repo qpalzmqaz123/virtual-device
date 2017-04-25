@@ -15,7 +15,7 @@ class Stepmotor(vdev.Device):
                 vdev.config.vdev_root_dir + '/posix/stepmotor/posix_vdev_stepmotor.c',
                 'stepmotor_cmd_t')
 
-    def received(self, data):
+    def received(self, dev_id, data):
         cmd = struct.unpack('B', data)[0]
 
         if cmd == self.cmd.STEPMOTOR_CMD_INIT:
@@ -23,9 +23,9 @@ class Stepmotor(vdev.Device):
         elif cmd == self.cmd.STEPMOTOR_CMD_RUN:
             self.count += 1
 
-        print('stepmotor %d: %.2f°' % (self.dev_id, self.count % 400 / 400 * 360))
+        print('stepmotor %d: %.2f°' % (dev_id, self.count % 400 / 400 * 360))
 
-        self.send_status(vdev.config.status.VDEV_STATUS_SUCCESS)
+        return vdev.config.status.VDEV_STATUS_SUCCESS
 
     def run(self):
         pass

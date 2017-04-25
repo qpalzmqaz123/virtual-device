@@ -28,7 +28,7 @@ class Led(vdev.Device):
                 vdev.config.vdev_root_dir + '/posix/led/posix_vdev_led.c',
                 'led_cmd_t')
 
-    def received(self, data):
+    def received(self, dev_id, data):
         cmd = struct.unpack('B', data)[0]
 
         if cmd == self.cmd.LED_CMD_INIT:
@@ -40,9 +40,9 @@ class Led(vdev.Device):
         elif cmd == self.cmd.LED_CMD_TOGGLE:
             self.state = not self.state
 
-        print('led%d: %s' % (self.dev_id, 'ON' if self.state else 'OFF'))
+        print('led%d: %s' % (dev_id, 'ON' if self.state else 'OFF'))
 
-        self.send_status(vdev.config.status.VDEV_STATUS_SUCCESS)
+        return vdev.config.status.VDEV_STATUS_SUCCESS
 
     def run(self):
         pass

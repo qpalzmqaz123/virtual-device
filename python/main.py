@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     v = Vdev()
 
-    v.register_device(devices.Led, model.VDEV_MODEL_LED, 0)
-    v.register_device(devices.Stepmotor, model.VDEV_MODEL_STEPMOTOR, 0)
+    v.register_device(devices.Led, model.VDEV_MODEL_LED)
+    v.register_device(devices.Stepmotor, model.VDEV_MODEL_STEPMOTOR)
 
     v.start()
