@@ -5,20 +5,7 @@ import sys
 import vdev
 import struct
 import time
-from PyQt5.QtWidgets import *
 from threading import Event
-
-
-class LedUI(QWidget):
-    __instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if not cls.__instance:
-            QWidget.__new__(cls, *args, **kwargs)
-        return cls.__instance
-
-    def __init__(self):
-        pass
 
 class Led(vdev.Device):
 
