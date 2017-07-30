@@ -422,9 +422,7 @@ void LCD_L0_DrawHLine  (int x0, int y,  int x1) {
       LCD_L0_XorPixel(x0, y);
     }
   } else {
-    for (; x0 <= x1; x0++) {
       pLcdApi->fill_rect(0, x0, y, x1, y, LCD_COLORINDEX);
-    }
   }
 }
 
@@ -438,9 +436,7 @@ void LCD_L0_DrawVLine  (int x, int y0,  int y1) {
       LCD_L0_XorPixel(x, y0);
     }
   } else {
-    for (; y0 <= y1; y0++) {
       pLcdApi->fill_rect(0, x, y0, x, y1, LCD_COLORINDEX);
-    }
   }
 }
 
