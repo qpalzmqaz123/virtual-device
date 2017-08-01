@@ -57,7 +57,7 @@ task_led(void *arg)
     }
 }
 
-WM_HWIN CreateFramewin(void);
+extern GUI_CONST_STORAGE GUI_FONT GUI_Fontzh_CN;
 static void
 task_main(void *arg)
 {
@@ -65,7 +65,10 @@ task_main(void *arg)
 
     p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
 
-    CreateFramewin();
+    GUI_UC_SetEncodeUTF8();
+    GUI_SetFont(&GUI_Fontzh_CN);
+    GUI_DispString("中文测试");
+    BUTTON_SetDefaultFont(&GUI_Fontzh_CN);
     while (1) {
         GUI_Exec(); 
         p_os->msleep(1);
