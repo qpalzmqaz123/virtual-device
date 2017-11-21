@@ -1,3 +1,4 @@
+#if 1
 #include <stdio.h>
 #include <string.h>
 #include "vdev.h"
@@ -5,10 +6,10 @@
 #include "DIALOG.h"
 
 
-static vdev_api_t Apis[] = {
-    {VDEV_API_LED,       VDEV_MODEL_LED},
-    {VDEV_API_OS,        VDEV_MODEL_OS},
-    {VDEV_API_LCD,       VDEV_MODEL_LCD},
+static vdev_api_list_entry_t Apis[] = {
+    { VDEV_MODEL_LED, "led" },
+    { VDEV_MODEL_OS,  "os" },
+    { VDEV_MODEL_LCD, "lcd" },
 };
 
 
@@ -18,9 +19,9 @@ bsp_init(void)
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
 
-    vdev_api_init(Apis, sizeof(Apis) / sizeof(vdev_api_t));
-    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
-    p_led = (vdev_led_api_t *)vdev_api_get(VDEV_API_LED);
+    vdev_api_init(Apis);
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_led = (vdev_led_api_t *)vdev_api_get("led");
 
     p_os->init();
     p_led->init(0);
@@ -32,7 +33,7 @@ task_touch(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
 
     while (1) {
         p_os->msleep(10);
@@ -48,8 +49,8 @@ task_led(void *arg)
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
-    p_led = (vdev_led_api_t *)vdev_api_get(VDEV_API_LED);
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_led = (vdev_led_api_t *)vdev_api_get("led");
 
     while (1) {
         p_os->msleep(500);
@@ -63,7 +64,7 @@ task_main(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
 
     GUI_UC_SetEncodeUTF8();
     GUI_SetFont(&GUI_Fontzh_CN);
@@ -83,7 +84,7 @@ main(void)
 
     bsp_init();
 
-    p_os = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
 
     p_os->task_create(&led,   task_led, (void *)NULL, "led");
     p_os->task_create(&task1, task_main, (void *)NULL, "main");
@@ -92,3 +93,60 @@ main(void)
     p_os->task_start();
 }
 
+#else
+
+#include <stdio.h>
+#include <string.h>
+#include "vdev.h"
+
+static vdev_api_list_entry_t Apis[] = {
+    { VDEV_MODEL_LED, "led" },
+    { VDEV_MODEL_OS,  "os"  },
+    { VDEV_MODEL_NULL, NULL }
+};
+
+static void
+bsp_init(void)
+{
+    vdev_os_api_t *p_os  = NULL;
+    vdev_led_api_t *p_led = NULL;
+
+    vdev_api_init(Apis);
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_led = (vdev_led_api_t *)vdev_api_get("led");
+    printf("p_os: %x\n", p_os);
+
+    p_os->init();
+    p_led->init(0);
+}
+
+static void
+task_led(void *arg)
+{
+    vdev_os_api_t *p_os  = NULL;
+    vdev_led_api_t *p_led = NULL;
+
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_led = (vdev_led_api_t *)vdev_api_get("led");
+
+    while (1) {
+        p_os->msleep(100);
+        p_led->toggle(0); 
+    }
+}
+
+int
+main(void)
+{
+    vdev_os_api_t *p_os  = NULL;
+    vdev_os_task_t led, task1, task2;
+
+    bsp_init();
+
+    p_os = (vdev_os_api_t *)vdev_api_get("os");
+
+    p_os->task_create(&led,   task_led, (void *)NULL, "led");
+
+    p_os->task_start();
+}
+#endif

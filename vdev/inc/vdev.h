@@ -19,37 +19,33 @@ extern "C" {
 
 
 /**
- * @brief Api id
- */
-typedef enum _vdev_api_id_t {
-    VDEV_API_LED = 0,
-    VDEV_API_LCD,
-    VDEV_API_OS,
-    VDEV_API_SDCARD,
-    VDEV_API_STEPMOTOR,
-
-    VDEV_API_MAX
-} vdev_api_id_t;
-
-/**
  * @brief All virtual device apis
  */
-typedef struct _vdev_api_t {
-    vdev_api_id_t  id;
+typedef struct _vdev_api_list_entry_t {
     vdev_model_t   model;
-} vdev_api_t;
+    const char *   mount_point;
+} vdev_api_list_entry_t;
 
 /**
  * @brief Api intiialization
  *
  * @param[in] p_api Api table
- * @param[in] count Item count in api table
  *
  * @return Return status code, refer to vdev_status_t
  */
-vdev_status_t vdev_api_init(
-        _IN_ vdev_api_t *p_api,
-        _IN_ size_t count);
+vdev_status_t
+vdev_api_init(_IN_ vdev_api_list_entry_t *p_api);
+
+/**
+ * @brief Register api
+ *
+ * @param[in] p_api Api
+ * @param[in] mount_point Mount point
+ *
+ */
+vdev_status_t
+vdev_api_register(void  *p_api,
+                  const char *mount_point);
 
 /**
  * @brief Get all api
@@ -58,8 +54,8 @@ vdev_status_t vdev_api_init(
  *
  * @return Return api pointer
  */
-void *vdev_api_get(
-        _IN_ vdev_api_id_t id);
+void *
+vdev_api_get(_IN_ const char *mount_point);
 
 /**
  * @brief Set log level
@@ -68,8 +64,8 @@ void *vdev_api_get(
  *
  * @return Return status code, refer to vdev_status_t
  */
-vdev_status_t vdev_set_log(
-        _IN_ vdev_log_t log);
+vdev_status_t
+vdev_set_log(_IN_ vdev_log_t log);
 
 #ifdef __cplusplus
 }

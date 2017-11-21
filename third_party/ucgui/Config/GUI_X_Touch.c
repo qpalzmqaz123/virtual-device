@@ -36,7 +36,7 @@ int  GUI_TOUCH_X_MeasureX(void) {
     uint16_t x, y;
 
     if (NULL == pLcdApi) {
-        pLcdApi = (vdev_lcd_api_t *)vdev_api_get(VDEV_API_LCD);
+        pLcdApi = (vdev_lcd_api_t *)vdev_api_get("lcd");
     }
 
     ret = pLcdApi->touch_get_xy(0, &x, &y);
@@ -53,7 +53,7 @@ int  GUI_TOUCH_X_MeasureY(void) {
     uint16_t x, y;
 
     if (NULL == pLcdApi) {
-        pLcdApi = (vdev_lcd_api_t *)vdev_api_get(VDEV_API_LCD);
+        pLcdApi = (vdev_lcd_api_t *)vdev_api_get("lcd");
     }
 
     ret = pLcdApi->touch_get_xy(0, &x, &y);

@@ -88,7 +88,7 @@ void GUI_X_ExecIdle (void)
 
 void  GUI_X_InitOS (void)
 { 
-    pOsApi = (vdev_os_api_t *)vdev_api_get(VDEV_API_OS);
+    pOsApi = (vdev_os_api_t *)vdev_api_get("os");
 
     pOsApi->mutex_create(&Mutex);
     pOsApi->event_create(&Event);
