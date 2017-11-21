@@ -523,7 +523,7 @@ void LCD_Off (void) {
 *   Initialises the LCD-controller.
 */
 int  LCD_L0_Init(void) {
-    pLcdApi = (vdev_lcd_api_t *)vdev_api_get("lcd");
+    pLcdApi = (vdev_lcd_api_t *)vdev_api_query("lcd");
 
     pLcdApi->init(0);
 

@@ -55,7 +55,7 @@ vdev_api_register(void  *p_api,
  * @return Return api pointer
  */
 void *
-vdev_api_get(_IN_ const char *mount_point);
+vdev_api_query(_IN_ const char *mount_point);
 
 /**
  * @brief Set log level

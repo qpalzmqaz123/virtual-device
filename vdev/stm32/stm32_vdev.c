@@ -54,7 +54,7 @@ vdev_status_t vdev_api_init(
     return stm32_install_all_api(p_api, count);
 }
 
-void *vdev_api_get(
+void *vdev_api_query(
         _IN_ vdev_api_id_t id)
 {
     if (id < VDEV_API_MAX) {

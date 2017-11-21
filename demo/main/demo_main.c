@@ -20,8 +20,8 @@ bsp_init(void)
     vdev_led_api_t *p_led = NULL;
 
     vdev_api_init(Apis);
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
-    p_led = (vdev_led_api_t *)vdev_api_get("led");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
+    p_led = (vdev_led_api_t *)vdev_api_query("led");
 
     p_os->init();
     p_led->init(0);
@@ -33,7 +33,7 @@ task_touch(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
 
     while (1) {
         p_os->msleep(10);
@@ -49,8 +49,8 @@ task_led(void *arg)
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
-    p_led = (vdev_led_api_t *)vdev_api_get("led");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
+    p_led = (vdev_led_api_t *)vdev_api_query("led");
 
     while (1) {
         p_os->msleep(500);
@@ -64,7 +64,7 @@ task_main(void *arg)
 {
     vdev_os_api_t *p_os  = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
 
     GUI_UC_SetEncodeUTF8();
     GUI_SetFont(&GUI_Fontzh_CN);
@@ -84,7 +84,7 @@ main(void)
 
     bsp_init();
 
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
 
     p_os->task_create(&led,   task_led, (void *)NULL, "led");
     p_os->task_create(&task1, task_main, (void *)NULL, "main");
@@ -112,8 +112,8 @@ bsp_init(void)
     vdev_led_api_t *p_led = NULL;
 
     vdev_api_init(Apis);
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
-    p_led = (vdev_led_api_t *)vdev_api_get("led");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
+    p_led = (vdev_led_api_t *)vdev_api_query("led");
     printf("p_os: %x\n", p_os);
 
     p_os->init();
@@ -126,8 +126,8 @@ task_led(void *arg)
     vdev_os_api_t *p_os  = NULL;
     vdev_led_api_t *p_led = NULL;
 
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
-    p_led = (vdev_led_api_t *)vdev_api_get("led");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
+    p_led = (vdev_led_api_t *)vdev_api_query("led");
 
     while (1) {
         p_os->msleep(100);
@@ -143,7 +143,7 @@ main(void)
 
     bsp_init();
 
-    p_os = (vdev_os_api_t *)vdev_api_get("os");
+    p_os = (vdev_os_api_t *)vdev_api_query("os");
 
     p_os->task_create(&led,   task_led, (void *)NULL, "led");
 

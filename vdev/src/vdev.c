@@ -28,7 +28,7 @@ vdev_api_register(void  *p_api,
 }
 
 void *
-vdev_api_get(_IN_ const char *mount_point)
+vdev_api_query(_IN_ const char *mount_point)
 {
     api_hash_t *p_hash = NULL;
 
