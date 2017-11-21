@@ -10,9 +10,9 @@ typedef struct api_hash_s {
 
 static api_hash_t *g_apis = NULL;
 
-vdev_status_t
-vdev_api_register(void  *p_api,
-                  const char *mount_point)
+__attribute__((weak)) vdev_status_t
+vdev_api_register(_IN_ void  *p_api,
+                  _IN_ const char *mount_point)
 {
     printf("%s\n", mount_point);
     api_hash_t *p_hash = (api_hash_t *)malloc(sizeof(api_hash_t));
@@ -27,7 +27,7 @@ vdev_api_register(void  *p_api,
     HASH_ADD_STR(g_apis, mount_point, p_hash);
 }
 
-void *
+__attribute__((weak)) void *
 vdev_api_query(_IN_ const char *mount_point)
 {
     api_hash_t *p_hash = NULL;
@@ -38,7 +38,8 @@ vdev_api_query(_IN_ const char *mount_point)
 }
 
 #if VDEV_SUPPORT_LOG
-vdev_status_t vdev_set_log(_IN_ vdev_log_t log)
+__attribute__((weak)) vdev_status_t
+vdev_set_log(_IN_ vdev_log_t log)
 {
     if (NULL == pVdevApi) {
         return VDEV_STATUS_FAILURE;

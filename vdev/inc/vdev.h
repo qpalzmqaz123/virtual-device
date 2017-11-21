@@ -44,8 +44,8 @@ vdev_api_init(_IN_ vdev_api_list_entry_t *p_api);
  *
  */
 vdev_status_t
-vdev_api_register(void  *p_api,
-                  const char *mount_point);
+vdev_api_register(_IN_ void  *p_api,
+                  _IN_ const char *mount_point);
 
 /**
  * @brief Get all api
