@@ -42,13 +42,13 @@ _posix_queue_put(posix_queue_t *queue, void *item, int ms, int timeout_en)
 
     node = (posix_queue_node_t *)malloc(sizeof(posix_queue_node_t));
     if (NULL == node) {
-        error = POSIX_QUEUE_NO_MEMORY; 
+        error = POSIX_QUEUE_OUT_OF_MEMORY;
         goto RET;
     }
     node->data = (void *)malloc(sizeof(queue->itemsize));
     if (NULL == node->data) {
         free(node);
-        error = POSIX_QUEUE_NO_MEMORY; 
+        error = POSIX_QUEUE_OUT_OF_MEMORY;
         goto RET;
     }
     memcpy(node->data, item, sizeof(queue->itemsize));

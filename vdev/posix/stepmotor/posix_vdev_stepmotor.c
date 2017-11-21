@@ -26,7 +26,7 @@ vdev_status_t posix_vdev_stepmotor_init(
     uint8_t cmd = STEPMOTOR_CMD_INIT;
     uint32_t res;
 
-    VDEV_RETURN_IF_NULL(p_motor = (stepmotor_t *)malloc(sizeof(stepmotor_t)), VDEV_STATUS_NO_MEMORY, "");
+    VDEV_RETURN_IF_NULL(p_motor = (stepmotor_t *)malloc(sizeof(stepmotor_t)), VDEV_STATUS_OUT_OF_MEMORY, "");
     memset(p_motor, 0, sizeof(stepmotor_t));
 
     p_motor->id = id;

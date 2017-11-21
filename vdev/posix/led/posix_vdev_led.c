@@ -28,7 +28,7 @@ vdev_status_t posix_vdev_led_init(
     uint8_t cmd = LED_CMD_INIT;
     uint32_t res;
 
-    VDEV_RETURN_IF_NULL(p_led = (led_t *)malloc(sizeof(led_t)), VDEV_STATUS_NO_MEMORY, "");
+    VDEV_RETURN_IF_NULL(p_led = (led_t *)malloc(sizeof(led_t)), VDEV_STATUS_OUT_OF_MEMORY, "");
     memset(p_led, 0, sizeof(led_t));
 
     p_led->id = id;

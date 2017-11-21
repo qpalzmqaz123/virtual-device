@@ -10,7 +10,7 @@ static vdev_status_t posix_vdev_os_queue_create(
     posix_queue_t *q = NULL;
 
     q = (posix_queue_t *)malloc(sizeof(posix_queue_t));
-    VDEV_RETURN_IF_NULL(q, VDEV_STATUS_NO_MEMORY, "");
+    VDEV_RETURN_IF_NULL(q, VDEV_STATUS_OUT_OF_MEMORY, "");
     VDEV_RETURN_IF_ERROR(posix_queue_create(q, length, itemsize),
                          VDEV_STATUS_FAILURE, "");
     *queue = q;

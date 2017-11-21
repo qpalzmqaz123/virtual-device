@@ -23,7 +23,7 @@ typedef struct _posix_queue_t {
 typedef enum _posix_queue_error_t {
     POSIX_QUEUE_SUCCESS = 0,
     POSIX_QUEUE_FAILURE,
-    POSIX_QUEUE_NO_MEMORY,
+    POSIX_QUEUE_OUT_OF_MEMORY,
     POSIX_QUEUE_TIMEOUT,
 } posix_queue_error_t;
 

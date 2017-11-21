@@ -93,7 +93,7 @@ static vdev_status_t posix_vdev_os_mutex_create(
     pthread_mutex_t *p = NULL;
 
     p = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_NO_MEMORY, "Can't create mutex");
+    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_OUT_OF_MEMORY, "Can't create mutex");
 
     memset(p, 0, sizeof(pthread_mutex_t));
     res = pthread_mutex_init(p, NULL);
@@ -135,7 +135,7 @@ static vdev_status_t posix_vdev_os_event_create(
     os_event_t *p = NULL;
 
     p = (os_event_t *)malloc(sizeof(os_event_t));
-    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_NO_MEMORY, "Can't create event");
+    VDEV_RETURN_IF_NULL(p, VDEV_STATUS_OUT_OF_MEMORY, "Can't create event");
 
     memset(p, 0, sizeof(os_event_t));
     res = pthread_mutex_init(&p->mutex, NULL);

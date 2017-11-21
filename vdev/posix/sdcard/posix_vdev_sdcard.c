@@ -28,7 +28,7 @@ vdev_status_t posix_vdev_sdcard_init(
 {
     sdcard_t *p_sd;
 
-    VDEV_RETURN_IF_NULL(p_sd = (sdcard_t *)malloc(sizeof(sdcard_t)), VDEV_STATUS_NO_MEMORY, "");
+    VDEV_RETURN_IF_NULL(p_sd = (sdcard_t *)malloc(sizeof(sdcard_t)), VDEV_STATUS_OUT_OF_MEMORY, "");
     memset(p_sd, 0, sizeof(sdcard_t));
 
     p_sd->id = id;

@@ -46,7 +46,7 @@ static vdev_status_t stm32_vdev_os_mutex_create(
         _OUT_ vdev_os_mutex_t *mutex)
 {
     *mutex = xSemaphoreCreateMutex();
-    VDEV_RETURN_IF_NULL(*mutex, VDEV_STATUS_NO_MEMORY, "Can't create mutex");
+    VDEV_RETURN_IF_NULL(*mutex, VDEV_STATUS_OUT_OF_MEMORY, "Can't create mutex");
 
     return VDEV_STATUS_SUCCESS;
 }
@@ -75,7 +75,7 @@ static vdev_status_t stm32_vdev_os_event_create(
         _OUT_ vdev_os_event_t *event)
 {
     vSemaphoreCreateBinary(*event);
-    VDEV_RETURN_IF_NULL(*event, VDEV_STATUS_NO_MEMORY, "Can't create event");
+    VDEV_RETURN_IF_NULL(*event, VDEV_STATUS_OUT_OF_MEMORY, "Can't create event");
     return VDEV_STATUS_SUCCESS;
 }
 
