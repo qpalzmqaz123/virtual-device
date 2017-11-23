@@ -17,11 +17,20 @@ class Client {
       const frame = await this._read()
       const instance = this._requireInstance(frame)
 
-      const response = await instance.received(frame.data)
-      if (response) {
-        /* TODO: resp */
-      }
+      this._callReceived(frame, instance)
     }
+  }
+
+  _callReceived (frame, instance) {
+    instance.received(frame.data)
+      .then(response => {
+        if (response) {
+          /* TODO: resp */
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   _requireInstance (frame) {
