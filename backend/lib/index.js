@@ -1,23 +1,57 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 const net = require('net')
 const { Transport } = require('./transport')
+const devicesConfig = require('../config/devices.json')
 
 class Client {
   constructor (client) {
     this._trans = new Transport(client)
-  }
-
-  async _read () {
-    return this._trans.read()
+    this._deviceCache = {}
   }
 
   async run () {
     while (true) {
-      let data = await this._read()
-      console.log('ffff', data)
+      const frame = await this._read()
+      const instance = this._requireInstance(frame)
+
+      const response = await instance.received(frame.data)
+      if (response) {
+        /* TODO: resp */
+      }
     }
+  }
+
+  _requireInstance (frame) {
+    let cachedInstance = this._deviceCache[this._genCacheKey(frame)]
+
+    /* check if cache exists */
+    if (!cachedInstance) {
+      cachedInstance = this._createDeviceInstance(frame)
+      this._deviceCache[this._genCacheKey(frame)] = cachedInstance
+    }
+
+    return cachedInstance
+  }
+
+  _createDeviceInstance (frame) {
+    /* get device module name */
+    let moduleName = Object.keys(devicesConfig).find(key => frame.model === devicesConfig[key])
+
+    /* get class */
+    const Cls = require(path.resolve('devices', moduleName))
+
+    return new Cls(frame.model, frame.id, null)
+  }
+
+  _genCacheKey (frame) {
+    return `${frame.model}-${frame.id}`
+  }
+
+  async _read () {
+    return this._trans.read()
   }
 }
 
