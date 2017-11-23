@@ -14,7 +14,6 @@ __attribute__((weak)) vdev_status_t
 vdev_api_register(_IN_ void  *p_api,
                   _IN_ const char *mount_point)
 {
-    printf("%s\n", mount_point);
     api_hash_t *p_hash = (api_hash_t *)malloc(sizeof(api_hash_t));
     VDEV_ASSERT_NOT_NULL(p_hash);
 
