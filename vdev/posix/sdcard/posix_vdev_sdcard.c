@@ -1,7 +1,7 @@
 #include "vdev.h"
 #include "vdev_model.h"
 #include "posix_manager.h"
-#include "uthash.h"
+#include "uthash/include/uthash.h"
 
 
 #define SDCARD_FILE_NAMESIZE 32

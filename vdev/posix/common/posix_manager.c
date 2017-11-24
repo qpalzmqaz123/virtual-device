@@ -3,7 +3,7 @@
 #include <string.h>
 #include "posix_manager.h"
 #include "posix_socket.h"
-#include "uthash.h"
+#include "uthash/include/uthash.h"
 #include "vdev.h"
 
 

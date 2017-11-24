@@ -1,7 +1,7 @@
 #include "vdev.h"
 #include "vdev_model.h"
 #include "posix_manager.h"
-#include "uthash.h"
+#include "uthash/include/uthash.h"
 
 
 typedef enum _stepmotor_cmd_t {
