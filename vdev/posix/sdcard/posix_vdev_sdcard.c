@@ -41,7 +41,6 @@ vdev_status_t posix_vdev_sdcard_init(
     HASH_ADD_INT(pHead, id, p_sd);
 
     p_sd->fp = fopen(p_sd->name, "a+");
-    printf("sdid: %d, %s\n", id, p_sd->name);
 
     return VDEV_STATUS_SUCCESS;
 }
