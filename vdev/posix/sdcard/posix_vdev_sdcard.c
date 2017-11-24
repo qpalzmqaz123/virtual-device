@@ -59,7 +59,7 @@ vdev_status_t posix_vdev_sdcard_read(
 
     offset = p_sd->info.block_size * selector;
     fseek(p_sd->fp, offset, SEEK_SET);
-    size = fread(buffer, p_sd->info.block_size, count, p_sd->fp);
+    size = fread(buffer, 1, p_sd->info.block_size * count, p_sd->fp);
 
     return size == p_sd->info.block_size * count ? VDEV_STATUS_SUCCESS : VDEV_STATUS_FAILURE;
 }
@@ -78,7 +78,7 @@ vdev_status_t posix_vdev_sdcard_write(
 
     offset = p_sd->info.block_size * selector;
     fseek(p_sd->fp, offset, SEEK_SET);
-    size = fwrite(buffer, p_sd->info.block_size, count, p_sd->fp);
+    size = fwrite(buffer, 1, p_sd->info.block_size * count, p_sd->fp);
     fflush(p_sd->fp);
 
     return size == p_sd->info.block_size * count ? VDEV_STATUS_SUCCESS : VDEV_STATUS_FAILURE;
