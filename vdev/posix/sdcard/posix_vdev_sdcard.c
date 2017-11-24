@@ -41,6 +41,7 @@ vdev_status_t posix_vdev_sdcard_init(
     HASH_ADD_INT(pHead, id, p_sd);
 
     p_sd->fp = fopen(p_sd->name, "a+");
+    printf("sdid: %d, %s\n", id, p_sd->name);
 
     return VDEV_STATUS_SUCCESS;
 }
@@ -51,6 +52,7 @@ vdev_status_t posix_vdev_sdcard_read(
         _IN_ uint32_t selector,
         _IN_ uint32_t count)
 {
+    size_t size;
     uint64_t offset;
     sdcard_t *p_sd;
 
@@ -58,17 +60,18 @@ vdev_status_t posix_vdev_sdcard_read(
 
     offset = p_sd->info.block_size * selector;
     fseek(p_sd->fp, offset, SEEK_SET);
-    fread(buffer, p_sd->info.block_size, count, p_sd->fp);
+    size = fread(buffer, p_sd->info.block_size, count, p_sd->fp);
 
-    return VDEV_STATUS_SUCCESS;
+    return size == p_sd->info.block_size * count ? VDEV_STATUS_SUCCESS : VDEV_STATUS_FAILURE;
 }
 
 vdev_status_t posix_vdev_sdcard_write(
         _IN_ uint32_t id,
-        _IN_ void *buffer,
+        _IN_ const void *buffer,
         _IN_ uint32_t selector,
         _IN_ uint32_t count)
 {
+    size_t size;
     uint64_t offset;
     sdcard_t *p_sd;
 
@@ -76,10 +79,10 @@ vdev_status_t posix_vdev_sdcard_write(
 
     offset = p_sd->info.block_size * selector;
     fseek(p_sd->fp, offset, SEEK_SET);
-    fwrite(buffer, p_sd->info.block_size, count, p_sd->fp);
+    size = fwrite(buffer, p_sd->info.block_size, count, p_sd->fp);
     fflush(p_sd->fp);
 
-    return VDEV_STATUS_SUCCESS;
+    return size == p_sd->info.block_size * count ? VDEV_STATUS_SUCCESS : VDEV_STATUS_FAILURE;
 }
 
 vdev_sdcard_info_t *posix_vdev_sdcard_get_info(

@@ -49,7 +49,7 @@ typedef vdev_status_t (*vdev_sdcard_read_fn) (
  */
 typedef vdev_status_t (*vdev_sdcard_write_fn) (
         _IN_ uint32_t id,
-        _IN_ void *buffer,
+        _IN_ const void *buffer,
         _IN_ uint32_t selector,
         _IN_ uint32_t count);
 

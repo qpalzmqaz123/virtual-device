@@ -24,6 +24,8 @@ vdev_api_register(_IN_ void  *p_api,
     strcpy(p_hash->mount_point, mount_point);
 
     HASH_ADD_STR(g_apis, mount_point, p_hash);
+
+    return VDEV_STATUS_SUCCESS;
 }
 
 __attribute__((weak)) void *
