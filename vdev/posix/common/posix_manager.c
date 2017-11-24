@@ -202,7 +202,7 @@ posix_manager_init(void)
     pthread_t thread;
 
     /* connect to server */
-    printf("Try to connect python...\n");
+    printf("Try to connect backend...\n");
     Sock = posix_socket_client_init(VDEV_SIMULATION_SOCKET_PATH);
     printf("Connection established\n");
 

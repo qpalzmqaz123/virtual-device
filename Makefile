@@ -52,9 +52,12 @@ demo:
 special:
 	$(MAKE) -C special/
 
-.PHONY: clean
+.PHONY: clean run
 clean:
 	rm -rvf $(OUT_DIR)
+
+run:
+	$(OUT_DIR)/$(PROJECT_NAME)
 
 ifeq ($(PLATFORM), stm32)
 .PHONY: burn
