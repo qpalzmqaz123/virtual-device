@@ -25,7 +25,7 @@ class Client {
     instance.received(frame.data)
       .then(response => {
         if (response) {
-          /* TODO: resp */
+          instance.send(response)
         }
       })
       .catch(err => {
@@ -52,7 +52,14 @@ class Client {
     /* get class */
     const Cls = require(path.resolve('devices', moduleName))
 
-    return new Cls(frame.model, frame.id, null)
+    return new Cls(frame.model, frame.id, data => {
+      const writeFrame = Object.assign(frame, {
+        data,
+        length: data.length
+      })
+
+      this._trans.write(writeFrame)
+    })
   }
 
   _genCacheKey (frame) {
