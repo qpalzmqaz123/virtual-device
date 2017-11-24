@@ -12,10 +12,13 @@ class LED extends BaseDevice {
         break
       case 'on':
         this._isOn = true
+        break
       case 'off':
         this._isOn = false
+        break
       case 'toggle':
         this._isOn = !this._isOn
+        break
       default:
         break
     }

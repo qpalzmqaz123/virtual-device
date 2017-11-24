@@ -54,14 +54,14 @@ class Transport {
     return header
   }
 
-	/**
-	 * Frame object
-	 * @typedef {Object} Frame
-	 * @property {number} model
-	 * @property {number} id
-	 * @property {number} length
-	 * @property {Buffer} data
-	 */
+  /**
+   * Frame object
+   * @typedef {Object} Frame
+   * @property {number} model
+   * @property {number} id
+   * @property {number} length
+   * @property {Buffer} data
+   */
 
   /**
    * Read frame
