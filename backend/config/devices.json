@@ -1,3 +1,4 @@
 {
-    "led": 4
+    "led": 4,
+    "stepmotor": 6
 }
