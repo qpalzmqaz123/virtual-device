@@ -23,5 +23,8 @@ posix_manager_send(const posix_manager_key_t *key, void *data, uint32_t length);
 uint32_t
 posix_manager_recv(const posix_manager_key_t *key, void *data, uint32_t length);
 
+uint32_t
+posix_manager_recv_async(const posix_manager_key_t *key, uint32_t length, void (*cb)(const void *data, uint32_t length, void *args), void *args);
+
 #endif
 

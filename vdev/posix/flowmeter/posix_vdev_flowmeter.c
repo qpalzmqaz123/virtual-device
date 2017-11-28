@@ -16,7 +16,22 @@ typedef struct _flowmeter_t {
     UT_hash_handle      hh;
 } flowmeter_t;
 
+typedef struct _flowmeter_async_t {
+    void (*cb)(uint32_t id);
+    uint32_t id;
+} flowmeter_async_t;
+
 static flowmeter_t *pHead = NULL;
+
+static void
+posix_vdev_flowmeter_async_callback(const void *data, uint32_t length, void *args)
+{
+    flowmeter_async_t *async = (flowmeter_async_t *)args;
+
+    async->cb(async->id);
+
+    free(async);
+}
 
 static vdev_status_t
 posix_vdev_flowmeter_init(
@@ -105,21 +120,25 @@ static vdev_status_t
 posix_vdev_flowmeter_set_alarm_async(
         _IN_ uint32_t id,
         _IN_ uint32_t flow,
-        _IN_ void (cb)(uint32_t id))
+        _IN_ void (*cb)(uint32_t id))
 {
     flowmeter_t *p_flowmeter;
     uint8_t msg[5];
-    uint8_t res[1];
+    flowmeter_async_t *async;
 
     HASH_FIND_INT(pHead, &id, p_flowmeter);
     VDEV_RETURN_IF_NULL(p_flowmeter, VDEV_STATUS_FAILURE, "");
 
+    async = (flowmeter_async_t *)malloc(sizeof(flowmeter_async_t));
+    async->cb = cb;
+    async->id = id;
+
     *msg = FLOWMETER_CMD_SET_ALARM;
     memcpy(msg + 1, &flow, 4);
     posix_manager_send(&p_flowmeter->key, msg, sizeof(msg));
-    posix_manager_recv(&p_flowmeter->key, res, sizeof(res));
+    posix_manager_recv_async(&p_flowmeter->key, 1, posix_vdev_flowmeter_async_callback, async);
 
-    return res[0];
+    return VDEV_STATUS_SUCCESS;
 }
 
 void

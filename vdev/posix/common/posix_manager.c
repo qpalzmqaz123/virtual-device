@@ -35,13 +35,23 @@ typedef struct _posix_manager_item_t {
     uint32_t            block;   /* block number */
     pthread_mutex_t     mutex;
     pthread_cond_t      cond;
+    pthread_t           thread;  /* for async */
 } posix_manager_item_t;
+
+typedef struct _posix_manager_recv_thread_args_t {
+    posix_manager_item_t *item;
+    uint32_t             length;
+    void                 *args;
+    void (*cb)(const void *data, uint32_t length, void *args);
+} posix_manager_recv_thread_args_t;
 
 
 static posix_manager_item_t *pHead = NULL;
 static pthread_rwlock_t Lock = PTHREAD_RWLOCK_INITIALIZER;
 static int Sock;
 
+static void *
+posix_recv_read_buffer_thread(void *args);
 
 uint32_t
 posix_manager_register(const posix_manager_key_t *key)
@@ -98,6 +108,26 @@ posix_manager_recv(const posix_manager_key_t *key, void *data, uint32_t length)
     return 0;
 }
 
+uint32_t
+posix_manager_recv_async(const posix_manager_key_t *key, uint32_t length, void (*cb)(const void *data, uint32_t length, void *args), void *args)
+{
+    posix_manager_item_t *item;
+    posix_manager_recv_thread_args_t *thr_args = NULL;
+
+    /* lookup item */
+    HASH_GET_ITEM(key, item);
+
+    VDEV_ASSERT_NOT_NULL(thr_args = (posix_manager_recv_thread_args_t *)malloc(sizeof(posix_manager_recv_thread_args_t)));
+    thr_args->item = item;
+    thr_args->length = length;
+    thr_args->args = args;
+    thr_args->cb = cb;
+
+    pthread_create(&item->thread, NULL, posix_recv_read_buffer_thread, thr_args);
+
+    return 0;
+}
+
 static void
 posix_recv_read_buffer(posix_manager_item_t *item, void *data, uint32_t length)
 {
@@ -121,6 +151,24 @@ posix_recv_read_buffer(posix_manager_item_t *item, void *data, uint32_t length)
     }
 
     pthread_mutex_unlock(&item->mutex);
+}
+
+static void *
+posix_recv_read_buffer_thread(void *p)
+{
+    posix_manager_recv_thread_args_t *args = (posix_manager_recv_thread_args_t *)p;
+
+    void *buffer = malloc(args->length);
+    VDEV_ASSERT_NOT_NULL(buffer);
+
+    posix_recv_read_buffer(args->item, buffer, args->length);
+
+    args->cb(buffer, args->length, args->args);
+
+    free(buffer);
+    free(args);
+
+    return NULL;
 }
 
 static void
