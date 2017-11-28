@@ -7,6 +7,7 @@
 #include "posix_vdev_led.h"
 #include "posix_vdev_sdcard.h"
 #include "posix_vdev_stepmotor.h"
+#include "posix_vdev_flowmeter.h"
 
 
 typedef struct _install_tbl_t {
@@ -21,7 +22,8 @@ static const install_tbl_t InstTbl[] = {
     {VDEV_MODEL_LCD,       sizeof(vdev_lcd_api_t),       (void (*)(void *))vdev_lcd_api_install},
     {VDEV_MODEL_OS,        sizeof(vdev_os_api_t),        (void (*)(void *))vdev_os_api_install},
     {VDEV_MODEL_SDCARD,    sizeof(vdev_sdcard_api_t),    (void (*)(void *))vdev_sdcard_api_install},
-    {VDEV_MODEL_STEPMOTOR, sizeof(vdev_stepmotor_api_t), (void (*)(void *))vdev_stepmotor_api_install}
+    {VDEV_MODEL_STEPMOTOR, sizeof(vdev_stepmotor_api_t), (void (*)(void *))vdev_stepmotor_api_install},
+    {VDEV_MODEL_FLOWMETER, sizeof(vdev_flowmeter_api_t), (void (*)(void *))vdev_flowmeter_api_install}
 };
 
 

@@ -11,6 +11,7 @@
 #include "vdev_led.h"
 #include "vdev_sdcard.h"
 #include "vdev_stepmotor.h"
+#include "vdev_flowmeter.h"
 
 
 #ifdef __cplusplus

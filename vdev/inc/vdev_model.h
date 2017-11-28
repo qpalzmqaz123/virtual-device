@@ -10,6 +10,7 @@ typedef enum _vdev_model_t {
     VDEV_MODEL_LED,
     VDEV_MODEL_SDCARD,
     VDEV_MODEL_STEPMOTOR,
+    VDEV_MODEL_FLOWMETER,
 
     VDEV_MODEL_MAX
 } vdev_model_t;

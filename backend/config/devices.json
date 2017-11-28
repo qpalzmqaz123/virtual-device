@@ -1,4 +1,5 @@
 {
     "led": 4,
-    "stepmotor": 6
+    "stepmotor": 6,
+    "flowmeter": 7
 }
