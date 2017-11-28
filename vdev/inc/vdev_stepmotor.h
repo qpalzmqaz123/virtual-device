@@ -15,9 +15,10 @@ typedef vdev_status_t (*vdev_stepmotor_init_fn) (
         _IN_ uint32_t id);
 
 /**
- * @brief Set speed (RPM)
+ * @brief Set speed
  *
  * @param[in] id Device id
+ * @param[in] speed (RPM)
  *
  * @return Return status code, refer to vdev_status_t
  */
@@ -29,6 +30,7 @@ typedef vdev_status_t (*vdev_stepmotor_set_speed_fn) (
  * @brief Set angle
  *
  * @param[in] id Device id
+ * @param[in] angle Angle (rad)
  *
  * @return Return status code, refer to vdev_status_t
  */
