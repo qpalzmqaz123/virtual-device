@@ -17,8 +17,8 @@ typedef struct _flowmeter_t {
 } flowmeter_t;
 
 typedef struct _flowmeter_async_t {
-    void (*cb)(uint32_t id);
-    uint32_t id;
+    void (*cb)(void *args);
+    void *args;
 } flowmeter_async_t;
 
 static flowmeter_t *pHead = NULL;
@@ -28,7 +28,7 @@ posix_vdev_flowmeter_async_callback(const void *data, uint32_t length, void *arg
 {
     flowmeter_async_t *async = (flowmeter_async_t *)args;
 
-    async->cb(async->id);
+    async->cb(async->args);
 
     free(async);
 }
@@ -120,7 +120,8 @@ static vdev_status_t
 posix_vdev_flowmeter_set_alarm_async(
         _IN_ uint32_t id,
         _IN_ uint32_t flow,
-        _IN_ void (*cb)(uint32_t id))
+        _IN_ void (*cb)(void *args),
+        _IN_ void *args)
 {
     flowmeter_t *p_flowmeter;
     uint8_t msg[5];
@@ -131,7 +132,7 @@ posix_vdev_flowmeter_set_alarm_async(
 
     async = (flowmeter_async_t *)malloc(sizeof(flowmeter_async_t));
     async->cb = cb;
-    async->id = id;
+    async->args = args;
 
     *msg = FLOWMETER_CMD_SET_ALARM;
     memcpy(msg + 1, &flow, 4);

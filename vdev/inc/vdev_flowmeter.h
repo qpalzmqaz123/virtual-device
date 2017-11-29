@@ -59,7 +59,8 @@ typedef vdev_status_t (*vdev_flowmeter_set_alarm_fn) (
 typedef vdev_status_t (*vdev_flowmeter_set_alarm_async_fn) (
         _IN_ uint32_t id,
         _IN_ uint32_t flow,
-        _IN_ void (cb)(uint32_t id));
+        _IN_ void (cb)(void *args),
+        _IN_ void *args);
 
 /**
  * @brief flowmeter apis
