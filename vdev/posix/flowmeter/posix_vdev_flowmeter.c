@@ -37,7 +37,7 @@ static vdev_status_t
 posix_vdev_flowmeter_init(
         _IN_ uint32_t id)
 {
-    uint32_t res;
+    uint8_t res;
     flowmeter_t *p_flowmeter;
     uint8_t cmd = FLOWMETER_CMD_INIT;
 
