@@ -131,6 +131,7 @@ posix_vdev_flowmeter_set_alarm_async(
     VDEV_RETURN_IF_NULL(p_flowmeter, VDEV_STATUS_FAILURE, "");
 
     async = (flowmeter_async_t *)malloc(sizeof(flowmeter_async_t));
+    VDEV_RETURN_IF_NULL(async, VDEV_STATUS_OUT_OF_MEMORY, "");
     async->cb = cb;
     async->args = args;
 

@@ -53,6 +53,7 @@ typedef vdev_status_t (*vdev_flowmeter_set_alarm_fn) (
  * @param[in] id Device id
  * @param[in] flow Flow
  * @param[in] cb Callback
+ * @param[in] args Callback args
  *
  * @return Return status code, refer to vdev_status_t
  */
