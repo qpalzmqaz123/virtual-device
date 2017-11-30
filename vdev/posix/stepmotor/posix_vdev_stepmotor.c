@@ -127,7 +127,7 @@ vdev_status_t posix_vdev_stepmotor_step(
 {
     stepmotor_t *p_motor = NULL;
     uint8_t msg[5];
-    uint32_t res;
+    uint8_t res;
 
     HASH_FIND_INT(pHead, &id, p_motor);
     VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
