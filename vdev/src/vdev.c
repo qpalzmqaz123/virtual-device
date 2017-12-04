@@ -1,5 +1,5 @@
 #include <string.h>
-#include "uthash/include/uthash.h"
+#include "uthash/uthash.h"
 #include "vdev.h"
 
 typedef struct api_hash_s {

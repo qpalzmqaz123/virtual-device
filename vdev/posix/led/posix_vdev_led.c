@@ -1,7 +1,7 @@
 #include "vdev.h"
 #include "vdev_model.h"
 #include "posix_manager.h"
-#include "uthash/include/uthash.h"
+#include "uthash/uthash.h"
 
 
 typedef enum _led_cmd_t {

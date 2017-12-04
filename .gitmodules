@@ -1,3 +1,6 @@
 [submodule "vdev/inc/uthash"]
 	path = vdev/inc/uthash
 	url = https://github.com/troydhanson/uthash.git
+[submodule "third_party/uthash"]
+	path = third_party/uthash
+	url = https://github.com/troydhanson/uthash.git
