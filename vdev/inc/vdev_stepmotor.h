@@ -10,8 +10,9 @@ typedef enum _vdev_stepmotor_dir_t {
 } vdev_stepmotor_dir_t;
 
 typedef struct _vdev_stepmotor_t {
-  vdev_stepmotor_dir_t dir;
-  uint32_t speed;
+  vdev_stepmotor_dir_t dir; /* refer to vdev_stepmotor_dir_t */
+  uint32_t speed; /* RPM */
+  double precision; /* stepping angle (degree), e.g. 0.9 */
 } vdev_stepmotor_t;
 
 /**
@@ -36,18 +37,6 @@ typedef vdev_status_t (*vdev_stepmotor_init_fn) (
 typedef vdev_status_t (*vdev_stepmotor_set_speed_fn) (
         _IN_ uint32_t id,
         _IN_ uint32_t speed);
-
-/**
- * @brief Set angle
- *
- * @param[in] id Device id
- * @param[in] angle Angle (rad)
- *
- * @return Return status code, refer to vdev_status_t
- */
-typedef vdev_status_t (*vdev_stepmotor_set_angle_fn) (
-        _IN_ uint32_t id,
-        _IN_ float angle);
 
 /**
  * @brief Set direction
@@ -93,11 +82,10 @@ typedef vdev_status_t (*vdev_stepmotor_step_async_fn) (
  * @brief stepmotor apis
  */
 typedef struct _vdev_stepmotor_api_t {
-    vdev_stepmotor_init_fn      init;
-    vdev_stepmotor_set_speed_fn set_speed;
-    vdev_stepmotor_set_angle_fn set_angle;
-    vdev_stepmotor_set_dir_fn   set_dir;
-    vdev_stepmotor_step_fn      step;
+    vdev_stepmotor_init_fn       init;
+    vdev_stepmotor_set_speed_fn  set_speed;
+    vdev_stepmotor_set_dir_fn    set_dir;
+    vdev_stepmotor_step_fn       step;
     vdev_stepmotor_step_async_fn step_async;
 } vdev_stepmotor_api_t;
 

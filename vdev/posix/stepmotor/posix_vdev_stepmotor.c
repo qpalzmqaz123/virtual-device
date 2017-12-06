@@ -5,12 +5,11 @@
 
 
 typedef enum _stepmotor_cmd_t {
-    STEPMOTOR_CMD_INIT      = 0,
-    STEPMOTOR_CMD_SET_SPEED = 1,
-    STEPMOTOR_CMD_SET_ANGLE = 2,
-    STEPMOTOR_CMD_SET_DIR   = 3,
-    STEPMOTOR_CMD_STEP      = 4,
-    STEPMOTOR_CMD_STEP_ASYNC = 5
+    STEPMOTOR_CMD_INIT       = 0,
+    STEPMOTOR_CMD_SET_SPEED  = 1,
+    STEPMOTOR_CMD_SET_DIR    = 2,
+    STEPMOTOR_CMD_STEP       = 3,
+    STEPMOTOR_CMD_STEP_ASYNC = 4
 } stepmotor_cmd_t;
 
 typedef struct _stepmotor_t {
@@ -42,7 +41,7 @@ vdev_status_t posix_vdev_stepmotor_init(
         _IN_ vdev_stepmotor_t *options)
 {
     stepmotor_t *p_motor = NULL;
-    uint8_t msg[6];
+    uint8_t msg[14];
     uint8_t res;
 
     VDEV_RETURN_IF_NULL(p_motor = (stepmotor_t *)malloc(sizeof(stepmotor_t)), VDEV_STATUS_OUT_OF_MEMORY, "");
@@ -60,6 +59,7 @@ vdev_status_t posix_vdev_stepmotor_init(
     *msg = STEPMOTOR_CMD_INIT;
     *(msg + 1) = p_motor->options.dir;
     memcpy(msg + 2, &p_motor->options.speed, 4);
+    memcpy(msg + 6, &p_motor->options.precision, 8);
 
     posix_manager_send(&p_motor->key, &msg, sizeof(msg));
     posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
@@ -87,26 +87,6 @@ vdev_status_t posix_vdev_stepmotor_set_speed(
     if (VDEV_STATUS_SUCCESS == res) {
       p_motor->options.speed = speed;
     }
-
-    return (vdev_status_t)res;
-}
-
-vdev_status_t posix_vdev_stepmotor_set_angle(
-        _IN_ uint32_t id,
-        _IN_ float angle)
-{
-    stepmotor_t *p_motor = NULL;
-    uint8_t msg[sizeof(uint8_t) + sizeof(float)];
-    uint8_t res;
-
-    HASH_FIND_INT(pHead, &id, p_motor);
-    VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
-
-    *msg = STEPMOTOR_CMD_SET_ANGLE;
-    memcpy(msg + 1, &angle, sizeof(float));
-
-    posix_manager_send(&p_motor->key, msg, sizeof(uint8_t) + sizeof(float));
-    posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
 
     return (vdev_status_t)res;
 }
@@ -188,7 +168,6 @@ vdev_stepmotor_api_install(vdev_stepmotor_api_t *api)
     api->init   = posix_vdev_stepmotor_init;
     api->step   = posix_vdev_stepmotor_step;
     api->set_speed = posix_vdev_stepmotor_set_speed;
-    api->set_angle = posix_vdev_stepmotor_set_angle;
     api->set_dir   = posix_vdev_stepmotor_set_dir;
     api->step_async = posix_vdev_stepmotor_step_async;
 }
