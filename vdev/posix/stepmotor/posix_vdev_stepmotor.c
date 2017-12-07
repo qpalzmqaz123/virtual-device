@@ -66,7 +66,7 @@ vdev_status_t posix_vdev_stepmotor_init(
 
     msg.cmd = STEPMOTOR_CMD_INIT;
     msg.dir = p_motor->options.dir;
-    msg.speed = p_motor->options.dir;
+    msg.speed = p_motor->options.speed;
     msg.precision = p_motor->options.precision;
 
     posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
