@@ -24,6 +24,14 @@ typedef struct _stepmotor_async_t {
     void *args;
 } stepmotor_async_t;
 
+typedef struct _stepmotor_msg_t {
+    uint8_t cmd;
+    uint8_t dir;
+    uint32_t speed;
+    double precision;
+    uint32_t step;
+} stepmotor_msg_t;
+
 static stepmotor_t *pHead = NULL;
 
 static void
@@ -41,7 +49,7 @@ vdev_status_t posix_vdev_stepmotor_init(
         _IN_ vdev_stepmotor_t *options)
 {
     stepmotor_t *p_motor = NULL;
-    uint8_t msg[14];
+    stepmotor_msg_t msg;
     uint8_t res;
 
     VDEV_RETURN_IF_NULL(p_motor = (stepmotor_t *)malloc(sizeof(stepmotor_t)), VDEV_STATUS_OUT_OF_MEMORY, "");
@@ -56,12 +64,12 @@ vdev_status_t posix_vdev_stepmotor_init(
 
     posix_manager_register(&p_motor->key);
 
-    *msg = STEPMOTOR_CMD_INIT;
-    *(msg + 1) = p_motor->options.dir;
-    memcpy(msg + 2, &p_motor->options.speed, 4);
-    memcpy(msg + 6, &p_motor->options.precision, 8);
+    msg.cmd = STEPMOTOR_CMD_INIT;
+    msg.dir = p_motor->options.dir;
+    msg.speed = p_motor->options.dir;
+    msg.precision = p_motor->options.precision;
 
-    posix_manager_send(&p_motor->key, &msg, sizeof(msg));
+    posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
     posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
 
     return (vdev_status_t)res;
@@ -72,16 +80,16 @@ vdev_status_t posix_vdev_stepmotor_set_speed(
         _IN_ uint32_t speed)
 {
     stepmotor_t *p_motor = NULL;
-    uint8_t msg[sizeof(uint8_t) + sizeof(uint32_t)];
+    stepmotor_msg_t msg;
     uint8_t res;
 
     HASH_FIND_INT(pHead, &id, p_motor);
     VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
 
-    *msg = STEPMOTOR_CMD_SET_SPEED;
-    memcpy(msg + 1, &speed, sizeof(uint32_t));
+    msg.cmd = STEPMOTOR_CMD_SET_SPEED;
+    msg.speed = speed;
 
-    posix_manager_send(&p_motor->key, msg, sizeof(uint8_t) + sizeof(uint32_t));
+    posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
     posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
 
     if (VDEV_STATUS_SUCCESS == res) {
@@ -96,16 +104,16 @@ vdev_status_t posix_vdev_stepmotor_set_dir(
         _IN_ vdev_stepmotor_dir_t dir)
 {
     stepmotor_t *p_motor = NULL;
-    uint8_t msg[2];
+    stepmotor_msg_t msg;
     uint8_t res;
 
     HASH_FIND_INT(pHead, &id, p_motor);
     VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
 
-    *msg = STEPMOTOR_CMD_SET_DIR;
-    *(msg + 1) = (uint8_t)dir;
+    msg.cmd = STEPMOTOR_CMD_SET_DIR;
+    msg.dir = (uint8_t)dir;
 
-    posix_manager_send(&p_motor->key, msg, sizeof(msg));
+    posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
     posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
 
     if (VDEV_STATUS_SUCCESS == res) {
@@ -120,16 +128,16 @@ vdev_status_t posix_vdev_stepmotor_step(
         _IN_ uint32_t count)
 {
     stepmotor_t *p_motor = NULL;
-    uint8_t msg[5];
+    stepmotor_msg_t msg;
     uint8_t res;
 
     HASH_FIND_INT(pHead, &id, p_motor);
     VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
 
-    *msg = STEPMOTOR_CMD_STEP;
-    memcpy(msg + 1, &count, 4);
+    msg.cmd = STEPMOTOR_CMD_STEP;
+    msg.step = count;
 
-    posix_manager_send(&p_motor->key, msg, sizeof(msg));
+    posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
     posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
 
     return res;
@@ -142,7 +150,7 @@ vdev_status_t posix_vdev_stepmotor_step_async(
         _IN_ void *args)
 {
     stepmotor_t *p_motor = NULL;
-    uint8_t msg[5];
+    stepmotor_msg_t msg;
     stepmotor_async_t *async;
 
     HASH_FIND_INT(pHead, &id, p_motor);
@@ -153,10 +161,10 @@ vdev_status_t posix_vdev_stepmotor_step_async(
     async->cb = cb;
     async->args = args;
 
-    *msg = STEPMOTOR_CMD_STEP_ASYNC;
-    memcpy(msg + 1, &count, 4);
+    msg.cmd = STEPMOTOR_CMD_STEP;
+    msg.step = count;
 
-    posix_manager_send(&p_motor->key, msg, sizeof(msg));
+    posix_manager_send(&p_motor->key, &msg, sizeof(msg));
     posix_manager_recv_async(&p_motor->key, sizeof(uint8_t), posix_vdev_stepmotor_async_callback, async);
 
     return VDEV_STATUS_SUCCESS;
