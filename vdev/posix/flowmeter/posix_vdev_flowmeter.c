@@ -21,6 +21,11 @@ typedef struct _flowmeter_async_t {
     void *args;
 } flowmeter_async_t;
 
+typedef struct _flowmeter_msg_t {
+    uint8_t cmd;
+    uint32_t flow;
+} flowmeter_msg_t;
+
 static flowmeter_t *pHead = NULL;
 
 static void
@@ -39,7 +44,7 @@ posix_vdev_flowmeter_init(
 {
     uint8_t res;
     flowmeter_t *p_flowmeter;
-    uint8_t cmd = FLOWMETER_CMD_INIT;
+    flowmeter_msg_t msg;
 
     VDEV_RETURN_IF_NULL(p_flowmeter = (flowmeter_t *)malloc(sizeof(flowmeter_t)), VDEV_STATUS_OUT_OF_MEMORY, "");
     memset(p_flowmeter, 0, sizeof(flowmeter_t));
@@ -51,7 +56,9 @@ posix_vdev_flowmeter_init(
 
     posix_manager_register(&p_flowmeter->key);
 
-    posix_manager_send(&p_flowmeter->key, &cmd, sizeof(uint8_t));
+    msg.cmd = FLOWMETER_CMD_INIT;
+
+    posix_manager_send(&p_flowmeter->key, &msg, sizeof(flowmeter_msg_t));
     posix_manager_recv(&p_flowmeter->key, &res, sizeof(uint8_t));
 
     return res;
@@ -63,14 +70,14 @@ posix_vdev_flowmeter_read(
         _OUT_ uint32_t *flow)
 {
     flowmeter_t *p_flowmeter;
-    uint8_t msg[1];
+    flowmeter_msg_t msg;
     uint8_t res[5];
 
     HASH_FIND_INT(pHead, &id, p_flowmeter);
     VDEV_RETURN_IF_NULL(p_flowmeter, VDEV_STATUS_FAILURE, "");
 
-    *msg = FLOWMETER_CMD_READ;
-    posix_manager_send(&p_flowmeter->key, msg, sizeof(msg));
+    msg.cmd = FLOWMETER_CMD_READ;
+    posix_manager_send(&p_flowmeter->key, &msg, sizeof(flowmeter_msg_t));
     posix_manager_recv(&p_flowmeter->key, res, sizeof(res));
 
     memcpy(flow, res + 1, 4);
@@ -83,14 +90,14 @@ posix_vdev_flowmeter_clear(
         _IN_ uint32_t id)
 {
     flowmeter_t *p_flowmeter;
-    uint8_t msg[1];
+    flowmeter_msg_t msg;
     uint8_t res[1];
 
     HASH_FIND_INT(pHead, &id, p_flowmeter);
     VDEV_RETURN_IF_NULL(p_flowmeter, VDEV_STATUS_FAILURE, "");
 
-    *msg = FLOWMETER_CMD_CLEAR;
-    posix_manager_send(&p_flowmeter->key, msg, sizeof(msg));
+    msg.cmd = FLOWMETER_CMD_CLEAR;
+    posix_manager_send(&p_flowmeter->key, &msg, sizeof(flowmeter_msg_t));
     posix_manager_recv(&p_flowmeter->key, res, sizeof(res));
 
     return res[0];
@@ -102,15 +109,16 @@ posix_vdev_flowmeter_set_alarm(
         _IN_ uint32_t flow)
 {
     flowmeter_t *p_flowmeter;
-    uint8_t msg[5];
+    flowmeter_msg_t msg;
     uint8_t res[1];
 
     HASH_FIND_INT(pHead, &id, p_flowmeter);
     VDEV_RETURN_IF_NULL(p_flowmeter, VDEV_STATUS_FAILURE, "");
 
-    *msg = FLOWMETER_CMD_SET_ALARM;
-    memcpy(msg + 1, &flow, 4);
-    posix_manager_send(&p_flowmeter->key, msg, sizeof(msg));
+    msg.cmd = FLOWMETER_CMD_SET_ALARM;
+    msg.flow = flow;
+
+    posix_manager_send(&p_flowmeter->key, &msg, sizeof(flowmeter_msg_t));
     posix_manager_recv(&p_flowmeter->key, res, sizeof(res));
 
     return res[0];
@@ -124,7 +132,7 @@ posix_vdev_flowmeter_set_alarm_async(
         _IN_ void *args)
 {
     flowmeter_t *p_flowmeter;
-    uint8_t msg[5];
+    flowmeter_msg_t msg;
     flowmeter_async_t *async;
 
     HASH_FIND_INT(pHead, &id, p_flowmeter);
@@ -135,9 +143,10 @@ posix_vdev_flowmeter_set_alarm_async(
     async->cb = cb;
     async->args = args;
 
-    *msg = FLOWMETER_CMD_SET_ALARM;
-    memcpy(msg + 1, &flow, 4);
-    posix_manager_send(&p_flowmeter->key, msg, sizeof(msg));
+    msg.cmd = FLOWMETER_CMD_SET_ALARM;
+    msg.flow = flow;
+
+    posix_manager_send(&p_flowmeter->key, &msg, sizeof(flowmeter_msg_t));
     posix_manager_recv_async(&p_flowmeter->key, 1, posix_vdev_flowmeter_async_callback, async);
 
     return VDEV_STATUS_SUCCESS;
