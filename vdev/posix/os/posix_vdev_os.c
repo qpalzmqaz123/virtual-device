@@ -179,6 +179,37 @@ static vdev_status_t posix_vdev_os_event_wait(
     return VDEV_STATUS_SUCCESS;
 }
 
+static vdev_status_t posix_vdev_os_event_wait_timeout(
+        _IN_ vdev_os_event_t event,
+        _IN_ uint32_t timeout)
+{
+    struct timeval now;
+    struct timeval wait;
+    struct timeval to_wait;
+    struct timespec to_wait_r;
+    int res = 0;
+
+    pthread_mutex_lock(&((os_event_t *)event)->mutex);
+
+    if (0xFFFFFFFF == timeout) {
+        pthread_cond_wait(&((os_event_t *)event)->cond, &((os_event_t *)event)->mutex);
+    }
+	else {
+		gettimeofday(&now, NULL);
+        wait.tv_sec = timeout / 1000;
+        wait.tv_usec = (timeout % 1000) * 1000;
+        timeradd(&now, &wait, &to_wait);
+        to_wait_r.tv_sec = to_wait.tv_sec;
+        to_wait_r.tv_nsec = to_wait.tv_usec * 1000;
+
+        res = pthread_cond_timedwait(&((os_event_t *)event)->cond, &((os_event_t *)event)->mutex, &to_wait_r);
+	}
+
+    pthread_mutex_unlock(&((os_event_t *)event)->mutex);
+
+    return res ? VDEV_STATUS_TIMEOUT : VDEV_STATUS_SUCCESS;
+}
+
 static uint32_t posix_vdev_get_task_id(void)
 {
     return (uint32_t)pthread_self();
@@ -209,23 +240,24 @@ static uint32_t posix_get_time(void)
 void
 vdev_os_api_install(vdev_os_api_t *api)
 {
-    api->init          = posix_vdev_os_init;
-    api->destroy       = posix_vdev_os_destroy;
-    api->task_create   = posix_vdev_os_task_create;
-    api->task_delete   = posix_vdev_os_task_delete;
-    api->task_start    = posix_vdev_os_task_start;
-    api->mutex_create  = posix_vdev_os_mutex_create;
-    api->mutex_delete  = posix_vdev_os_mutex_delete;
-    api->mutex_lock    = posix_vdev_os_mutex_lock;
-    api->mutex_unlock  = posix_vdev_os_mutex_unlock;
-    api->event_create  = posix_vdev_os_event_create;
-    api->event_delete  = posix_vdev_os_event_delete;
-    api->event_set     = posix_vdev_os_event_set;
-    api->event_wait    = posix_vdev_os_event_wait;
-    api->get_task_id   = posix_vdev_get_task_id;
-    api->sleep         = posix_sleep;
-    api->msleep        = posix_msleep;
-    api->get_time      = posix_get_time;
+    api->init               = posix_vdev_os_init;
+    api->destroy            = posix_vdev_os_destroy;
+    api->task_create        = posix_vdev_os_task_create;
+    api->task_delete        = posix_vdev_os_task_delete;
+    api->task_start         = posix_vdev_os_task_start;
+    api->mutex_create       = posix_vdev_os_mutex_create;
+    api->mutex_delete       = posix_vdev_os_mutex_delete;
+    api->mutex_lock         = posix_vdev_os_mutex_lock;
+    api->mutex_unlock       = posix_vdev_os_mutex_unlock;
+    api->event_create       = posix_vdev_os_event_create;
+    api->event_delete       = posix_vdev_os_event_delete;
+    api->event_set          = posix_vdev_os_event_set;
+    api->event_wait         = posix_vdev_os_event_wait;
+    api->event_wait_timeout = posix_vdev_os_event_wait_timeout;
+    api->get_task_id        = posix_vdev_get_task_id;
+    api->sleep              = posix_sleep;
+    api->msleep             = posix_msleep;
+    api->get_time           = posix_get_time;
 
     vdev_os_queue_api_install(api);
 }

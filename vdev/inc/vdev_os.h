@@ -137,6 +137,17 @@ typedef vdev_status_t (*vdev_os_event_wait_fn) (
         _IN_ vdev_os_event_t event);
 
 /**
+ * @brief Wait event (timeout)
+ *
+ * @param[in] event Event
+ *
+ * @return Status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_os_event_wait_timeout_fn) (
+        _IN_ vdev_os_event_t event,
+        uint32_t timeout);
+
+/**
  * @brief Get current task id
  *
  * @return Task id
@@ -253,34 +264,35 @@ typedef vdev_status_t (*vdev_os_queue_put_timeout_fn) (
  * @brief OS apis
  */
 typedef struct _vdev_os_api_t {
-    vdev_os_init_fn          init;
-    vdev_os_destroy_fn       destroy;
+    vdev_os_init_fn                 init;
+    vdev_os_destroy_fn              destroy;
     /* task */
-    vdev_os_task_create_fn   task_create;
-    vdev_os_task_delete_fn   task_delete;
-    vdev_os_task_start_fn    task_start;
+    vdev_os_task_create_fn          task_create;
+    vdev_os_task_delete_fn          task_delete;
+    vdev_os_task_start_fn           task_start;
     /* mutex */
-    vdev_os_mutex_create_fn  mutex_create;
-    vdev_os_mutex_delete_fn  mutex_delete;
-    vdev_os_mutex_lock_fn    mutex_lock;
-    vdev_os_mutex_unlock_fn  mutex_unlock;
+    vdev_os_mutex_create_fn         mutex_create;
+    vdev_os_mutex_delete_fn         mutex_delete;
+    vdev_os_mutex_lock_fn           mutex_lock;
+    vdev_os_mutex_unlock_fn         mutex_unlock;
     /* event */
-    vdev_os_event_create_fn  event_create;
-    vdev_os_event_delete_fn  event_delete;
-    vdev_os_event_set_fn     event_set;
-    vdev_os_event_wait_fn    event_wait;
+    vdev_os_event_create_fn         event_create;
+    vdev_os_event_delete_fn         event_delete;
+    vdev_os_event_set_fn            event_set;
+    vdev_os_event_wait_fn           event_wait;
+    vdev_os_event_wait_timeout_fn   event_wait_timeout;
     /* misc */
-    vdev_get_task_id_fn      get_task_id;
-    vdev_sleep_fn            sleep;
-    vdev_msleep_fn           msleep;
-    vdev_get_time_fn         get_time;
+    vdev_get_task_id_fn             get_task_id;
+    vdev_sleep_fn                   sleep;
+    vdev_msleep_fn                  msleep;
+    vdev_get_time_fn                get_time;
     /* queue */
-    vdev_os_queue_create_fn      queue_create;
-    vdev_os_queue_delete_fn      queue_delete;
-    vdev_os_queue_get_fn         queue_get;
-    vdev_os_queue_put_fn         queue_put;
-    vdev_os_queue_get_timeout_fn queue_get_timeout;
-    vdev_os_queue_put_timeout_fn queue_put_timeout;
+    vdev_os_queue_create_fn         queue_create;
+    vdev_os_queue_delete_fn         queue_delete;
+    vdev_os_queue_get_fn            queue_get;
+    vdev_os_queue_put_fn            queue_put;
+    vdev_os_queue_get_timeout_fn    queue_get_timeout;
+    vdev_os_queue_put_timeout_fn    queue_put_timeout;
 } vdev_os_api_t;
 
 #endif
