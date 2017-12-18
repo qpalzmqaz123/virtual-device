@@ -27,6 +27,9 @@ static int LcdConn;
 static pthread_mutex_t ReadMutex = PTHREAD_MUTEX_INITIALIZER;
 
 
+extern void sdl_lcd_run(void);
+
+
 static vdev_status_t posix_lcd_init(
        _IN_ uint32_t id)
 {
@@ -35,7 +38,7 @@ static vdev_status_t posix_lcd_init(
     pid = fork();
 
     if (0 == pid) {
-        execl("out.posix/special_lcd/special_lcd.out", "lcd", NULL);
+        sdl_lcd_run();
         exit(0);
     }
 
