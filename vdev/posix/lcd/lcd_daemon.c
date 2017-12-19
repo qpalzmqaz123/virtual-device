@@ -6,8 +6,8 @@
 #include "vdev.h"
 #include "posix_socket.h"
 
-#define VLCD_X_SIZE 480
-#define VLCD_Y_SIZE 320
+#define VLCD_X_SIZE 320
+#define VLCD_Y_SIZE 240
 
 #define VLCD_SOCK_FILE "/tmp/vdev_lcd_socket"
 
