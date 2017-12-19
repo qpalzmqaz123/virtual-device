@@ -79,6 +79,16 @@ typedef vdev_status_t (*vdev_stepmotor_step_async_fn) (
         _IN_ void *args);
 
 /**
+ * @brief Stop running
+ *
+ * @param[in] id Device id
+ *
+ * @return Return status code, refer to vdev_status_t
+ */
+typedef vdev_status_t (*vdev_stepmotor_stop_fn) (
+        _IN_ uint32_t id);
+
+/**
  * @brief stepmotor apis
  */
 typedef struct _vdev_stepmotor_api_t {
@@ -87,6 +97,7 @@ typedef struct _vdev_stepmotor_api_t {
     vdev_stepmotor_set_dir_fn    set_dir;
     vdev_stepmotor_step_fn       step;
     vdev_stepmotor_step_async_fn step_async;
+    vdev_stepmotor_stop_fn       stop;
 } vdev_stepmotor_api_t;
 
 

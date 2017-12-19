@@ -9,7 +9,8 @@ typedef enum _stepmotor_cmd_t {
     STEPMOTOR_CMD_SET_SPEED  = 1,
     STEPMOTOR_CMD_SET_DIR    = 2,
     STEPMOTOR_CMD_STEP       = 3,
-    STEPMOTOR_CMD_STEP_ASYNC = 4
+    STEPMOTOR_CMD_STEP_ASYNC = 4,
+    STEPMOTOR_CMD_STOP       = 5
 } stepmotor_cmd_t;
 
 typedef struct _stepmotor_t {
@@ -170,13 +171,33 @@ vdev_status_t posix_vdev_stepmotor_step_async(
     return VDEV_STATUS_SUCCESS;
 }
 
+vdev_status_t posix_vdev_stepmotor_stop(
+        _IN_ uint32_t id)
+{
+    stepmotor_t *p_motor = NULL;
+    stepmotor_msg_t msg;
+    uint8_t res = VDEV_STATUS_SUCCESS;
+
+    HASH_FIND_INT(pHead, &id, p_motor);
+    VDEV_RETURN_IF_NULL(p_motor, VDEV_STATUS_FAILURE, "");
+
+    msg.cmd = STEPMOTOR_CMD_STOP;
+
+    posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
+    /* FIXME: here are some bug if receive message immediately */
+//    posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
+
+    return res;
+}
+
 void
 vdev_stepmotor_api_install(vdev_stepmotor_api_t *api)
 {
-    api->init   = posix_vdev_stepmotor_init;
-    api->step   = posix_vdev_stepmotor_step;
-    api->set_speed = posix_vdev_stepmotor_set_speed;
-    api->set_dir   = posix_vdev_stepmotor_set_dir;
+    api->init       = posix_vdev_stepmotor_init;
+    api->step       = posix_vdev_stepmotor_step;
+    api->set_speed  = posix_vdev_stepmotor_set_speed;
+    api->set_dir    = posix_vdev_stepmotor_set_dir;
     api->step_async = posix_vdev_stepmotor_step_async;
+    api->stop       = posix_vdev_stepmotor_stop;
 }
 
