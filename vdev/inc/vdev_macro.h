@@ -48,6 +48,13 @@
     } \
 } while (0) \
 
+#define VDEV_RETURN_IF_FALSE(res, error, fmt, ...) do { \
+    if (!(res)) { \
+        VDEV_LOG(VDEV_LOG_ERROR, fmt, ##__VA_ARGS__); \
+        return (error); \
+    } \
+} while (0) \
+
 #define VDEV_RETURN_IF_NULL(ptr, error, fmt, ...) do { \
     if (NULL == (ptr)) { \
         VDEV_LOG(VDEV_LOG_ERROR, fmt, ##__VA_ARGS__); \
