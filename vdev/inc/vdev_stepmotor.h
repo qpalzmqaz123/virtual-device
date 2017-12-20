@@ -16,6 +16,13 @@ typedef struct _vdev_stepmotor_t {
 } vdev_stepmotor_t;
 
 /**
+ * step callback
+ */
+typedef void (*vdev_stepmotor_step_callback)(
+        _OUT_ vdev_status_t status,
+        _OUT_ void *args);
+
+/**
  * @brief Initialize stepmotor
  *
  * @param[in] id Device id
@@ -75,7 +82,7 @@ typedef vdev_status_t (*vdev_stepmotor_step_fn) (
 typedef vdev_status_t (*vdev_stepmotor_step_async_fn) (
         _IN_ uint32_t id,
         _IN_ uint32_t count,
-        _IN_ void (cb)(void *args),
+        _IN_ vdev_stepmotor_step_callback cb,
         _IN_ void *args);
 
 /**

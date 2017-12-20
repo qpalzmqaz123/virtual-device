@@ -21,7 +21,7 @@ typedef struct _stepmotor_t {
 } stepmotor_t;
 
 typedef struct _stepmotor_async_t {
-    void (*cb)(void *args);
+    vdev_stepmotor_step_callback cb;
     void *args;
 } stepmotor_async_t;
 
@@ -40,7 +40,9 @@ posix_vdev_stepmotor_async_callback(const void *data, uint32_t length, void *arg
 {
     stepmotor_async_t *async = (stepmotor_async_t *)args;
 
-    async->cb(async->args);
+    VDEV_ASSERT(1 == length);
+
+    async->cb(*(char *)data, async->args);
 
     free(async);
 }
@@ -147,7 +149,7 @@ vdev_status_t posix_vdev_stepmotor_step(
 vdev_status_t posix_vdev_stepmotor_step_async(
         _IN_ uint32_t id,
         _IN_ uint32_t count,
-        _IN_ void (cb)(void *args),
+        _IN_ vdev_stepmotor_step_callback cb,
         _IN_ void *args)
 {
     stepmotor_t *p_motor = NULL;
@@ -184,8 +186,7 @@ vdev_status_t posix_vdev_stepmotor_stop(
     msg.cmd = STEPMOTOR_CMD_STOP;
 
     posix_manager_send(&p_motor->key, &msg, sizeof(stepmotor_msg_t));
-    /* FIXME: here are some bug if receive message immediately */
-//    posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
+    posix_manager_recv(&p_motor->key, &res , sizeof(uint8_t));
 
     return res;
 }
