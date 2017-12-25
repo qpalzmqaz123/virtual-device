@@ -34,15 +34,6 @@ typedef vdev_status_t (*vdev_led_on_fn) (
 typedef vdev_status_t (*vdev_led_off_fn) (
         _IN_ uint32_t id);
 
-/**
- * @brief Toggle led
- *
- * @param[in] id Device id
- *
- * @return Return status code, refer to vdev_status_t
- */
-typedef vdev_status_t (*vdev_led_toggle_fn) (
-        _IN_ uint32_t id);
 
 /**
  * @brief led apis
@@ -51,7 +42,6 @@ typedef struct _vdev_led_api_t {
     vdev_led_init_fn      init;
     vdev_led_on_fn        on;
     vdev_led_off_fn       off;
-    vdev_led_toggle_fn    toggle;
 } vdev_led_api_t;
 
 

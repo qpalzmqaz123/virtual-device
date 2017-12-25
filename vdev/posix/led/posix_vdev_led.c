@@ -7,8 +7,7 @@
 typedef enum _led_cmd_t {
     LED_CMD_INIT   = 0,
     LED_CMD_ON     = 1,
-    LED_CMD_OFF    = 2,
-    LED_CMD_TOGGLE = 3
+    LED_CMD_OFF    = 2
 } led_cmd_t;
 
 typedef struct _led_t {
@@ -76,29 +75,11 @@ vdev_status_t posix_vdev_led_off(
     return res;
 }
 
-vdev_status_t posix_vdev_led_toggle(
-        _IN_ uint32_t id)
-{
-    led_t *p_led = NULL;
-    uint8_t cmd = LED_CMD_TOGGLE;
-    uint32_t res;
-
-    HASH_FIND_INT(pHead, &id, p_led);
-    VDEV_RETURN_IF_NULL(p_led, VDEV_STATUS_FAILURE, "");
-
-    posix_manager_send(&p_led->key, &cmd, sizeof(uint8_t));
-    posix_manager_recv(&p_led->key, &res, sizeof(uint32_t));
-
-    return res;
-}
-
 void
 vdev_led_api_install(vdev_led_api_t *api)
 {
     api->init   = posix_vdev_led_init;
     api->on     = posix_vdev_led_on;
     api->off    = posix_vdev_led_off;
-    api->toggle = posix_vdev_led_toggle;
-
 }
 
