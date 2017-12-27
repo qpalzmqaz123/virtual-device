@@ -31,4 +31,8 @@ typedef enum _vdev_log_t {
     VDEV_LOG_CRITICAL
 } vdev_log_t;
 
+typedef void (*vdev_async_callback)(
+        _OUT_ vdev_status_t status,
+        _OUT_ void *args);
+
 #endif

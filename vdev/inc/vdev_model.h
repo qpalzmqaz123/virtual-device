@@ -11,6 +11,7 @@ typedef enum _vdev_model_t {
     VDEV_MODEL_SDCARD       = 5,
     VDEV_MODEL_STEPMOTOR    = 6,
     VDEV_MODEL_FLOWMETER    = 7,
+    VDEV_MODEL_BUTTON       = 8,
 
     VDEV_MODEL_MAX
 } vdev_model_t;

@@ -12,7 +12,7 @@
 #include "vdev_sdcard.h"
 #include "vdev_stepmotor.h"
 #include "vdev_flowmeter.h"
-
+#include "vdev_button.h"
 
 #ifdef __cplusplus
 extern "C" {
